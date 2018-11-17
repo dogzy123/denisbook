@@ -9,6 +9,7 @@
   "author": "klesun and dogzy123",
   "license": "MIT",
   "dependencies": {
+      "google-id-token-verifier": "^0.2.3"
   },
   "devDependencies": {
     "nodemon": "^1.18.6"

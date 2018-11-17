@@ -76,14 +76,19 @@ let getPosts = (post) => new Promise((resolve) => {
     });
 });
 
-let testGoogle = (requestData) => {
-    let google = require('googleapis').google;
-    let oauth = new google.auth.OAuth2(
-        '521166378127-vhkak167b5ghngfkk5r6ukrq059njoo8.apps.googleusercontent.com',
-        'j-KYTKjAidu59Y-k_c30zSQg',
-        'https://midiana.lv/oauth2callback.html',
-    );
-};
+let login = (requestData) => new Promise((resolve) => {
+    let verifier = require('google-id-token-verifier');
+    let idToken = requestData.googleUser.Zi.id_token;
+    let clientId = '521166378127-vhkak167b5ghngfkk5r6ukrq059njoo8.apps.googleusercontent.com';
+    verifier.verify(idToken, clientId, function (err, tokenInfo) {
+        useDb(db => {
+            let stmt = db.prepare('REPLACE INTO users (email, displayName, imageUrl) VALUES (?,?,?);');
+            let sqlStatus = stmt.run(tokenInfo.email, tokenInfo.name, tokenInfo.picture);
+            stmt.finalize();
+            resolve({tokenInfo: tokenInfo, sqlStatus: sqlStatus});
+        });
+    });
+});
 
 exports.processRequest = (requestData) => new Promise((resolve, reject) => {
     let func = requestData.func;
@@ -95,10 +100,8 @@ exports.processRequest = (requestData) => new Promise((resolve, reject) => {
     } else if (func === 'deletePost') {
         deletePost(requestData).then(resolve).catch(reject);
     } else if (func === 'login') {
-        testGoogle(requestData);
-        let oauthToken = requestData.oauthToken;
         console.log(requestData);
-        reject('Not implemented yet');
+        login(requestData).then(resolve).catch(reject);
     } else {
         reject('Unknown func - ' + func);
     }
