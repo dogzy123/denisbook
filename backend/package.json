@@ -1,0 +1,16 @@
+{
+  "name": "best-meeting-website-evar-backend",
+  "version": "0.0.1",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "start": "nodemon --exec server.js"
+  },
+  "author": "klesun and dogzy123",
+  "license": "MIT",
+  "dependencies": {
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.6"
+  }
+}
