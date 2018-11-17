@@ -1,0 +1,146 @@
+body {
+  font-family: 'PT Sans', sans-serif;
+  color : #fff;
+  background-color: #fbfbfb;
+  margin: 0;
+}
+
+h1, h2, h3,
+h4, h5, h6,
+.caption {
+  font-family: 'PT Sans Narrow', sans-serif;
+  letter-spacing: 1px;
+}
+
+.main-container {
+  display: flex;
+  flex-direction: column;
+  width: 710px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 60px;
+
+  #user-posts {
+    .create-post {
+      min-height: 100px;
+      .create-post-text {
+        margin: 0;
+        width: 100%;
+        height: 100px;
+        background-color: #e0ecec;
+        border: none;
+        resize: none;
+        overflow-x: hidden;
+        font-size: 16px;
+        transition: background-color 0.11s ease-out, color 0.11s ease-out;
+
+        &:hover {
+          color: #fff;
+          background-color: #87aeb3;
+        }
+
+        &:focus {
+          outline: none;
+          box-shadow: none;
+          border: none;
+          color: #fff;
+          background-color: #87aeb3;
+        }
+      }
+    }
+
+    .post {
+      margin-top: 16px;
+      margin-bottom: 16px;
+      border: 1px solid #68a09e;
+      background-color: #638b90;
+      border-radius: 2px;
+      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.16);
+
+      .post-wrapper {
+        position: relative;
+        padding: 24px 16px;
+        border-left: 6px solid transparent;
+
+        .post-remove {
+          position: absolute;
+          background-color: #7d1f1f;
+          right: 15px;
+          top: 15px;
+          border-radius: 26px;
+          font-size: 16px;
+          padding: 3px 8px;
+          cursor: pointer;
+        }
+
+        .post-sub-title {
+          display: flex;
+          margin-top: 4px;
+          margin-bottom: 16px;
+
+          .post-author {
+            font-size: 15px;
+            margin-right: 16px;
+            color: #d8e7e8;
+          }
+
+          .post-date {
+            color : #d8e7e8;
+            font-size: 14px;
+            padding-top: 1px;
+          }
+        }
+
+        h1, h2, h3,
+        h4, h5, h6 {
+          margin: 8px 0;
+          margin-bottom: 0;
+        }
+      }
+
+      &.new {
+        background-color: #48807e;
+
+        > .post-wrapper {
+          border-left: 6px solid #05635f;
+        }
+      }
+    }
+  }
+  #login-panel {
+
+    #google-signin {
+      width: 240px;
+      margin-right: auto;
+      margin-left: auto;
+    }
+
+    .login-wrapper {
+      display: flex;
+      flex-direction: column;
+      width: 485px;
+      margin: auto;
+      min-height: 400px;
+      background-color: #377e88;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+
+      .login-title {
+        text-align: center;
+        flex-grow: 6;
+      }
+
+      .login-body {
+        flex-grow: 6;
+      }
+    }
+  }
+}
+
+nav {
+  width: 100%;
+  min-height: 60px;
+  background-color: #305f5d;
+  position: fixed;
+  top: 0;
+  border-bottom: 1px solid #275452;
+}
