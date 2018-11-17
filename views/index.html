@@ -2,11 +2,86 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>LOLOLO</title>
+    <title>Denisbook</title>
+    <!-- PT SANS Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=PT+Sans" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=PT+Sans+Narrow" rel="stylesheet">
+    <link rel="stylesheet" href="../src/style/main.css">
+
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <meta name="google-signin-client_id" content="521166378127-vhkak167b5ghngfkk5r6ukrq059njoo8.apps.googleusercontent.com">
 </head>
 <body>
-<h1>node test server</h1>
+    <nav id="navigation"></nav>-
 
-<script type="text/javascript" src="../scripts/test.js"></script>
+    <div class="main-container">
+        <!--<div id="login-panel">
+            <div class="login-wrapper">
+                <div class="login-title">
+                    <h1>Choose login form</h1>
+                </div>
+                <div class="login-body">
+                    <div id="google-signin"></div>
+                </div>
+            </div>
+        </div>-->
+
+       <div id="user-posts">
+            <div class="create-post">
+                <textarea id="create-post" class="create-post-text" placeholder="Write something here..."></textarea>
+            </div>
+            <div class="post new">
+                <div class="post-wrapper">
+                    <h3>Some caption to test fonts</h3>
+                    <div class="post-date"></div>
+                    <div class="post-body">
+                        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centu
+                    </div>
+                </div>
+            </div>
+            <div class="post">
+                <div class="post-wrapper">
+                    <div class="post-remove">⨯</div>
+                    <h3>Some caption to test fonts</h3>
+                    <div class="post-sub-title">
+                        <div class="post-author">
+                            <span>klesun</span>
+                        </div>
+                        <div class="post-date">13 November, 11:23</div>
+                    </div>
+                    <div class="post-body">
+                        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centu
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="../dist/app-bundle.js"></script>
+
+    <script>
+        function onSignIn (googleUser) {
+            return window.sendPost({func: 'login', googleUser: googleUser});
+        }
+
+        function signOut() {
+            var auth2 = gapi.auth2.getAuthInstance();
+            auth2.signOut().then(function () {
+                console.log('User signed out.');
+            });
+        }
+
+        function renderButton() {
+            gapi.signin2.render('google-signin', {
+                'scope'     : 'profile email',
+                'width'     : 240,
+                'height'    : 50,
+                'longtitle' : true,
+                'theme'     : 'dark',
+                'onsuccess' : onSignIn
+            });
+        }
+    </script>
+   <script src="https://apis.google.com/js/platform.js?onload=renderButton" async defer></script>
 </body>
 </html>
