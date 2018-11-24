@@ -18,7 +18,8 @@
   "homepage": "https://github.com/klesun/best-meeting-website-evar#readme",
   "dependencies": {
     "express": "^4.16.4",
-    "moment": "^2.22.2"
+    "moment": "^2.22.2",
+    "redux": "^4.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.1.6",

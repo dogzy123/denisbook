@@ -1,39 +1,60 @@
 import Post from "./postClass";
 import {post} from "../utils/requests";
+import Component from "../utils/component";
+import {store} from "../app";
+import {loadRecords} from "../actions/actions";
+
+const mainContainer = document.getElementById('main');
 
 export default class Posts {
     constructor () {
-        this.context    = document.getElementById('user-posts');
+        this.context    = new Component('div#user-posts');
         this.posts      = [];
-        this.newPosts   = [];
+
+        mainContainer.appendChild( this.context.context );
+
+        return this;
     }
 
     add ( post ) {
-        if (!this.context.children.length)
+        if (!this.context.subscribers.length)
         {
             this.context.appendChild( post.getContext() );
         }
 
-        this.context.insertBefore(post.getContext(), this.context.children[0]);
+        this.context.context.insertBefore( post.getContext(), this.context.subscribers[0].context );
     }
 
     append ( post ) {
-        this.context.appendChild( post.getContext() );
+        this.context.observe( post.component );
+    }
+
+    loadPosts ( records ) {
+        this.posts = records.map( el => new Post( el, this ));
+        store.dispatch( loadRecords( records ) );
+    }
+
+    render ( state ) {
+        this.posts.map( post => {
+            this.context.observe( post.component );
+        } );
+
+        this.context.render( state );
     }
 
     refresh () {
         post({func : "getRelevantPosts"})
             .then( resp => {
-                if (!this.posts.length)
-                {
-                    resp['records'].map( record => this.posts.push( new Post( record, this ) ) );
-                }
+                store.dispatch( loadRecords( resp['records'] ) );
+              /*
                 else
                 {
+
                     resp['records'].map( record => {
                         let newRecord = true;
 
                         this.posts.map( post => {
+                            // check for new record
                             if (record['rowId'] === post['rowId'])
                             {
                                 newRecord = false;
@@ -42,21 +63,15 @@ export default class Posts {
 
                         if (newRecord)
                         {
-                            this.newPosts.push( new Post( record, this ) );
+                            this.posts.unshift( new Post( record, this ) );
+                            this.add( this.posts[0] );
                         }
 
                     } );
 
                 }
 
-                if (this.newPosts.length)
-                {
-                    this.newPosts.map( el => this.add( el ) );
-
-                    return this.posts = this.newPosts.concat(this.posts);
-                }
-
-                return this.posts.map( el => this.append( el ) );
+                return this.posts.map( el => this.append( el ) );*/
             } );
     }
 }

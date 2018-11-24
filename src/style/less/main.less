@@ -60,11 +60,32 @@ h4, h5, h6,
         border: none;
         color: #fff;
         background-color: #87aeb3;
+
+        &::placeholder {
+          color : #fff;
+        }
+
+        &::-webkit-input-placeholder {
+          color: #fff;
+        }
+
+        &:-moz-placeholder {
+          color: #fff;
+        }
+
+        &::-moz-placeholder {
+          color: #fff;
+        }
       }
     }
   }
 
-  #user-posts {
+  .main-app {
+    padding-top: 16px;
+    padding-bottom: 16px;
+  }
+
+  .user-posts {
     .post {
       margin-top: 16px;
       margin-bottom: 16px;
@@ -127,6 +148,7 @@ h4, h5, h6,
       }
     }
   }
+
   #login-panel {
 
     #google-signin {

@@ -1,6 +1,8 @@
 import Component from "../utils/component";
 import {post} from "../utils/requests";
 import moment from "moment/moment";
+import {store} from "../app";
+import {removeRecord} from "../actions/actions";
 
 const getPostContext = ({rowId, title, author, date, body}, Posts) => {
     return new Component('div.post')
@@ -8,7 +10,7 @@ const getPostContext = ({rowId, title, author, date, body}, Posts) => {
             new Component('div.post-wrapper')
                 .observe(
                     new Component('div.post-remove$⨯', {
-                        onclick : () => post({func: 'deletePost', rowId: rowId}).then( () => Posts.refresh() )
+                        onclick : () => store.dispatch( removeRecord(rowId) )
                     }),
 
                     new Component('h3', {
@@ -53,5 +55,9 @@ export default class Post {
 
     getContext () {
         return this.component.context;
+    }
+
+    remove () {
+        console.log(this.component.context.parentNode);
     }
 }

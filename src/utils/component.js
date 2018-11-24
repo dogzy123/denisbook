@@ -73,6 +73,9 @@ export default class Component {
         return this;
     }
 
+    __renderer () {
+    }
+
     renderer ( fn ) {
         if (fn && typeof fn === 'function')
         {

@@ -59,7 +59,23 @@ h6,
   color: #fff;
   background-color: #87aeb3;
 }
-.main-container #user-posts .post {
+.main-container .create-post .create-post-text:focus::placeholder {
+  color: #fff;
+}
+.main-container .create-post .create-post-text:focus::-webkit-input-placeholder {
+  color: #fff;
+}
+.main-container .create-post .create-post-text:focus:-moz-placeholder {
+  color: #fff;
+}
+.main-container .create-post .create-post-text:focus::-moz-placeholder {
+  color: #fff;
+}
+.main-container .main-app {
+  padding-top: 16px;
+  padding-bottom: 16px;
+}
+.main-container .user-posts .post {
   margin-top: 16px;
   margin-bottom: 16px;
   border: 1px solid #68a09e;
@@ -67,12 +83,12 @@ h6,
   border-radius: 2px;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.16);
 }
-.main-container #user-posts .post .post-wrapper {
+.main-container .user-posts .post .post-wrapper {
   position: relative;
   padding: 24px 16px;
   border-left: 6px solid transparent;
 }
-.main-container #user-posts .post .post-wrapper .post-remove {
+.main-container .user-posts .post .post-wrapper .post-remove {
   position: absolute;
   right: 3px;
   top: 0;
@@ -82,37 +98,37 @@ h6,
   cursor: pointer;
   transition: color 0.11s ease-out;
 }
-.main-container #user-posts .post .post-wrapper .post-remove:hover {
+.main-container .user-posts .post .post-wrapper .post-remove:hover {
   color: #ffd3c5;
 }
-.main-container #user-posts .post .post-wrapper .post-sub-title {
+.main-container .user-posts .post .post-wrapper .post-sub-title {
   display: flex;
   margin-top: 4px;
   margin-bottom: 16px;
 }
-.main-container #user-posts .post .post-wrapper .post-sub-title .post-author {
+.main-container .user-posts .post .post-wrapper .post-sub-title .post-author {
   font-size: 15px;
   margin-right: 16px;
   color: #d8e7e8;
 }
-.main-container #user-posts .post .post-wrapper .post-sub-title .post-date {
+.main-container .user-posts .post .post-wrapper .post-sub-title .post-date {
   color: #d8e7e8;
   font-size: 14px;
   padding-top: 1px;
 }
-.main-container #user-posts .post .post-wrapper h1,
-.main-container #user-posts .post .post-wrapper h2,
-.main-container #user-posts .post .post-wrapper h3,
-.main-container #user-posts .post .post-wrapper h4,
-.main-container #user-posts .post .post-wrapper h5,
-.main-container #user-posts .post .post-wrapper h6 {
+.main-container .user-posts .post .post-wrapper h1,
+.main-container .user-posts .post .post-wrapper h2,
+.main-container .user-posts .post .post-wrapper h3,
+.main-container .user-posts .post .post-wrapper h4,
+.main-container .user-posts .post .post-wrapper h5,
+.main-container .user-posts .post .post-wrapper h6 {
   margin: 8px 0;
   margin-bottom: 0;
 }
-.main-container #user-posts .post.new {
+.main-container .user-posts .post.new {
   background-color: #48807e;
 }
-.main-container #user-posts .post.new > .post-wrapper {
+.main-container .user-posts .post.new > .post-wrapper {
   border-left: 6px solid #05635f;
 }
 .main-container #login-panel #google-signin {
