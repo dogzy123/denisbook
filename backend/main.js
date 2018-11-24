@@ -50,12 +50,17 @@ let useDb = (callback) => {
     db.close();
 };
 
-let addPost = (post) => new Promise((resolve) => {
+let addPost = (post) => new Promise((resolve, reject) => {
     useDb(db => {
         let stmt = db.prepare('INSERT INTO posts VALUES (?,?,?,?);');
-        let sqlStatus = stmt.run(post.text, post.author, new Date().toISOString(), post.title);
-        stmt.finalize();
-        resolve({message: 'Written OK... probably', sqlStatus: sqlStatus});
+        stmt.run(post.text, post.author, new Date().toISOString(), post.title, function(err) {
+            if (err) {
+                reject(err);
+            } else {
+                resolve({message: 'Written OK', rowId: this.lastID || null});
+            }
+            stmt.finalize();
+        });
     });
 });
 
@@ -68,10 +73,14 @@ let deletePost = (post) => new Promise((resolve) => {
     });
 });
 
-let getPosts = (post) => new Promise((resolve) => {
+let getPosts = (post) => new Promise((resolve, reject) => {
     useDb(db => {
         db.all("SELECT *, ROWID as rowId FROM posts ORDER BY ROWID DESC;", (err, rows) => {
-            resolve(rows);
+            if (err) {
+                reject(err);
+            } else {
+                resolve(rows);
+            }
         });
     });
 });
@@ -93,7 +102,7 @@ let login = (requestData) => new Promise((resolve) => {
 exports.processRequest = (requestData) => new Promise((resolve, reject) => {
     let func = requestData.func;
     if (func === 'getRelevantPosts') {
-        getPosts(requestData).then(posts => 1 && {records: posts})
+        getPosts(requestData).then(posts => 1 && {records: posts || null})
             .then(resolve).catch(reject);
     } else if (func === 'addPost') {
         addPost(requestData).then(resolve).catch(reject);

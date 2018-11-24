@@ -9,7 +9,8 @@
   "author": "klesun and dogzy123",
   "license": "MIT",
   "dependencies": {
-      "google-id-token-verifier": "^0.2.3"
+    "google-id-token-verifier": "^0.2.3",
+    "sqlite3": "^4.0.4"
   },
   "devDependencies": {
     "nodemon": "^1.18.6"

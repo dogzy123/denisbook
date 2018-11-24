@@ -33,10 +33,10 @@ let server = http.createServer((req, res) => {
     main.processRequest(requestData)
       .then(responseData => {
         res.statusCode = 200;
-        res.end(JSON.stringify(responseData));
+        res.end(JSON.stringify(Object.assign({message: 'ok'}, responseData)));
       }).catch(error => {
-        res.statusCode = 200; // preflight OPTIONS request, damn it
-        res.end(JSON.stringify({error: error}));
+        res.statusCode = req.method === 'OPTIONS' ? 200 : 500; // preflight OPTIONS request, damn it
+        res.end(JSON.stringify({error: error + ''}));
       });
   });
 });
