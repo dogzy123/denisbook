@@ -50,10 +50,34 @@ let useDb = (callback) => {
     db.close();
 };
 
-let addPost = (post) => new Promise((resolve, reject) => {
+let fetchAll = (db, table, keyFields = []) => new Promise((resolve, reject) => {
+    let quote = value => value === undefined ? 'null' : JSON.stringify(value);
+    let sql = [
+        `SELECT *, ROWID as rowId FROM ${table}`,
+        `WHERE TRUE`,
+    ].concat(keyFields.map(([name, value]) => {
+        return 'AND `' + name + '` = ' + quote(value);
+    }).join(' ')).concat([
+        `ORDER BY ROWID DESC;`,
+    ]).join('\n');
+    db.all(sql, (err, rows) => {
+        if (err) {
+            reject(err);
+        } else {
+            resolve(rows);
+        }
+    });
+});
+
+let fetchOne = (db, table, keyFields) => fetchAll(db, table, keyFields)
+    .then(rows => rows.length > 0
+        ? Promise.resolve(rows[0])
+        : Promise.reject('No record in DB that would match ' + JSON.stringify(keyFields)));
+
+let addPost = (post, tokenInfo) => new Promise((resolve, reject) => {
     useDb(db => {
         let stmt = db.prepare('INSERT INTO posts VALUES (?,?,?,?);');
-        stmt.run(post.text, post.author, new Date().toISOString(), post.title, function(err) {
+        stmt.run(post.text, tokenInfo.email, new Date().toISOString(), post.title, function(err) {
             if (err) {
                 reject(err);
             } else {
@@ -64,54 +88,65 @@ let addPost = (post) => new Promise((resolve, reject) => {
     });
 });
 
-let deletePost = (post) => new Promise((resolve) => {
+let deletePost = (post, tokenInfo) => new Promise((resolve, reject) => {
     useDb(db => {
-        let stmt = db.prepare('DELETE FROM posts WHERE ROWID = ?;');
-        let sqlStatus = stmt.run(post.rowId);
-        stmt.finalize();
-        resolve({message: 'Deleted OK... probably', sqlStatus: sqlStatus});
-    });
-});
-
-let getPosts = (post) => new Promise((resolve, reject) => {
-    useDb(db => {
-        db.all("SELECT *, ROWID as rowId FROM posts ORDER BY ROWID DESC;", (err, rows) => {
-            if (err) {
-                reject(err);
+        fetchOne(db, 'posts', [
+            ['ROWID', post.rowId],
+        ]).then(row => {
+            if (row.author !== tokenInfo.email) {
+                reject('You can not delete this post since you are not it\s author - you are ' + tokenInfo.email + ', not ' + row.author);
             } else {
-                resolve(rows);
+                let stmt = db.prepare('DELETE FROM posts WHERE ROWID = ?;');
+                let sqlStatus = stmt.run(post.rowId);
+                stmt.finalize();
+                resolve({message: 'Deleted OK... probably', sqlStatus: sqlStatus});
             }
-        });
+        }).then(resolve).catch(reject);
     });
 });
 
-let login = (requestData) => new Promise((resolve) => {
+let getPosts = (requestData) => new Promise((resolve, reject) => {
+    useDb(db => fetchAll(db, 'posts', []).then(resolve).catch(reject));
+});
+
+let getUserData = (googleIdToken) => new Promise((resolve, reject) => {
+    if (!googleIdToken) {
+        reject('googleIdToken is empty');
+    }
     let verifier = require('google-id-token-verifier');
-    let idToken = requestData.googleUser.Zi.id_token;
     let clientId = '521166378127-vhkak167b5ghngfkk5r6ukrq059njoo8.apps.googleusercontent.com';
-    verifier.verify(idToken, clientId, function (err, tokenInfo) {
-        useDb(db => {
-            let stmt = db.prepare('REPLACE INTO users (email, displayName, imageUrl) VALUES (?,?,?);');
-            let sqlStatus = stmt.run(tokenInfo.email, tokenInfo.name, tokenInfo.picture);
-            stmt.finalize();
-            resolve({tokenInfo: tokenInfo, sqlStatus: sqlStatus});
-        });
+    verifier.verify(googleIdToken, clientId, function (err, tokenInfo) {
+        if (err) {
+            reject(err);
+        } else {
+            resolve(tokenInfo);
+        }
     });
 });
 
-exports.processRequest = (requestData) => new Promise((resolve, reject) => {
+let login = (googleIdToken) => getUserData(googleIdToken)
+    .then(tokenInfo => useDb(db => {
+        let stmt = db.prepare('REPLACE INTO users (email, displayName, imageUrl) VALUES (?,?,?);');
+        stmt.run(tokenInfo.email, tokenInfo.name, tokenInfo.picture);
+        stmt.finalize();
+        return {tokenInfo: tokenInfo};
+    }));
+
+exports.processRequest = (requestData) => {
     let func = requestData.func;
     if (func === 'getRelevantPosts') {
-        getPosts(requestData).then(posts => 1 && {records: posts || null})
-            .then(resolve).catch(reject);
+        return getPosts(requestData).then(posts => 1 && {records: posts || null});
     } else if (func === 'addPost') {
-        addPost(requestData).then(resolve).catch(reject);
+        return getUserData(requestData.googleIdToken)
+            .then(tokenInfo => addPost(requestData, tokenInfo));
     } else if (func === 'deletePost') {
-        deletePost(requestData).then(resolve).catch(reject);
+        return getUserData(requestData.googleIdToken)
+            .then(tokenInfo => deletePost(requestData, tokenInfo));
     } else if (func === 'login') {
         console.log(requestData);
-        login(requestData).then(resolve).catch(reject);
+        let googleIdToken = requestData.googleUser.Zi.id_token;
+        return login(googleIdToken);
     } else {
-        reject('Unknown func - ' + func);
+        return Promise.reject('Unknown func - ' + func);
     }
-});
+};
