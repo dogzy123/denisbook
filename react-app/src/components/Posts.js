@@ -10,7 +10,7 @@ class Posts extends Component {
             .then( response => {
                 this.props.dispatch({
                     type    : FETCH_POSTS,
-                    posts   : response['records']
+                    posts   : response['records'] || []
                 })
             } );
     }
@@ -23,24 +23,30 @@ class Posts extends Component {
     }
 
     render() {
-        const posts = this.props.posts.map( post => (
-            <div className="post">
-                <div className="post-wrapper">
-                    <div className="post-remove">⨯</div>
-                    <h3>{post.title}</h3>
-                    <div className="post-sub-title">
-                        <div className="post-author">
-                            <span>{post.author}</span>
+        const posts = [];
+
+        if (this.props.posts.length)
+        {
+            this.props.posts.map( post => (
+                posts.push(
+                    <div key={post.rowId} className="post">
+                        <div className="post-wrapper">
+                            <div className="post-remove">⨯</div>
+                            <div className="post-sub-title">
+                                <div className="post-author">
+                                    <span>{post.author}</span>
+                                </div>
+                                <div className="post-date">{moment(post.dt).format("DD MMMM, hh:mm")}</div>
+                            </div>
+                            <div className="post-body">{post.text}</div>
                         </div>
-                        <div className="post-date">{moment(post.dt).format("DD MMMM, hh:mm")}</div>
                     </div>
-                    <div className="post-body">{post.text}</div>
-                </div>
-            </div>
-        ) );
+                )
+            ) )
+        }
 
         return (
-            <div className="user-posts">{posts}</div>
+            <div className="user-posts">{ posts }</div>
         );
     }
 }

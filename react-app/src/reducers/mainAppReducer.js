@@ -1,7 +1,9 @@
-import {ADD_POST, FETCH_POSTS} from "../actions/actions";
+import {ADD_POST, FETCH_POSTS, LOGGED_IN} from "../actions/actions";
 
 const initialState = {
-    posts : []
+    loggedIn    : false,
+    user        : {},
+    posts       : []
 };
 
 export default function ( state = initialState, action ) {
@@ -16,6 +18,13 @@ export default function ( state = initialState, action ) {
             return {
                 ...state,
                 newPost : action.post
+            };
+
+        case LOGGED_IN:
+            return {
+                ...state,
+                loggedIn : action.loggedIn,
+                user     : action.user
             };
 
         default:

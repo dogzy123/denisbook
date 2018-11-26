@@ -1,17 +1,13 @@
 import React, { Component } from 'react';
 import {Provider} from "react-redux";
-import AddPosts from "./AddPosts";
-import Posts from "./Posts";
+import MainBlock from "./MainBlock";
 import {store} from "../store";
 
 class MainApp extends Component {
     render() {
         return (
             <Provider store={store}>
-                <div className="main-app">
-                    <AddPosts/>
-                    <Posts/>
-                </div>
+                <MainBlock/>
             </Provider>
         );
     }

@@ -1,8 +1,11 @@
 const path              = require('path');
+const webpack           = require('webpack');
 //const HtmlWebPackPlugin = require("html-webpack-plugin");
 
 
 module.exports = {
+    mode : 'development',
+
     entry: "./src/index.js",
 
     output: {
@@ -34,11 +37,14 @@ module.exports = {
             }*/
         ]
     },
-/*
+
     plugins: [
-        new HtmlWebPackPlugin({
+        new webpack.ProvidePlugin({
+            "React": "react",
+        })
+       /* new HtmlWebPackPlugin({
             template: "./src/index.html",
             filename: "./index.html"
-        })
-    ]*/
+        })*/
+    ]
 };
