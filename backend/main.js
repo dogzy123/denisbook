@@ -81,7 +81,7 @@ let addPost = (post, tokenInfo) => new Promise((resolve, reject) => {
             if (err) {
                 reject(err);
             } else {
-                resolve({message: 'Written OK', rowId: this.lastID || null});
+                resolve({message: 'Written OK', rowId: this.lastID || null, author: tokenInfo.email});
             }
             stmt.finalize();
         });
