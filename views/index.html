@@ -2,30 +2,30 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="google-signin-client_id" content="521166378127-vhkak167b5ghngfkk5r6ukrq059njoo8.apps.googleusercontent.com">
-
-    <title>Denisbook</title>
-    <!-- PT SANS Fonts -->
-    <link href="https://fonts.googleapis.com/css?family=PT+Sans" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=PT+Sans+Narrow" rel="stylesheet">
+    <!--<meta name="google-signin-client_id" content="521166378127-vhkak167b5ghngfkk5r6ukrq059njoo8.apps.googleusercontent.com">-->
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
     <link rel="stylesheet" href="../src/style/main.css">
 
-    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <title>Denisbook</title>
+
+    <script src="https://apis.google.com/js/platform.js?onload=renderButton" async defer></script>
 </head>
 <body>
     <nav id="navigation"></nav>
 
-    <div id="main" class="main-container">
-        <!--<div id="login-panel">
-            <div class="login-wrapper">
-                <div class="login-title">
-                    <h1>Choose login form</h1>
-                </div>
-                <div class="login-body">
-                    <div id="google-signin"></div>
-                </div>
+    <div id="login-panel">
+        <div class="login-wrapper">
+            <div class="login-title">
+                <h1>Choose login form</h1>
             </div>
-        </div>-->
+            <div class="login-body">
+                <div id="google-signin"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="main" class="main-container">
+
 
        <!--<div id="user-posts">
             <div class="post new">
@@ -55,22 +55,15 @@
         </div>-->
     </div>
 
-    <script type="text/javascript" src="../react-app/dist/react-app-bundle.js"></script>
-    <!--<script type="text/javascript" src="../dist/app-bundle.js"></script>-->
-
     <script>
-        function onSignIn (googleUser) {
+        window.auth = {};
+
+       /* function onSignIn (googleUser) {
+            window.auth.user = googleUser;
             return window.sendPost({func: 'login', googleUser: googleUser});
         }
-
-        function signOut() {
-            var auth2 = gapi.auth2.getAuthInstance();
-            auth2.signOut().then(function () {
-                console.log('User signed out.');
-            });
-        }
-
-        function renderButton() {
+*/
+        /*function renderButton() {
             gapi.signin2.render('google-signin', {
                 'scope'     : 'profile email',
                 'width'     : 240,
@@ -79,8 +72,9 @@
                 'theme'     : 'dark',
                 'onsuccess' : onSignIn
             });
-        }
+        }*/
     </script>
-   <script src="https://apis.google.com/js/platform.js?onload=renderButton" async defer></script>
+
+    <script type="text/javascript" src="../react-app/dist/react-app-bundle.js"></script>
 </body>
 </html>

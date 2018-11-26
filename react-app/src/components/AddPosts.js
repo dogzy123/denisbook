@@ -1,7 +1,7 @@
 import { connect } from "react-redux";
 import React, { Component } from 'react';
 import {post} from "../../../src/utils/requests";
-import {ADD_POST} from "../actions/actions";
+import {addPost} from "../actions/actions";
 
 class AddPosts extends Component {
     constructor (props) {
@@ -17,23 +17,17 @@ class AddPosts extends Component {
 
 
     addPost () {
-        const data = {
-            author  : 'admin',
-            title   : 'Add post',
-            text    : this.state.text
-        };
+        const data = { text : this.state.text };
 
         post({func: "addPost", ...data})
             .then( response => {
                 const newPost = {
-                    id : response.id || 4324,
+                    rowId   : response.rowId,
+                    author  : response.author,
                     ...data
                 };
 
-                this.props.dispatch({
-                    type : ADD_POST,
-                    post : newPost
-                });
+                this.props.dispatch( addPost( newPost ) );
             } );
     }
 
