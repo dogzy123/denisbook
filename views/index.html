@@ -8,7 +8,7 @@
 
     <title>Denisbook</title>
 
-    <script src="https://apis.google.com/js/platform.js?onload=renderButton" async defer></script>
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
 </head>
 <body>
     <nav id="navigation"></nav>
@@ -57,22 +57,6 @@
 
     <script>
         window.auth = {};
-
-       /* function onSignIn (googleUser) {
-            window.auth.user = googleUser;
-            return window.sendPost({func: 'login', googleUser: googleUser});
-        }
-*/
-        /*function renderButton() {
-            gapi.signin2.render('google-signin', {
-                'scope'     : 'profile email',
-                'width'     : 240,
-                'height'    : 50,
-                'longtitle' : true,
-                'theme'     : 'dark',
-                'onsuccess' : onSignIn
-            });
-        }*/
     </script>
 
     <script type="text/javascript" src="../react-app/dist/react-app-bundle.js"></script>
