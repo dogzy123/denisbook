@@ -22,7 +22,7 @@ let server = http.createServer((req, res) => {
         res.setHeader('Content-Type', 'application/json');
 
         // Website you wish to allow to connect
-        res.setHeader('Access-Control-Allow-Origin', 'http://midiana.lv');
+        res.setHeader('Access-Control-Allow-Origin', '*');
 
         // Request methods you wish to allow
         res.setHeader('Access-Control-Allow-Methods', 'GET, POST');
