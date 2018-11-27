@@ -1,46 +1,4 @@
 
-// let relevantPosts = [
-//     {
-//         title: 'Denis Comes Tomorrow',
-//         author: 'anonymous',
-//         dt: '2018-11-13 23:23:43.341',
-//         text: [
-//             'It is rumored that tomorrow somewhere between 00:00 and 23:59 his majesty Denis will honor our house with his noble presence.',
-//             'We gonna taught him a lesson about opengl so he could pass exams.',
-//         ].join('\n'),
-//     },
-//     {
-//         title: '5 Bottles of Dr. Pepper in the Fridge',
-//         author: 'klesun',
-//         dt: '2018-11-15 23:23:43.341',
-//         text: [
-//             'Awesome ain\'t it?',
-//         ].join('\n'),
-//     },
-//     {
-//         title: 'Stan Lee Died',
-//         author: 'slowpoke',
-//         dt: '2018-10-15 03:33:43.341',
-//         text: [
-//             'void main(int argc, char** argv)',
-//             '{',
-//             '    printf("Goodbye, World\\n");',
-//             '}',
-//         ].join('\n'),
-//     },
-//     {
-//         title: 'Stas huj',
-//         author: 'anonymous',
-//         dt: '2018-11-12 13:43:43.341',
-//         text: [
-//             'Stas huj Stas huj Stas huj Stas huj Stas huj Stas huj',
-//             'Stas huj Stas huj Stas huj Stas huj Stas huj Stas huj',
-//             'Stas huj Stas huj Stas huj Stas huj Stas huj Stas huj',
-//             'Stas huj Stas huj Stas huj Stas huj Stas huj Stas huj',
-//         ].join('\n'),
-//     },
-// ];
-
 let useDb = (callback) => {
     let sqlite3 = require('sqlite3');
     let db = new sqlite3.Database('./zhopa.db');
