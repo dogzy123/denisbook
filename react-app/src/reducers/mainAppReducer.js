@@ -1,8 +1,8 @@
-import {ADD_POST, FETCH_POSTS, LOGGED_IN, SET_SESSION} from "../actions/actions";
+import {ADD_POST, FETCH_POSTS, LOG_OUT, LOGGED_IN, SET_SESSION} from "../actions/actions";
 
 const initialState = {
     loggedIn    : false,
-    user        : {},
+    user        : null,
     posts       : []
 };
 
@@ -33,6 +33,13 @@ export default function ( state = initialState, action ) {
                 loggedIn   : action.loggedIn,
                 session    : action.session,
                 user       : action.user
+            };
+
+        case LOG_OUT:
+            return {
+                ...state,
+                loggedIn    : action.loggedIn,
+                user        : action.user,
             };
 
         default:

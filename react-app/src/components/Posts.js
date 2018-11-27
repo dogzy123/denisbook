@@ -11,7 +11,7 @@ class Posts extends Component {
         this.updateInterval = null;
     }
 
-    componentWillMount () {
+    componentDidMount () {
         const fetchPosts = () => post({func : 'getRelevantPosts'})
             .then( response =>
                 this.props.dispatch({
@@ -20,9 +20,9 @@ class Posts extends Component {
                 })
             );
 
-        fetchPosts();
+       fetchPosts();
 
-        this.updateInterval = setInterval( fetchPosts, 1000 );
+       this.updateInterval = setInterval( fetchPosts, 1000 );
     }
 
     componentWillReceiveProps (nextProps) {

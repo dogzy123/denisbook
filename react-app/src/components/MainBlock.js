@@ -1,20 +1,15 @@
 import { Component } from "react";
 import AddPosts from "./AddPosts";
 import Posts from "./Posts";
-import GoogleLogin from "react-google-login";
+import LoginPanel from "./LoginPanel";
+import { BarLoader } from "react-spinners";
 import {connect} from "react-redux";
-import {logIn, setUserSession} from "../actions/actions";
+import {logIn, logOut, setUserSession} from "../actions/actions";
 
 class MainBlock extends Component {
 
     constructor (props) {
         super(props);
-    }
-
-    onSignIn ( dispatch ) {
-        return function ( googleUser ) {
-            dispatch( logIn(googleUser) );
-        }
     }
 
     componentDidMount () {
@@ -32,6 +27,8 @@ class MainBlock extends Component {
 
                     return dispatch( setUserSession( {session: resp, user: resp.currentUser.get()} ) );
                 }
+
+                return dispatch( logOut() );
             } );
         } ) ;
     }
@@ -39,12 +36,21 @@ class MainBlock extends Component {
     getContext () {
         if (!this.props.loggedIn)
         {
+            if (!this.props.user)
+            {
+                return (
+                    <div className="loader">
+                        <BarLoader
+                            color={'#26A69A'}
+                            width={200}
+                            height={5}
+                        />
+                    </div>
+                );
+            }
+
             return (
-                <GoogleLogin
-                    clientId="521166378127-vhkak167b5ghngfkk5r6ukrq059njoo8.apps.googleusercontent.com"
-                    buttonText="Sign In"
-                    onSuccess={this.onSignIn(this.props.dispatch)}
-                />
+                <LoginPanel/>
             );
         }
 

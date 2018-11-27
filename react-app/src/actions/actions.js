@@ -1,6 +1,7 @@
 export const FETCH_POSTS    = "FETCH POSTS";
 export const ADD_POST       = "ADD POST";
 export const LOGGED_IN      = "LOGGED IN";
+export const LOG_OUT        = "LOG_OUT";
 export const SET_SESSION    = "SET SESSION";
 
 export const logIn = user => {
@@ -8,6 +9,14 @@ export const logIn = user => {
         type        : LOGGED_IN,
         loggedIn    : true,
         user        : user
+    });
+};
+
+export const logOut = () => {
+    return ({
+        type : LOG_OUT,
+        loggedIn : false,
+        user : {}
     });
 };
 
