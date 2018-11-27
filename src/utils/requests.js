@@ -13,7 +13,7 @@ export const post = ( props ) => {
         ...props
     };
 
-    return fetch('http://midiana.lv:8080/', {
+    return fetch('https://midiana.lv:8086//', {
         method  : "POST",
         headers : {
             'Accept': 'application/json',
