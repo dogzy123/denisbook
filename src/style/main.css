@@ -91,6 +91,9 @@ h6,
 .main-container .user-posts .post .post-wrapper .post-remove:hover {
   color: #ffd3c5;
 }
+.main-container .user-posts .post .post-wrapper .post-body {
+  word-break: break-word;
+}
 .main-container .user-posts .post .post-wrapper .post-sub-title {
   display: flex;
   margin-top: 4px;

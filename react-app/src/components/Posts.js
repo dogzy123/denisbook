@@ -5,14 +5,24 @@ import {post} from "../../../src/utils/requests";
 import {FETCH_POSTS} from "../actions/actions";
 
 class Posts extends Component {
+    constructor (props) {
+        super(props);
+
+        this.updateInterval = null;
+    }
+
     componentWillMount () {
-        post({func : 'getRelevantPosts'})
-            .then( response => {
+        const fetchPosts = () => post({func : 'getRelevantPosts'})
+            .then( response =>
                 this.props.dispatch({
                     type    : FETCH_POSTS,
                     posts   : response['records'] || []
                 })
-            } );
+            );
+
+        fetchPosts();
+
+        this.updateInterval = setInterval( fetchPosts, 1000 );
     }
 
     componentWillReceiveProps (nextProps) {
