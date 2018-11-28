@@ -77,7 +77,7 @@ class Posts extends Component {
                                 <div className="post-author">
                                     <span>{post.author}</span>
                                 </div>
-                                <div className="post-date">{moment(post.dt).format("DD MMMM, hh:mm")}</div>
+                                <div className="post-date">{moment(post.dt).format("DD MMMM, HH:mm")}</div>
                             </div>
                             <div className="post-body">{post.text}</div>
                         </div>
