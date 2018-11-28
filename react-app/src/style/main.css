@@ -62,6 +62,12 @@ h6,
   font-size: 14px;
   transition: background-color 0.11s ease-out, color 0.11s ease-out;
 }
+.main-container .create-post .create-post-text.error {
+  background-color: #FFAB91;
+}
+.main-container .create-post .create-post-text.error:focus {
+  outline-color: #DD2C00;
+}
 .main-container .create-post .create-post-text:focus {
   cursor: text;
   outline-color: #00695C;
