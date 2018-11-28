@@ -12,6 +12,34 @@ h4, h5, h6,
   letter-spacing: 1px;
 }
 
+#navigation {
+  display: flex;
+  flex-direction: row;
+
+  .nav-head {
+    flex: 1;
+    padding: 4px 16px;
+    text-transform: uppercase;
+
+    > h4 {
+      font-size: 18px;
+      font-weight: lighter;
+    }
+  }
+
+  > ul {
+    flex: 1;
+    display: flex;
+    list-style: none;
+    padding-left: 0;
+
+    > li {
+      padding: 4px 8px;
+
+    }
+  }
+}
+
 .main-container {
   display: flex;
   flex-direction: column;
@@ -82,7 +110,7 @@ h4, h5, h6,
       margin-top: 16px;
       margin-bottom: 16px;
       border: 1px solid #68a09e;
-      background-color: #009688;
+      background-color: #00897B;
       border-radius: 2px;
       box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.16);
 

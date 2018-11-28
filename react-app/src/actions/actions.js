@@ -3,6 +3,7 @@ export const ADD_POST       = "ADD POST";
 export const LOGGED_IN      = "LOGGED IN";
 export const LOG_OUT        = "LOG_OUT";
 export const SET_SESSION    = "SET SESSION";
+export const POSTS_TO_SHOW  = "POSTS TO SHOW";
 
 export const logIn = user => {
     return ({
@@ -25,6 +26,14 @@ export const addPost = post => {
         type : ADD_POST,
         post
     });
+};
+
+export const showPosts = ({showPosts, showPostStep}) => {
+    return ({
+        type : POSTS_TO_SHOW,
+        showPosts,
+        showPostStep
+    })
 };
 
 export const setUserSession = ({session, user}) => {

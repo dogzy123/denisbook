@@ -1,17 +1,43 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
 import moment from "moment";
-import {post} from "../../../src/utils/requests";
-import {FETCH_POSTS} from "../actions/actions";
+import {post} from "../requests";
+import {FETCH_POSTS, showPosts} from "../actions/actions";
 
 class Posts extends Component {
     constructor (props) {
         super(props);
 
+        this.step = 35;
         this.updateInterval = null;
     }
 
-    componentDidMount () {
+    componentWillMount () {
+        const updatePostsToShow = e => {
+            if (window.pageYOffset + 1000 > document.body.clientHeight)
+            {
+                if (this.props.posts.length)
+                {
+                    let step = this.props.showPostStep + 35;
+
+                    if (this.props.showPostStep >= this.props.posts.length)
+                    {
+                        this.props.dispatch( showPosts( {
+                            showPosts : this.props.showPosts,
+                            showPostStep : this.props.posts.length
+                        } ) );
+
+                        return window.removeEventListener('scroll', updatePostsToShow);
+                    }
+
+                    this.props.dispatch( showPosts( {
+                        showPosts: this.props.showPosts.concat( this.props.posts.slice(this.props.showPosts.length, step) ),
+                        showPostStep : step
+                    }) );
+                }
+            }
+        };
+
         const fetchPosts = () => post({func : 'getRelevantPosts'})
             .then( response =>
                 this.props.dispatch({
@@ -20,7 +46,12 @@ class Posts extends Component {
                 })
             );
 
-       fetchPosts();
+       fetchPosts()
+           .then( () => {
+              this.props.dispatch( showPosts( {showPosts: this.props.posts.slice(0, 35), showPostStep: 35}) );
+
+              window.addEventListener('scroll', updatePostsToShow);
+           } );
 
        this.updateInterval = setInterval( fetchPosts, 1000 );
     }
@@ -35,9 +66,9 @@ class Posts extends Component {
     render() {
         const posts = [];
 
-        if (this.props.posts.length)
+        if (this.props.showPosts.length)
         {
-            this.props.posts.map( post => (
+            this.props.showPosts.map( post => (
                 posts.push(
                     <div key={post.rowId} className="post">
                         <div className="post-wrapper">
@@ -63,6 +94,8 @@ class Posts extends Component {
 
 const mapStateToProps = state => ({
     posts   : state.posts,
+    showPosts   : state.showPosts,
+    showPostStep : state.showPostStep,
     newPost : state.newPost
 });
 

@@ -1,6 +1,6 @@
 import { connect } from "react-redux";
 import React, { Component } from 'react';
-import {post} from "../../../src/utils/requests";
+import {post} from "../requests";
 import {addPost} from "../actions/actions";
 
 class AddPosts extends Component {

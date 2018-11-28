@@ -14,6 +14,28 @@ h6,
   font-family: 'PT Sans Narrow', sans-serif;
   letter-spacing: 1px;
 }
+#navigation {
+  display: flex;
+  flex-direction: row;
+}
+#navigation .nav-head {
+  flex: 1;
+  padding: 4px 16px;
+  text-transform: uppercase;
+}
+#navigation .nav-head > h4 {
+  font-size: 18px;
+  font-weight: lighter;
+}
+#navigation > ul {
+  flex: 1;
+  display: flex;
+  list-style: none;
+  padding-left: 0;
+}
+#navigation > ul > li {
+  padding: 4px 8px;
+}
 .main-container {
   display: flex;
   flex-direction: column;
@@ -73,7 +95,7 @@ h6,
   margin-top: 16px;
   margin-bottom: 16px;
   border: 1px solid #68a09e;
-  background-color: #009688;
+  background-color: #00897B;
   border-radius: 2px;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.16);
 }

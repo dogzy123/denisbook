@@ -1,4 +1,4 @@
-import {store} from "../../react-app/src/store";
+import {store} from "./store";
 
 const getGoogleUser = () => store.getState()['user'];
 
