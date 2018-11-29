@@ -125,6 +125,7 @@ h6,
 }
 .main-container .user-posts .post .post-wrapper .post-body {
   word-break: break-word;
+  white-space: pre;
 }
 .main-container .user-posts .post .post-wrapper .post-sub-title {
   display: flex;

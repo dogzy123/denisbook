@@ -89,7 +89,6 @@ class AddPosts extends Component {
     }
 
     render() {
-        console.log(this.state);
         return (
             <div className="create-post">
                 <textarea className={"create-post-text" + (this.state.isError ? " error" : "") } onKeyDown={this.onKeyDown} onKeyUp={this.onKeyUp} onInput={this.onInput} placeholder="Write something here..."></textarea>

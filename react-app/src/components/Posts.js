@@ -8,7 +8,6 @@ class Posts extends Component {
     constructor (props) {
         super(props);
 
-        this.step = 35;
         this.updateInterval = null;
     }
 
@@ -44,22 +43,22 @@ class Posts extends Component {
                     type    : FETCH_POSTS,
                     posts   : response['records'] || []
                 })
-            );
+            )
+            .then( () => {
+                this.props.dispatch( showPosts( {showPosts: this.props.posts.slice(0, 35), showPostStep: 35}) );
+            } );
 
        fetchPosts()
-           .then( () => {
-              this.props.dispatch( showPosts( {showPosts: this.props.posts.slice(0, 35), showPostStep: 35}) );
-
-              window.addEventListener('scroll', updatePostsToShow);
-           } );
+           .then( () => window.addEventListener('scroll', updatePostsToShow) );
 
        this.updateInterval = setInterval( fetchPosts, 1000 );
     }
 
     componentWillReceiveProps (nextProps) {
-        if (nextProps.newPost)
+        if (nextProps.newPost && nextProps.newPost.rowId !== this.props.posts[0].rowId)
         {
             this.props.posts.unshift( nextProps.newPost );
+            this.props.showPosts.unshift( nextProps.newPost );
         }
     }
 
