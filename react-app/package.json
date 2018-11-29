@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "marked": "^0.5.2",
+    "moment": "^2.22.2",
     "react": "^16.6.3",
     "react-dom": "^16.6.3",
     "react-google-login": "^4.0.0",
@@ -10,8 +12,7 @@
     "react-redux": "^5.1.1",
     "react-scripts": "2.1.1",
     "react-spinners": "^0.4.7",
-    "redux": "^4.0.1",
-    "moment": "^2.22.2"
+    "redux": "^4.0.1"
   },
   "scripts": {
     "start": "react-scripts start",

@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import moment from "moment";
 import {post} from "../requests";
 import {FETCH_POSTS, showPosts} from "../actions/actions";
+import marked from "marked";
 
 class Posts extends Component {
     constructor (props) {
@@ -58,20 +59,22 @@ class Posts extends Component {
        this.updateInterval = setInterval( fetchPosts, 1000 );
     }
 
-    componentWillReceiveProps (nextProps) {
+/*    componentWillReceiveProps (nextProps) {
         if (nextProps.newPost && nextProps.newPost.rowId !== this.props.posts[0].rowId)
         {
             this.props.posts.unshift( nextProps.newPost );
             this.props.showPosts.unshift( nextProps.newPost );
         }
-    }
+    }*/
 
     render() {
         const posts = [];
 
+        const getHtml = text => ({__html : marked(text)});
+
         if (this.props.showPosts.length)
         {
-            this.props.showPosts.map( post => (
+            this.props.showPosts.map( post => {
                 posts.push(
                     <div key={post.rowId} className="post">
                         <div className="post-wrapper">
@@ -82,11 +85,11 @@ class Posts extends Component {
                                 </div>
                                 <div className="post-date">{moment(post.dt).format("DD MMMM, HH:mm")}</div>
                             </div>
-                            <div className="post-body">{post.text}</div>
+                            <div className="post-body" dangerouslySetInnerHTML={getHtml(post.text)}></div>
                         </div>
                     </div>
                 )
-            ) )
+            } )
         }
 
         return (
