@@ -4,6 +4,7 @@ export const LOGGED_IN      = "LOGGED IN";
 export const LOG_OUT        = "LOG_OUT";
 export const SET_SESSION    = "SET SESSION";
 export const POSTS_TO_SHOW  = "POSTS TO SHOW";
+export const INITIAL_POSTS_STATUS = "INITIAL POSTS STATUS";
 
 export const logIn = user => {
     return ({
@@ -25,6 +26,13 @@ export const addPost = post => {
     return ({
         type : ADD_POST,
         post
+    });
+};
+
+export const setPostsLength = ({postsLength}) => {
+    return ({
+        type : INITIAL_POSTS_STATUS,
+        postsLength
     });
 };
 

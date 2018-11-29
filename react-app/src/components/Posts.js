@@ -2,13 +2,14 @@ import React, { Component } from 'react';
 import { connect } from "react-redux";
 import moment from "moment";
 import {post} from "../requests";
-import {FETCH_POSTS, showPosts} from "../actions/actions";
+import {FETCH_POSTS, setPostsLength, showPosts} from "../actions/actions";
 import marked from "marked";
 
 class Posts extends Component {
     constructor (props) {
         super(props);
 
+        this.newPostSound = new Audio('../react-app/src/audio/newpost.mp3');
         this.updateInterval = null;
     }
 
@@ -38,34 +39,58 @@ class Posts extends Component {
             }
         };
 
-        const fetchPosts = () => post({func : 'getRelevantPosts'})
-            .then( response =>
-                this.props.dispatch({
-                    type    : FETCH_POSTS,
-                    posts   : response['records'] || []
-                })
-            )
-            .then( () => {
-                this.props.dispatch( showPosts( {showPosts: this.props.posts.slice(0, this.props.showPosts.length), showPostStep: this.props.showPostStep}) );
-            } );
+        const fetchPosts = () => {
+            return post({func : 'getRelevantPosts'})
+                .then( response =>
+                    this.props.dispatch({
+                        type    : FETCH_POSTS,
+                        posts   : response['records'] || []
+                    })
+                )
+                .then( () => {
+                    this.props.dispatch( showPosts( {showPosts: this.props.posts.slice(0, this.props.showPosts.length), showPostStep: this.props.showPostStep}) );
+                } )
+                .then( () => {
+                    if (this.props.postsLength > 0)
+                    {
+                        if (this.props.posts.length > this.props.postsLength)
+                        {
+                            console.log(this.props.posts[0]);
+                            if (this.props.posts[0].author !== this.props.user['w3']['U3'])
+                            {
+                                this.newPostSound.play();
+                            }
 
-       fetchPosts()
+                            this.props.dispatch( setPostsLength({ postsLength: this.props.posts.length }) );
+                        }
+                    }
+                } );
+        };
+
+        fetchPosts()
+           .then( () => {
+               this.props.dispatch( setPostsLength({ postsLength: this.props.posts.length }) );
+           } )
            .then( () => {
                this.props.dispatch( showPosts( {showPosts: this.props.posts.slice(0, 35), showPostStep: 35} ) );
 
                window.addEventListener('scroll', updatePostsToShow)
            } );
 
-       this.updateInterval = setInterval( fetchPosts, 1000 );
+        this.updateInterval = setInterval( fetchPosts, 1000 );
     }
 
-    componentWillReceiveProps (nextProps) {
+    componentDidMount () {
+
+    }
+
+    /*componentWillReceiveProps (nextProps) {
         if (nextProps.newPost && nextProps.newPost.rowId !== this.props.posts[0].rowId)
         {
             this.props.posts.unshift( nextProps.newPost );
             this.props.showPosts.unshift( nextProps.newPost );
         }
-    }
+    }*/
 
     render() {
         const posts = [];
@@ -108,7 +133,9 @@ const mapStateToProps = state => ({
     posts   : state.posts,
     showPosts   : state.showPosts,
     showPostStep : state.showPostStep,
-    newPost : state.newPost
+    newPost : state.newPost,
+    postsLength : state.postsLength,
+    user : state.user
 });
 
 export default connect(mapStateToProps)(Posts);

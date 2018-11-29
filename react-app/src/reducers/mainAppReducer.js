@@ -1,11 +1,14 @@
-import {ADD_POST, FETCH_POSTS, LOG_OUT, LOGGED_IN, POSTS_TO_SHOW, SET_SESSION, showPosts} from "../actions/actions";
+import {
+    ADD_POST, FETCH_POSTS, INITIAL_POSTS_STATUS, LOG_OUT, LOGGED_IN, POSTS_TO_SHOW, SET_SESSION
+} from "../actions/actions";
 
 const initialState = {
-    loggedIn    : false,
-    user        : null,
-    posts       : [],
-    showPosts   : [],
-    showPostStep : 0
+    loggedIn        : false,
+    user            : null,
+    posts           : [],
+    showPosts       : [],
+    postsLength     : 0,
+    showPostStep    : 0
 };
 
 export default function ( state = initialState, action ) {
@@ -22,6 +25,12 @@ export default function ( state = initialState, action ) {
                 newPost : action.post,
                 showPosts : [action.post, ...state.showPosts],
                 showPostStep: state.showPostStep + 1
+            };
+
+        case INITIAL_POSTS_STATUS:
+            return {
+                ...state,
+                postsLength : action.postsLength
             };
 
         case POSTS_TO_SHOW:
