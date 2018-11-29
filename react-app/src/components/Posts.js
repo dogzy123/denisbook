@@ -46,7 +46,7 @@ class Posts extends Component {
                 })
             )
             .then( () => {
-                this.props.dispatch( showPosts( {showPosts: this.props.showPosts, showPostStep: this.props.showPostStep}) );
+                this.props.dispatch( showPosts( {showPosts: this.props.posts.slice(0, this.props.showPosts.length), showPostStep: this.props.showPostStep}) );
             } );
 
        fetchPosts()
@@ -59,13 +59,13 @@ class Posts extends Component {
        this.updateInterval = setInterval( fetchPosts, 1000 );
     }
 
-/*    componentWillReceiveProps (nextProps) {
+    componentWillReceiveProps (nextProps) {
         if (nextProps.newPost && nextProps.newPost.rowId !== this.props.posts[0].rowId)
         {
             this.props.posts.unshift( nextProps.newPost );
             this.props.showPosts.unshift( nextProps.newPost );
         }
-    }*/
+    }
 
     render() {
         const posts = [];
