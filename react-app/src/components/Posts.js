@@ -45,11 +45,15 @@ class Posts extends Component {
                 })
             )
             .then( () => {
-                this.props.dispatch( showPosts( {showPosts: this.props.posts.slice(0, 35), showPostStep: 35}) );
+                this.props.dispatch( showPosts( {showPosts: this.props.showPosts, showPostStep: this.props.showPostStep}) );
             } );
 
        fetchPosts()
-           .then( () => window.addEventListener('scroll', updatePostsToShow) );
+           .then( () => {
+               this.props.dispatch( showPosts( {showPosts: this.props.posts.slice(0, 35), showPostStep: 35} ) );
+
+               window.addEventListener('scroll', updatePostsToShow)
+           } );
 
        this.updateInterval = setInterval( fetchPosts, 1000 );
     }
