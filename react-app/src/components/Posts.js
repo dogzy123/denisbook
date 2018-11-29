@@ -70,6 +70,12 @@ class Posts extends Component {
     render() {
         const posts = [];
 
+        marked.setOptions({
+            pedantic : true,
+            smartypants : true,
+            sanitize : true
+        });
+
         const getHtml = text => ({__html : marked(text)});
 
         if (this.props.showPosts.length)
