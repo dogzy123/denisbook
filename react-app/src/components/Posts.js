@@ -4,6 +4,7 @@ import moment from "moment";
 import {post} from "../requests";
 import {FETCH_POSTS, setPostsLength, showPosts} from "../actions/actions";
 import marked from "marked";
+import RemovePost from "./RemovePost";
 
 class Posts extends Component {
     constructor (props) {
@@ -109,7 +110,7 @@ class Posts extends Component {
                 posts.push(
                     <div key={post.rowId} className="post">
                         <div className="post-wrapper">
-                            <div className="post-remove">⨯</div>
+                            <RemovePost post={post} />
                             <div className="post-sub-title">
                                 <div className="post-author">
                                     <span>{post.author}</span>
