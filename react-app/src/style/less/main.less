@@ -119,6 +119,8 @@ h4, h5, h6,
   }
 
   .user-posts {
+    font-size: 14px;
+
     .post {
       margin-top: 16px;
       margin-bottom: 16px;
@@ -161,16 +163,15 @@ h4, h5, h6,
           display: flex;
           margin-top: 4px;
           margin-bottom: 16px;
+          font-size: 12px;
 
           .post-author {
-            font-size: 14px;
             margin-right: 16px;
             color: #d8e7e8;
           }
 
           .post-date {
             color : #d8e7e8;
-            font-size: 14px;
             padding-top: 1px;
           }
         }
@@ -235,8 +236,7 @@ nav {
 
   .pm-container {
     display: flex;
-    min-height: 600px;
-    max-height: 1000px;
+    height: calc(100vh - 80px);
 
     .pm-dialogs {
       flex: 1;
@@ -244,12 +244,33 @@ nav {
       border-right: none;
       overflow-y: scroll;
 
+      &::-webkit-scrollbar-track
+      {
+        -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+        background-color: #fbfbfb;
+      }
+
+      &::-webkit-scrollbar
+      {
+        width: 6px;
+        background-color: #fbfbfb;
+      }
+
+      &::-webkit-scrollbar-thumb
+      {
+        background-color: #004D40;
+      }
+
       .dialog-wrapper {
         cursor : pointer;
         border-bottom: 1px solid #B2DFDB;
         height: 55px;
         padding: 16px 8px;
         background-color: #00695C;
+
+        &.active {
+          background-color: #00897B;
+        }
 
         .dialog-inner {
           padding: 0 8px;
@@ -269,6 +290,8 @@ nav {
       .pm-messages {
         flex : 2;
         border : 1px solid #004D40;
+        border-bottom: none;
+        border-left: none;
         padding: 16px;
 
         .pm-msg {
@@ -292,7 +315,8 @@ nav {
       .pm-text-field {
         min-height: 50px;
         border: 1px solid #004D40;
-        border-top: none;
+        border-top: 1px solid #B2DFDB;
+        border-left: none;
 
         .pm-send-msg {
           width: 80%;

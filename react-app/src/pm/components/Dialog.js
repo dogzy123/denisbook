@@ -19,8 +19,20 @@ class Dialog extends Component {
     }
 
     render () {
+        let active = "";
+
+        if (this.props.currentDialog)
+        {
+            if (this.props.currentDialog.rowId === this.props.user.rowId)
+            {
+                active = " active";
+            }
+        }
+
+        console.log('CURRENT DIALOG', this.props.currentDialog);
+
         return (
-            <div onClick={this.onClick} className="dialog-wrapper">
+            <div onClick={this.onClick} className={ "dialog-wrapper" + active }>
                 <div className="dialog-inner">
                     <div className="dialog-user">{ this.props.user.displayName } ({ this.props.user.email })</div>
                 </div>
