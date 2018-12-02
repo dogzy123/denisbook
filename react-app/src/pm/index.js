@@ -4,5 +4,5 @@ import PmApp from "../components/PmApp";
 
 ReactDOM.render(
     <PmApp/>,
-    document.getElementById('main')
+    document.getElementById('pm-main')
 );
