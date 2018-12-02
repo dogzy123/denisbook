@@ -54,7 +54,7 @@
         <label>Your points: <span class="your-points">0</span></label><br/>
         <label>Opponent points: <span class="opponent-points">0</span></label><br/>
         <label>
-            Your move: <select class="choose-move">
+            Your move: <select class="choose-move" size="4" style="overflow: auto">
                 <option disabled="disabled" selected="selected">-- choose ---</option>
                 <option value="rock">Rock (1 point)</option>
                 <option value="scissors">Scissors (2 points)</option>
@@ -101,38 +101,41 @@ const enterMatchmaking = function(email, idToken) {
             });
     };
 
+    let matchCont = document.querySelector('.match-cont');
+    let moveHistory = matchCont.querySelector('tbody.move-history');
+    let addHistoryRow = (moveRecs, i) => {
+        let you = moveRecs.filter(p => p.email === email)[0];
+        let opponent = moveRecs.filter(p => p.email !== email)[0];
+        moveHistory.appendChild(htmlToElement(''
+            + '<tr>'
+            + '<td>' + i + '</td>'
+            + '<td>' + you.points +'</td>'
+            + '<td>' + opponent.points +'</td>'
+            + '<td>' + (you.move || '') +'</td>'
+            + '<td>' + (opponent.move || '') +'</td>'
+            + '</tr>'
+        ))
+    };
+
     let syncMatch = (matchData) => {
         let you = matchData.players.filter(p => p.email === email)[0];
         let opponent = matchData.players.filter(p => p.email !== email)[0];
 
-        let matchCont = document.querySelector('.match-cont');
         let select = matchCont.querySelector('select.choose-move');
         let statusCont = matchCont.querySelector('.status');
-        let moveHistory = matchCont.querySelector('tbody.move-history');
 
         matchCont.classList.add('started');
         matchCont.querySelectorAll('.opponent-name')
             .forEach(span => span.textContent = opponent.email);
 
-        let addHistoryRow = (moveRecs, i) => {
-            let you = moveRecs.filter(p => p.email === email)[0];
-            let opponent = moveRecs.filter(p => p.email !== email)[0];
-            moveHistory.appendChild(htmlToElement(''
-                + '<tr>'
-                + '<td>' + i + '</td>'
-                + '<td>' + you.points +'</td>'
-                + '<td>' + opponent.points +'</td>'
-                + '<td>' + (you.move || '') +'</td>'
-                + '<td>' + (opponent.move || '') +'</td>'
-                + '</tr>'
-            ))
-        };
         moveHistory.innerHTML = '';
         matchData.moveHistory.forEach(addHistoryRow);
         addHistoryRow(matchData.players, matchData.moveHistory.length);
+        let lastMoveRecs = matchData.moveHistory.slice(-1)[0] || [];
+        let lastMove = lastMoveRecs.filter(p => p.email === email).map(p => p.move)[0] || null;
         matchCont.querySelector('.your-points').textContent = you.points;
         matchCont.querySelector('.opponent-points').textContent = opponent.points;
-        let outcome = you.points >= 3 ? 'won' :
+        let outcome = you.points >= 3 ? (lastMove === 'rock' ? 'rock' : 'won') :
             opponent.points >= 3 ? 'lost' :
             'pending';
         if (!you.move) {
@@ -247,6 +250,8 @@ tr.challenger {
 .match-cont .status { text-align: center; }
 .match-cont .status[data-outcome="won"] { color: green; }
 .match-cont .status[data-outcome="won"]:after { content: 'You Won!'; }
+.match-cont .status[data-outcome="rock"] { color: green; }
+.match-cont .status[data-outcome="rock"]:after { content: 'You Rock!'; }
 .match-cont .status[data-outcome="lost"] { color: red; }
 .match-cont .status[data-outcome="lost"]:after { content: 'You Lost!'; }
 .match-cont .status[data-outcome="pending"] { color: grey; }
