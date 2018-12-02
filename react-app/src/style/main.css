@@ -56,6 +56,10 @@ h6,
   font-family: 'PT Sans Narrow', sans-serif;
   letter-spacing: 1px;
 }
+.global-container {
+  display: flex;
+  flex-direction: column;
+}
 #navigation {
   display: flex;
   flex-direction: row;
@@ -224,9 +228,73 @@ h6,
 }
 nav {
   width: 100%;
-  min-height: 60px;
+  min-height: 80px;
   background-color: #004D40;
   position: fixed;
   top: 0;
   z-index: 1;
+}
+#pm-main {
+  margin-top: 80px;
+}
+#pm-main .pm-container {
+  display: flex;
+  min-height: 600px;
+  max-height: 1000px;
+}
+#pm-main .pm-container .pm-dialogs {
+  flex: 1;
+  border: 1px solid #004D40;
+  border-right: none;
+  overflow-y: scroll;
+}
+#pm-main .pm-container .pm-dialogs .dialog-wrapper {
+  cursor: pointer;
+  border-bottom: 1px solid #B2DFDB;
+  height: 55px;
+  padding: 16px 8px;
+  background-color: #00695C;
+}
+#pm-main .pm-container .pm-dialogs .dialog-wrapper .dialog-inner {
+  padding: 0 8px;
+}
+#pm-main .pm-container .pm-body {
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+}
+#pm-main .pm-container .pm-body .pm-messages {
+  flex: 2;
+  border: 1px solid #004D40;
+  padding: 16px;
+}
+#pm-main .pm-container .pm-body .pm-messages .pm-msg {
+  background-color: #00695C;
+  border-radius: 2px;
+  padding: 16px 8px;
+  max-width: 55%;
+  word-break: break-all;
+}
+#pm-main .pm-container .pm-body .pm-messages .pm-msg-right {
+  display: flex;
+  flex-flow: row-reverse;
+}
+#pm-main .pm-container .pm-body .pm-messages .pm-msg-left {
+  display: flex;
+  flex-flow: row;
+}
+#pm-main .pm-container .pm-body .pm-text-field {
+  min-height: 50px;
+  border: 1px solid #004D40;
+  border-top: none;
+}
+#pm-main .pm-container .pm-body .pm-text-field .pm-send-msg {
+  width: 80%;
+  height: 50px;
+  border: none;
+  resize: none;
+  padding: 8px;
+}
+#pm-main .pm-container .pm-body .pm-text-field .pm-send-msg:focus {
+  outline: none;
 }

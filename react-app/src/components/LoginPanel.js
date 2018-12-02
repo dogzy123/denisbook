@@ -1,6 +1,7 @@
 import { Component } from "react";
 import { connect } from "react-redux";
-import {logIn} from "../actions/actions";
+import {setUserSession} from "../actions/actions";
+import {post} from "../requests";
 
 class LoginPanel extends Component {
 
@@ -10,7 +11,13 @@ class LoginPanel extends Component {
 
     onSignIn ( dispatch ) {
         return function ( googleUser ) {
-            dispatch( logIn(googleUser) );
+            const session = gapi.auth2.getAuthInstance();
+
+            window.auth2 = {...session};
+
+            dispatch( setUserSession( {session: session, user: googleUser} ) );
+
+            post({func : 'login'});
         }
     }
 

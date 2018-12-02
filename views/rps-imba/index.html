@@ -5,8 +5,7 @@
     <meta name="google-signin-client_id" content="521166378127-vhkak167b5ghngfkk5r6ukrq059njoo8.apps.googleusercontent.com">
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
 
-    <title onload="onGapiScriptLoaded();">RPS imba</title>
-    <script></script>
+    <title>RPS imba</title>
 </head>
 <body>
 
@@ -29,6 +28,7 @@
                 <tr>
                     <th style="min-width: 200px">Email</th>
                     <th style="min-width: 160px">Activity</th>
+                    <th>Win/Lose Rate</th>
                     <th>Challenge!</th>
                 </tr>
                 </thead>
@@ -167,6 +167,7 @@ const enterMatchmaking = function(email, idToken) {
             tbody.append(tr);
             tr.appendChild(htmlToElement('<td>' + user.email + '</td>'));
             tr.appendChild(htmlToElement('<td>' + ((new Date().getTime() - user.activityTs) / 1000) + ' seconds ago</td>'));
+            tr.appendChild(htmlToElement('<td>' + user.wins + '/' + user.loses + ' '  + (user.wins / (user.wins + user.loses)).toFixed(2) + '</td>'));
             let btnTd = htmlToElement('<td></td>');
             tr.appendChild(btnTd);
             let btnLabel = 'Challenge!';
@@ -231,6 +232,8 @@ var onGapiScriptLoaded = () =>
 </script>
 
     <script src="https://apis.google.com/js/platform.js" async defer onload="onGapiScriptLoaded();"></script>
+    <!-- for some reason IDEA reports syntax error here... -->
+    <script></script>
 </body>
 
 <style>
