@@ -1,17 +1,17 @@
 import React, { Component } from 'react';
 import {Provider} from "react-redux";
+import {store} from "../stores/pm";
 import LoginChecker from "./LoginChecker";
-import Feed from "./Feed";
-import {store} from "../stores/feed";
+import Pm from "./Pm";
 
-class MainApp extends Component {
+class PmApp extends Component {
     render() {
         return (
             <Provider store={store}>
-                <LoginChecker body={ <Feed/> }/>
+                <LoginChecker body={ <Pm/> } />
             </Provider>
         );
     }
 }
 
-export default MainApp;
+export default PmApp;

@@ -6,12 +6,15 @@ const webpack           = require('webpack');
 module.exports = {
     mode : 'development',
 
-    entry: "./src/index.js",
+    entry: {
+        feed : "./src/feed/index.js",
+        pm : "./src/pm/index.js"
+    },
 
     output: {
         path: path.resolve(__dirname, "./dist"),
 
-        filename: "react-app-bundle.js"
+        filename: "[name]-bundle.js"
     },
 
     module: {

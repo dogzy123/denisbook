@@ -1,6 +1,4 @@
-import {store} from "./store";
-
-const getGoogleUser = () => store.getState()['user'];
+const getGoogleUser = () => window.auth2['currentUser'].get();
 
 export const get = () => {};
 
@@ -30,5 +28,3 @@ export const post = ( props ) => {
         } );
 
 };
-
-window.sendPost = post;

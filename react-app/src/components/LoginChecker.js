@@ -1,12 +1,10 @@
 import { Component } from "react";
-import AddPosts from "./AddPosts";
-import Posts from "./Posts";
 import LoginPanel from "./LoginPanel";
 import { BarLoader } from "react-spinners";
 import {connect} from "react-redux";
-import {logIn, logOut, setUserSession} from "../actions/actions";
+import {logOut, setUserSession} from "../actions/actions";
 
-class MainBlock extends Component {
+class LoginChecker extends Component {
 
     constructor (props) {
         super(props);
@@ -54,12 +52,7 @@ class MainBlock extends Component {
             );
         }
 
-        return (
-            <div className="main-app">
-                <AddPosts/>
-                <Posts/>
-            </div>
-        )
+        return this.props.body;
     }
 
     render () {
@@ -74,4 +67,4 @@ const mapStateToProps = state => ({
     user: state.user
 });
 
-export default connect(mapStateToProps)(MainBlock);
+export default connect(mapStateToProps)(LoginChecker);
