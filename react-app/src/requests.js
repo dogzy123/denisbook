@@ -13,7 +13,8 @@ export const post = ( props ) => {
         ...props
     };
 
-    return fetch('https://midiana.lv:8086//', {
+    // f= just to see the name in Network panel during debug
+    return fetch('https://midiana.lv:8086/?f=' + data.func, {
         method  : "POST",
         headers : {
             'Accept': 'application/json',

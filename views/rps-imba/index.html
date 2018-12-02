@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="google-signin-client_id" content="521166378127-vhkak167b5ghngfkk5r6ukrq059njoo8.apps.googleusercontent.com">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+
+    <title onload="onGapiScriptLoaded();">RPS imba</title>
+    <script src="https://apis.google.com/js/platform.js" async defer onload="onGapiScriptLoaded();"></script>
+    <script></script>
+</head>
+<body>
+
+<div>
+    <h1 style="text-align: center">rps-imba</h1>
+    <div style="width: 100%; text-align: center">
+        <img src="rock.png" width="256" height="256"/>
+        <img src="scissors.png" width="256" height="256"/>
+        <img src="paper.png" width="256" height="256"/>
+        <br clear="all"/>
+    </div>
+    <p>This is a game like rock-paper-scissors, but with different values for each move. Rock = 1 point, Scissors = 2 points, Paper = 3 points. Wins the one who gains 3 point first.</p>
+    <p>It could seem at a glance that choosing Paper is the best option since it gives you enough points to instantly win, but your opponent may expect you to do so and use the counter-move, Scissors, even though it gives less points, but you can read him as well, and counter that with Rock, and the pattern continues...</p>
+    <p>This game solves the issue of original rock-paper-scissors where winner is usually being decided by random. Here wins the one who understands his opponent better.</p>
+    <div class="player-list-cont">
+        <h3>Active players</h3>
+        <div style="display: inline-block">
+            <table>
+                <thead>
+                <tr>
+                    <th style="min-width: 200px">Email</th>
+                    <th style="min-width: 160px">Activity</th>
+                    <th>Challenge!</th>
+                </tr>
+                </thead>
+                <tbody class="player-list"></tbody>
+            </table>
+        </div>
+    </div>
+    <div class="match-cont">
+        <h3 style="text-align: center">Your match against <span class="opponent-name">somebody</span></h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Move #</th>
+                    <th>Your Points</th>
+                    <th>Opponent Points</th>
+                    <th>Your Move</th>
+                    <th>Enemy Move</th>
+                </tr>
+            </thead>
+            <tbody class="move-history"></tbody>
+        </table>
+        <label>Your points: <span class="your-points">0</span></label><br/>
+        <label>Opponent points: <span class="opponent-points">0</span></label><br/>
+        <label>
+            Your move: <select class="choose-move">
+                <option disabled="disabled" selected="selected">-- choose ---</option>
+                <option value="rock">Rock (1 point)</option>
+                <option value="scissors">Scissors (2 points)</option>
+                <option value="paper">Paper (3 points)</option>
+            </select>
+        </label><br/>
+        <h2 class="status" data-outcome="pending"></h2>
+    </div>
+    <br/>
+    <pre class="status-terminal">Console messages will appear here...</pre>
+</div>
+
+<script>
+const enterMatchmaking = function(email, idToken) {
+    function htmlToElement(html) {
+        var template = document.createElement('template');
+        html = html.trim(); // Never return a text node of whitespace as the result
+        template.innerHTML = html;
+        return template.content.firstChild;
+    }
+    let showHappy = msg => document.querySelector('.status-terminal').innerHTML += '\n<span class="happy-msg">' + msg + '</span>';
+    let showInfo = msg => document.querySelector('.status-terminal').innerHTML += '\n<span class="info-msg">' + msg + '</span>';
+    let showError = msg => document.querySelector('.status-terminal').innerHTML += '\n<span class="error-msg">' + msg + '</span>';
+    let callApi = (func, restParams = {}) => {
+        restParams.func = func;
+        restParams.googleIdToken = idToken;
+        return fetch('https://midiana.lv:8086?f=' + func, {
+            method: 'POST',
+            body: JSON.stringify(restParams)
+        })  .then(resp => resp.json())
+            .then(respData => respData.error
+                ? Promise.reject('Server error - ' + respData.error)
+                : Promise.resolve(respData))
+            .then(respData => {
+                if (respData.message && respData.message.toLowerCase() !== 'ok') {
+                    showInfo('HTTP ' + func + ' - OK - ' + respData.message);
+                }
+                return Promise.resolve(respData);
+            })
+            .catch(exc => {
+                showError('HTTP ' + func + ' - ERROR - ' + exc);
+                showInfo('You can try refreshing page or something...');
+                return Promise.reject(exc);
+            });
+    };
+
+    let syncMatch = (matchData) => {
+        let you = matchData.players.filter(p => p.email === email)[0];
+        let opponent = matchData.players.filter(p => p.email !== email)[0];
+
+        let matchCont = document.querySelector('.match-cont');
+        let select = matchCont.querySelector('select.choose-move');
+        let statusCont = matchCont.querySelector('.status');
+        let moveHistory = matchCont.querySelector('tbody.move-history');
+
+        matchCont.classList.add('started');
+        matchCont.querySelectorAll('.opponent-name')
+            .forEach(span => span.textContent = opponent.email);
+
+        let addHistoryRow = (moveRecs, i) => {
+            let you = moveRecs.filter(p => p.email === email)[0];
+            let opponent = moveRecs.filter(p => p.email !== email)[0];
+            moveHistory.appendChild(htmlToElement(''
+                + '<tr>'
+                + '<td>' + i + '</td>'
+                + '<td>' + you.points +'</td>'
+                + '<td>' + opponent.points +'</td>'
+                + '<td>' + (you.move || '') +'</td>'
+                + '<td>' + (opponent.move || '') +'</td>'
+                + '</tr>'
+            ))
+        };
+        moveHistory.innerHTML = '';
+        matchData.moveHistory.forEach(addHistoryRow);
+        addHistoryRow(matchData.players, matchData.moveHistory.length);
+        matchCont.querySelector('.your-points').textContent = you.points;
+        matchCont.querySelector('.opponent-points').textContent = opponent.points;
+        let outcome = you.points >= 3 ? 'won' :
+            opponent.points >= 3 ? 'lost' :
+            'pending';
+        if (!you.move) {
+            // should be the disabled "choose value" option
+            select.selectedIndex = 0;
+            if (outcome === 'pending') {
+                select.removeAttribute('disabled');
+            } else {
+                select.setAttribute('disabled', 'disabled');
+            }
+        } else {
+            select.value = you.move;
+            select.setAttribute('disabled', 'disabled');
+        }
+        statusCont.setAttribute('data-outcome', outcome);
+
+        select.onchange = () =>
+            callApi('makeMove', {move: select.value})
+                .then(respData => syncMatch(respData.match));
+    };
+
+    let challenged = null;
+    let syncMatchmaking = (syncData) => {
+        let tbody = document.querySelector('tbody.player-list');
+        tbody.innerHTML = '';
+        challenged = syncData.challenged;
+        let challengedBy = syncData.challengedBy;
+        syncData.activePlayers.forEach(user => {
+            let tr = htmlToElement('<tr></tr>');
+            tbody.append(tr);
+            tr.appendChild(htmlToElement('<td>' + user.email + '</td>'));
+            tr.appendChild(htmlToElement('<td>' + ((new Date().getTime() - user.activityTs) / 1000) + ' seconds ago</td>'));
+            let btnTd = htmlToElement('<td></td>');
+            tr.appendChild(btnTd);
+            let btnLabel = 'Challenge!';
+            if (user.email === challengedBy) {
+                tr.classList.add('challenger');
+                btnLabel = 'Accept Challenge';
+            }
+            if (user.email !== email) {
+                let btn = htmlToElement('<button>' + btnLabel + '</button>');
+                btnTd.appendChild(btn);
+                btn.onclick = () => {
+                    challenged = user.email;
+                    callApi('challenge', {opponent: challenged})
+                        .then(respData => {
+                            syncMatchmaking(syncData, email);
+                            if (respData.match) {
+                                syncMatch(respData.match);
+                            }
+                        });
+                };
+                if (challenged) {
+                    btn.setAttribute('disabled', 'disabled');
+                }
+            }
+            if (user.email === challenged) {
+                tr.classList.add('challenged');
+            }
+        });
+        if (syncData.match) {
+            syncMatch(syncData.match);
+        }
+    };
+
+    let main = () => {
+        let sync = () => {
+            callApi('syncMatchmaking')
+                .then(respData => syncMatchmaking(respData));
+        };
+        sync();
+        setInterval(sync, 1000);
+    };
+
+    main();
+};
+var onGapiScriptLoaded = () =>
+    // TODO: handle when user is not logged in google
+    gapi.load( 'auth2', function () {
+        gapi.auth2.init({
+            client_id: "521166378127-vhkak167b5ghngfkk5r6ukrq059njoo8.apps.googleusercontent.com"
+        }).then( resp => {
+            if ( resp.isSignedIn.get() )
+            {
+                window.auth2 = resp;
+                let user = resp.currentUser.get();
+                let idToken = user.Zi.id_token;
+                let email = user.w3.U3;
+                enterMatchmaking(email, idToken);
+            }
+        } );
+    } ) ;
+
+</script>
+</body>
+
+<style>
+tr.challenged {
+    background-color: cyan;
+}
+tr.challenger {
+    background-color: orange;
+}
+.match-cont {
+    padding: 2px;
+    border: solid 2px grey;
+    background-color: lightcyan;
+}
+.match-cont:not(.started) {
+    display: none;
+}
+.match-cont .status { text-align: center; }
+.match-cont .status[data-outcome="won"] { color: green; }
+.match-cont .status[data-outcome="won"]:after { content: 'You Won!'; }
+.match-cont .status[data-outcome="lost"] { color: red; }
+.match-cont .status[data-outcome="lost"]:after { content: 'You Lost!'; }
+.match-cont .status[data-outcome="pending"] { color: grey; }
+.match-cont .status[data-outcome="pending"]:after { content: 'Match in Progress...'; }
+
+.player-list-cont {
+    text-align: center;
+}
+table {
+    margin: 6px;
+    border-collapse: collapse;
+}
+td, th {
+    border: solid 1px black;
+}
+h3 {
+    margin: 4px;
+}
+.error-msg {
+    color: red;
+}
+.info-msg {
+    color: #1e4ce6;
+}
+</style>
+
+</html>
