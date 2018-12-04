@@ -2,6 +2,7 @@ import {Component} from "react";
 import { connect } from "react-redux";
 import {post} from "../../requests";
 import {addMyMessage} from "../../actions/actions";
+import CryptHelper from "../../utils/CryptHelper";
 
 class PmSendMessageInput extends Component {
 
@@ -28,7 +29,7 @@ class PmSendMessageInput extends Component {
         {
             post({
                 func: 'sendPrivateMessage',
-                message: this.state.text,
+                message: CryptHelper.encryptMessage('', this.state.text),
                 recipient: this.props.currentDialog.email,
                 encryption: 'plainText'
             }).then( response => {
@@ -36,7 +37,7 @@ class PmSendMessageInput extends Component {
                 {
                     this.props.dispatch( addMyMessage( {recipient: this.props.currentDialog.rowId, message: this.state.text, date: new Date()} ) );
 
-                    window.localStorage.setItem('myMessages', JSON.stringify(this.props.myMessages));
+                    //window.localStorage.setItem('myMessages', JSON.stringify(this.props.myMessages));
                 }
             } );
         }
@@ -44,7 +45,7 @@ class PmSendMessageInput extends Component {
 
     render () {
         return (
-            <textarea className="pm-send-msg" onKeyDown={this.onKeyDown} onInput={this.onInput}></textarea>
+            <textarea className="pm-send-msg" onKeyDown={this.onKeyDown} onInput={this.onInput} disabled={!this.props.currentDialog}></textarea>
         );
     }
 }
