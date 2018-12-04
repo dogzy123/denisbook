@@ -9,7 +9,7 @@ let rsaAlgo = {
     // with RSA-OAEP encoded message length must not exceed key length * n
     // so we should either chunk encoded message, or encrypt it with a symmetric key, and then encrypt the _symmetric key_ with RSA-OAEP
     name: "RSA-OAEP",
-    modulusLength: 4096, //can be 1024, 2048, or 4096
+    modulusLength: 1408, //can be 1024, 2048, or 4096
     publicExponent: new Uint8Array([0x01, 0x00, 0x01]),
     hash: {name: "SHA-256"}, //can be "SHA-1", "SHA-256", "SHA-384", or "SHA-512"
 };

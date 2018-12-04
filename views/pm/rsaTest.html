@@ -1,0 +1,14 @@
+<script type="module">
+    let message = 'zhopa';
+    import CryptHelper from "../../react-app/src/utils/CryptHelper.js"
+    CryptHelper.generateKey()
+        .then(generated => {
+            console.log('zhopa generated', generated);
+            CryptHelper.encryptMessage(generated.publicKey, message)
+                .then(encr => {
+                    console.log('zhopa encrypted', encr);
+                    CryptHelper.decryptMessage(generated.privateKey, encr)
+                        .then(decr => console.log('zhopa decrypted', decr));
+                });
+        });
+</script>
