@@ -71,8 +71,6 @@ class AddPosts extends Component {
 
             if (e.keyCode === 13 && !this.state.newLine['16'])
             {
-                e.target.blur();
-
                 if (e.target.value.length < 1)
                 {
                     e.target.value = "";
@@ -82,7 +80,10 @@ class AddPosts extends Component {
                     })
                 }
 
-                e.target.value = "";
+                e.target.blur();
+                e.target.value = "".trim();
+                e.target.focus();
+
                 return this.addPost();
             }
         }

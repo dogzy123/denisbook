@@ -27,19 +27,21 @@ class PmSendMessageInput extends Component {
     onKeyDown (e) {
         if (e.keyCode === 13)
         {
-            post({
-                func: 'sendPrivateMessage',
-                message: CryptHelper.encryptMessage('', this.state.text),
-                recipient: this.props.currentDialog.email,
-                encryption: 'plainText'
-            }).then( response => {
-                if ( response.message === "ok")
-                {
-                    this.props.dispatch( addMyMessage( {recipient: this.props.currentDialog.rowId, message: this.state.text, date: new Date()} ) );
-
-                    //window.localStorage.setItem('myMessages', JSON.stringify(this.props.myMessages));
-                }
-            } );
+            CryptHelper.encryptMessage( CryptHelper.base64toArrayBuffer(this.props.publicKey), btoa(this.state.text) )
+                .then( resp => {
+                    post({
+                        func        : 'sendPrivateMessage',
+                        message     : btoa( String.fromCharCode( ...new Uint8Array(resp.encryptedPm) ) ),
+                        recipient   : this.props.currentDialog.email,
+                        encryption  : "CryptHelper_v001"
+                    }).then( response => {
+                        console.log(response);
+                        if ( response.message === "ok")
+                        {
+                            //this.props.dispatch( addMyMessage( {recipient: this.props.currentDialog.rowId, message: this.state.text, date: new Date()} ) );
+                        }
+                    } );
+                } );
         }
     }
 
@@ -52,7 +54,9 @@ class PmSendMessageInput extends Component {
 
 const mapStateToProp = state => ({
     currentDialog : state.currentDialog,
-    myMessages: state.myMessages
+    myMessages: state.myMessages,
+    publicKey : state.publicKey,
+    privateKey : state.privateKey
 });
 
 export default connect(mapStateToProp)(PmSendMessageInput);

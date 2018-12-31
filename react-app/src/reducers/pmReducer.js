@@ -1,5 +1,6 @@
 import {
-    ADD_MY_MESSAGES, INIT_MY_MESSAGES, LOAD_DIALOGS, LOG_OUT, LOGGED_IN, SET_CURRENT_DIALOG, SET_MY_MESSAGES,
+    ADD_MY_MESSAGES, CHECK_KEYS, INIT_MY_MESSAGES, LOAD_DIALOGS, LOG_OUT, LOGGED_IN, SET_CURRENT_DIALOG, SET_KEYS,
+    SET_MY_MESSAGES,
     SET_SESSION
 } from "../actions/actions";
 
@@ -9,7 +10,10 @@ const initialState = {
     currentDialogMessages   : null,
     loggedIn                : false,
     user                    : null,
-    myMessages              : {}
+    myMessages              : {},
+    keysChecking            : false,
+    publicKey               : null,
+    privateKey              : null,
 };
 
 export default function ( state = initialState, action) {
@@ -71,6 +75,19 @@ export default function ( state = initialState, action) {
                     ...state.myMessages,
                     [action.id] : [action.msgObj, ...state.myMessages[action.id]]
                 }
+            };
+
+        case CHECK_KEYS:
+            return {
+                ...state,
+                keysChecking: action.keysChecking
+            };
+
+        case SET_KEYS:
+            return {
+                ...state,
+                publicKey : action.publicKey,
+                privateKey : action.privateKey
             };
 
         default :

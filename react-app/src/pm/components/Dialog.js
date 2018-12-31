@@ -10,11 +10,6 @@ class Dialog extends Component {
     }
 
     onClick () {
-        if (!this.props.myMessages[this.props.user.rowId])
-        {
-            this.props.dispatch( initMyMessages(this.props.user.rowId) );
-        }
-
         return this.props.dispatch( setCurrentDialog(this.props.user) );
     }
 
@@ -28,8 +23,6 @@ class Dialog extends Component {
                 active = " active";
             }
         }
-
-        console.log('CURRENT DIALOG', this.props.currentDialog);
 
         return (
             <div onClick={this.onClick} className={ "dialog-wrapper" + active }>

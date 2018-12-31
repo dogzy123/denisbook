@@ -6,22 +6,6 @@ import PmSendMessageInput from "../pm/components/SendMsg";
 import {setMyMessages} from "../actions/actions";
 
 class Pm extends Component {
-    componentDidMount () {
-        const myMessages = localStorage.getItem('myMessages');
-
-        if (!myMessages || !myMessages.length)
-        {
-            localStorage.setItem('myMessages', "{}");
-        }
-
-        this.props.dispatch( setMyMessages( JSON.parse(localStorage.getItem('myMessages')) ) );
-
-    /*    if (!localStorage.getItem('publicKey'))
-        {
-            localStorage.setItem('publicKey', );
-        }*/
-    }
-
     render () {
         return (
             <div className="pm-container">

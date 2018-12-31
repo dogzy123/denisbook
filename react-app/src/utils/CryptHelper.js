@@ -27,6 +27,18 @@ let encryptWithAesCtr = (privateMessage) =>
 // I just realized that this won't solve anything since server may switch your public key with it's
 // own and your buddy would encrypt his messages with server's key thinking that it's your key...
 let CryptHelper = {
+    // ty to https://gist.github.com/borismus/1032746
+    base64toArrayBuffer : base64 => {
+        let raw = atob(base64);
+        let rawLength = raw.length;
+        let array = new Uint8Array(new ArrayBuffer(rawLength));
+
+        for(let i = 0; i < rawLength; i++) {
+            array[i] = raw.charCodeAt(i);
+        }
+
+        return array;
+    },
     generateKey: () =>
         window.crypto.subtle.generateKey(rsaAlgo, true, ["encrypt", "decrypt"])
             .then((key) => {

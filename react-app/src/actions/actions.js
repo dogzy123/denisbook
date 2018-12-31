@@ -10,6 +10,8 @@ export const SET_CURRENT_DIALOG = "SET CURRENT DIALOG";
 export const ADD_MY_MESSAGES = "ADD MY MESSAGES";
 export const INIT_MY_MESSAGES = "INIT MY MESSAGES";
 export const SET_MY_MESSAGES = "SET MY MESSAGES";
+export const CHECK_KEYS = "CHECK KEYS";
+export const SET_KEYS = "SET KEYS";
 
 export const logIn = user => {
     return ({
@@ -77,6 +79,21 @@ export const addMyMessage = props => {
         type: ADD_MY_MESSAGES,
         id : props.recipient,
         msgObj : props
+    });
+};
+
+export const checkKeys = bool => {
+    return ({
+        type : CHECK_KEYS,
+        keysChecking : bool
+    });
+};
+
+export const setKeys = ({publicKey, privateKey}) => {
+    return ({
+        type: SET_KEYS,
+        publicKey,
+        privateKey
     });
 };
 
