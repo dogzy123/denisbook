@@ -51,7 +51,6 @@ class PmSendMessageInput extends Component {
 
             CryptHelper.encryptMessage( CryptHelper.base64toArrayBuffer(this.props.publicKey), btoa(this.state.text) )
                 .then( resp => {
-                    console.log('ENCRYPTED', resp);
                     post({
                         func        : 'sendPrivateMessage',
                         message     : btoa( String.fromCharCode( ...new Uint8Array(resp.encryptedPm) ) ) + ':' + btoa( String.fromCharCode( ...new Uint8Array(resp.encryptedAesKey) ) ) ,

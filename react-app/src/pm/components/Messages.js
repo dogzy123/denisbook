@@ -20,7 +20,10 @@ class Messages extends Component {
                 this.props.messages.map(  msg => {
                     if (msg.sender === this.props.currentDialog.email)
                     {
-                        CryptHelper.decryptMessage(this.props.privateKey, {
+                        console.log(msg.message.split(':')[0]);
+                        console.log(msg.message.split(':')[1]);
+
+                        CryptHelper.decryptMessage( CryptHelper.base64toArrayBuffer(this.props.privateKey), {
                             encryptedAesKey: CryptHelper.base64toArrayBuffer(msg.message.split(':')[0]),
                             encryptedPm: CryptHelper.base64toArrayBuffer(msg.message.split(':')[1]),
                         }).then( resp => {
@@ -58,6 +61,7 @@ class Messages extends Component {
 
 const mapStateToProps = state => ({
     currentDialog : state.currentDialog,
+    currentDialogPublicKey : state.currentDialogPublicKey,
     myMessages : state.myMessages,
     messages : state.messages
 });

@@ -37,7 +37,7 @@ let CryptHelper = {
             array[i] = raw.charCodeAt(i);
         }
 
-        return array;
+        return array.buffer;
     },
     generateKey: () =>
         window.crypto.subtle.generateKey(rsaAlgo, true, ["encrypt", "decrypt"])
