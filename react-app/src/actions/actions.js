@@ -6,6 +6,8 @@ export const SET_SESSION    = "SET SESSION";
 export const POSTS_TO_SHOW  = "POSTS TO SHOW";
 export const INITIAL_POSTS_STATUS = "INITIAL POSTS STATUS";
 export const LOAD_DIALOGS   = "LOAD DIALOGS";
+export const LOAD_MESSAGES  = "LOAD MESSAGES";
+export const SET_DIALOG_KEY = "SET DIALOG KEY";
 export const SET_CURRENT_DIALOG = "SET CURRENT DIALOG";
 export const ADD_MY_MESSAGES = "ADD MY MESSAGES";
 export const INIT_MY_MESSAGES = "INIT MY MESSAGES";
@@ -67,6 +69,13 @@ export const loadDialogs = ({dialogs}) => {
     });
 };
 
+export const loadMessages = msgs => {
+    return ({
+        type: LOAD_MESSAGES,
+        messages: msgs
+    });
+};
+
 export const setCurrentDialog = user => {
     return ({
         type : SET_CURRENT_DIALOG,
@@ -101,6 +110,13 @@ export const initMyMessages = id => {
     return ({
         type: INIT_MY_MESSAGES,
         id
+    });
+};
+
+export const currentDialogPublicKey = string => {
+    return ({
+        type : SET_DIALOG_KEY,
+        string
     });
 };
 

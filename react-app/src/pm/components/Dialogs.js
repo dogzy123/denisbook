@@ -1,7 +1,7 @@
  import { Component } from "react";
  import { post } from "../../requests";
  import { connect } from "react-redux";
- import {loadDialogs} from "../../actions/actions";
+ import {loadDialogs, loadMessages} from "../../actions/actions";
  import Dialog from "./Dialog";
 
 class Dialogs extends Component {
@@ -14,6 +14,13 @@ class Dialogs extends Component {
             .then( resp => {
                 this.props.dispatch( loadDialogs( {dialogs: resp['records']} ) );
             } );
+
+        post({
+            func : 'getPrivateMessages',
+            encryption : 'CryptHelper_v001'
+        }).then( response => {
+            this.props.dispatch( loadMessages( response['records'] ) );
+        } );
     }
 
     render () {

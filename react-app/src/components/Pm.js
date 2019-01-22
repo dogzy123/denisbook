@@ -3,7 +3,6 @@ import {connect} from "react-redux";
 import Dialogs from "../pm/components/Dialogs";
 import Body from  "../pm/components/Body";
 import PmSendMessageInput from "../pm/components/SendMsg";
-import {setMyMessages} from "../actions/actions";
 
 class Pm extends Component {
     render () {

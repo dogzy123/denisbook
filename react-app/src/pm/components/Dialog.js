@@ -1,6 +1,6 @@
 import { Component } from "react";
 import { connect } from "react-redux";
-import {initMyMessages, setCurrentDialog, setMyMessages} from "../../actions/actions";
+import {initMyMessages, setCurrentDialog} from "../../actions/actions";
 
 class Dialog extends Component {
     constructor (props) {

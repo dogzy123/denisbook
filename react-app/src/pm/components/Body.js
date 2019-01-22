@@ -2,13 +2,20 @@ import { Component } from "react";
 import { connect } from "react-redux";
 import Messages from "./Messages";
 import CryptHelper from "../../utils/CryptHelper";
-import {checkKeys, setKeys} from "../../actions/actions";
+import {checkKeys, currentDialogPublicKey, setKeys, setMyMessages} from "../../actions/actions";
 
 const storage = window.localStorage;
 
 class Body extends Component {
     constructor (props) {
         super(props)
+    }
+
+    componentDidMount () {
+        if (storage.getItem('myMessages') && storage.getItem('myMessages').length > 3)
+        {
+            this.props.dispatch( setMyMessages(JSON.parse( storage.getItem('myMessages')) ) );
+        }
     }
 
     componentWillUpdate (nextProps) {
@@ -21,14 +28,14 @@ class Body extends Component {
 
             const update = () => {
 
-                fetch(`http://keyvalue.immanuel.co/api/KeyVal/GetValue/7p6a4g00/${btoa( email + '_1' )}/${localPublicKeyParted1}`, {
+                fetch(`https://keyvalue.immanuel.co/api/KeyVal/GetValue/7p6a4g00/${btoa( email + '_1' )}/${localPublicKeyParted1}`, {
                     method: 'GET'
                 })
                     .then(out => out.text())
                     .then( key1 => {
                         if (JSON.parse(key1) === localPublicKeyParted1)
                         {
-                            fetch(`http://keyvalue.immanuel.co/api/KeyVal/GetValue/7p6a4g00/${btoa( email + '_2' )}/${localPublicKeyParted2}`, {
+                            fetch(`https://keyvalue.immanuel.co/api/KeyVal/GetValue/7p6a4g00/${btoa( email + '_2' )}/${localPublicKeyParted2}`, {
                                 method : 'GET'
                             })
                                 .then( out2 => out2.text())
@@ -61,6 +68,23 @@ class Body extends Component {
 
         if (nextProps.currentDialog)
         {
+            fetch(`https://keyvalue.immanuel.co/api/KeyVal/GetValue/7p6a4g00/${btoa( nextProps.currentDialog.email + '_1' )}/`, {
+                method: 'GET'
+            })
+                .then(out => out.text())
+                .then( key1 => {
+                    if (key1)
+                    {
+                        fetch(`https://keyvalue.immanuel.co/api/KeyVal/GetValue/7p6a4g00/${btoa( nextProps.currentDialog.email + '_2' )}/`, {
+                            method : 'GET'
+                        })
+                            .then( out2 => out2.text())
+                            .then( key2 => {
+                                this.props.dispatch( currentDialogPublicKey( JSON.parse(key1) + JSON.parse(key2) ) );
+                            } )
+                    }
+                });
+
             if (!storage.getItem('publicKey') || storage.getItem('publicKey').length < 1)
             {
                 CryptHelper.generateKey().then( keys => {
@@ -76,11 +100,11 @@ class Body extends Component {
                     storage.setItem('publicKey', publicKey);
                     storage.setItem('privateKey',  privateKey);
 
-                    fetch(`http://keyvalue.immanuel.co/api/KeyVal/UpdateValue/7p6a4g00/${ btoa( email + '_1') }/${partedKey1}`, {method: 'POST'})
+                    fetch(`https://keyvalue.immanuel.co/api/KeyVal/UpdateValue/7p6a4g00/${ btoa( email + '_1') }/${partedKey1}`, {method: 'POST'})
                         .then( response => {
                             if (response.status === 200)
                             {
-                                fetch(`http://keyvalue.immanuel.co/api/KeyVal/UpdateValue/7p6a4g00/${ btoa( email + '_2') }/${partedKey2}`, {method: 'POST'})
+                                fetch(`https://keyvalue.immanuel.co/api/KeyVal/UpdateValue/7p6a4g00/${ btoa( email + '_2') }/${partedKey2}`, {method: 'POST'})
                                     .then( response2 => {
                                         if (response2.status === 200)
                                         {
@@ -108,8 +132,6 @@ class Body extends Component {
     }
 
     render () {
-        console.log('ON RENDER', this.props.currentDialog);
-
         return (
             <div className="pm-messages">
                 <Messages/>

@@ -293,6 +293,8 @@ nav {
         border-bottom: none;
         border-left: none;
         padding: 16px;
+        overflow-x: hidden;
+        overflow-y: auto;
 
         .pm-msg {
           background-color: #00695C;
@@ -305,11 +307,13 @@ nav {
         .pm-msg-right {
           display: flex;
           flex-flow: row-reverse;
+          margin-bottom: 8px;
         }
 
         .pm-msg-left {
           display: flex;
           flex-flow: row;
+          margin-bottom: 8px;
         }
       }
       .pm-text-field {
