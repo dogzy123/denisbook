@@ -24,21 +24,36 @@ let encryptWithAesCtr = (privateMessage) =>
         encryptedPm: encrypted,
     }));
 
-// I just realized that this won't solve anything since server may switch your public key with it's
-// own and your buddy would encrypt his messages with server's key thinking that it's your key...
+/** @param {ArrayBuffer} buffer */
+let bufToB64 = (buffer) => {
+    let binary = '';
+    let bytes = new Uint8Array( buffer );
+    let len = bytes.byteLength;
+    for (let i = 0; i < len; i++) {
+        binary += String.fromCharCode( bytes[ i ] );
+    }
+    return window.btoa( binary );
+};
+
+let b64ToBuf = (base64) => {
+    let raw = atob(base64);
+    let rawLength = raw.length;
+    let array = new Uint8Array(new ArrayBuffer(rawLength));
+
+    for(let i = 0; i < rawLength; i++) {
+        array[i] = raw.charCodeAt(i);
+    }
+
+    return array.buffer;
+};
+
+/**
+ * use the *B64() functions, it will be much more convenient for you
+ * functions that return ArrayBuffer should be made private once you stop using them
+ */
 let CryptHelper = {
     // ty to https://gist.github.com/borismus/1032746
-    base64toArrayBuffer : base64 => {
-        let raw = atob(base64);
-        let rawLength = raw.length;
-        let array = new Uint8Array(new ArrayBuffer(rawLength));
-
-        for(let i = 0; i < rawLength; i++) {
-            array[i] = raw.charCodeAt(i);
-        }
-
-        return array.buffer;
-    },
+    base64toArrayBuffer : b64ToBuf,
     generateKey: () =>
         window.crypto.subtle.generateKey(rsaAlgo, true, ["encrypt", "decrypt"])
             .then((key) => {
@@ -51,6 +66,11 @@ let CryptHelper = {
                 privateKey: privateKeyData,
                 publicKey: publicKeyData,
             })),
+    generateKeyB64: () => CryptHelper.generateKey()
+        .then(({privateKey, publicKey}) => ({
+            privateKeyB64: bufToB64(privateKey),
+            publicKeyB64: bufToB64(publicKey),
+        })),
     encryptMessage: (publicKey, privateMessage) =>
         crypto.subtle.importKey('spki', publicKey, rsaAlgo, true, ["encrypt"])
             .then(importedPublic => encryptWithAesCtr(privateMessage)
@@ -62,6 +82,16 @@ let CryptHelper = {
                             encryptedPm: encryptedPm,
                         }));
                 })),
+    /** @return string - encrypted message in form of 2 base64 string joined with ':' */
+    encryptMessageB64: (publicKeyB64, privateMessage) => {
+        let publicKey = b64ToBuf(publicKeyB64);
+        return CryptHelper.encryptMessage(publicKey, privateMessage)
+            .then(({encryptedAesKey, encryptedPm}) => {
+                let encryptedAesKeyB64 = bufToB64(encryptedAesKey);
+                let encryptedPmB64 = bufToB64(encryptedPm);
+                return encryptedAesKeyB64 + ':' + encryptedPmB64;
+            });
+    },
     decryptMessage: (privateKey, {encryptedAesKey, encryptedPm}) =>
         crypto.subtle.importKey('pkcs8', privateKey, rsaAlgo, true, ["decrypt"])
             .then(importedPrivate => crypto.subtle.decrypt(rsaAlgo, importedPrivate, encryptedAesKey))
@@ -71,19 +101,27 @@ let CryptHelper = {
                     .then(imported => crypto.subtle.decrypt(aesAlgo, imported, encryptedPm));
             })
             .then(pmBuffer => new TextDecoder().decode(pmBuffer)),
+    decryptMessageB64: (privateKeyB64, encryptedMessageB64) => {
+        let privateKey = b64ToBuf(privateKeyB64);
+        let [encryptedAesKeyB64, encryptedPmB64] = encryptedMessageB64.split(':');
+        let encryptedAesKey = b64ToBuf(encryptedAesKeyB64);
+        let encryptedPm = b64ToBuf(encryptedPmB64);
+        return CryptHelper.decryptMessage(privateKey, {encryptedAesKey, encryptedPm});
+    },
 };
 
-// usage:
-//CryptHelper.generateKey()
-//    .then(({privateKey, publicKey}) =>
-//        CryptHelper.encryptMessage(publicKey, privateMessage)
-//            .then(encrypted => {
-//                console.log('zhopa encrypted', encrypted);
-//                return CryptHelper.decryptMessage(privateKey, encrypted)
-//                    .then(decrypted => {
-//                        console.log('zhopa decryptd', decrypted);
-//                        return decrypted;
-//                    });
-//            }));
-
+/* usage:
+var privateMessage = 'ололо залупа !";!!!!!!%!№515 AFAS fasf гузно';
+CryptHelper.generateKeyB64()
+    .then(({privateKeyB64, publicKeyB64}) =>
+        CryptHelper.encryptMessageB64(publicKeyB64, privateMessage)
+            .then(encrypted => {
+                console.log('zhopa encrypted', encrypted);
+                return CryptHelper.decryptMessageB64(privateKeyB64, encrypted)
+                    .then(decrypted => {
+                        console.log('zhopa decryptd', decrypted);
+                        return decrypted;
+                    });
+            }));
+*/
 export default CryptHelper;
