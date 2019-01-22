@@ -98,11 +98,11 @@ export const checkKeys = bool => {
     });
 };
 
-export const setKeys = ({publicKey, privateKey}) => {
+export const setKeys = ({publicKeyB64, privateKeyB64}) => {
     return ({
-        type: SET_KEYS,
-        publicKey,
-        privateKey
+        type        : SET_KEYS,
+        publicKey   : publicKeyB64.trim(),
+        privateKey  : privateKeyB64.trim()
     });
 };
 

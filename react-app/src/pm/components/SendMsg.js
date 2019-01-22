@@ -49,20 +49,16 @@ class PmSendMessageInput extends Component {
                 storage.setItem('myMessages', JSON.stringify( messages ));
             }
 
-            CryptHelper.encryptMessage( CryptHelper.base64toArrayBuffer(this.props.publicKey), btoa(this.state.text) )
-                .then( resp => {
+            CryptHelper.encryptMessageB64( this.props.currentDialogPublicKey, this.state.text)
+                .then(encrypted => {
+                    console.log('ENCRYPTED', encrypted);
                     post({
                         func        : 'sendPrivateMessage',
-                        message     : btoa( String.fromCharCode( ...new Uint8Array(resp.encryptedPm) ) ) + ':' + btoa( String.fromCharCode( ...new Uint8Array(resp.encryptedAesKey) ) ) ,
+                        message     : encrypted,
                         recipient   : this.props.currentDialog.email,
                         encryption  : "CryptHelper_v001"
-                    }).then( response => {
-                        if ( response.message === "ok")
-                        {
-                            //this.props.dispatch( addMyMessage( {recipient: this.props.currentDialog.rowId, message: this.state.text, date: new Date()} ) );
-                        }
-                    } );
-                } );
+                    });
+                });
 
             this.props.dispatch( setMyMessages(JSON.parse( storage.getItem('myMessages') )) );
         }
@@ -77,6 +73,7 @@ class PmSendMessageInput extends Component {
 
 const mapStateToProp = state => ({
     currentDialog : state.currentDialog,
+    currentDialogPublicKey : state.currentDialogPublicKey,
     myMessages: state.myMessages,
     publicKey : state.publicKey,
     privateKey : state.privateKey,

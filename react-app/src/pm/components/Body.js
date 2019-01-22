@@ -12,9 +12,46 @@ class Body extends Component {
     }
 
     componentDidMount () {
+        const sendKeyToService = key => {
+            const partedKey1 = key.substring(0, key.length / 2).replace(/[/]/g, '@').replace(/[+]/g, '_');
+            const partedKey2 = key.substring(key.length / 2, key.length).replace(/[/]/g, '@').replace(/[+]/g, '_');
+
+            fetch(`https://keyvalue.immanuel.co/api/KeyVal/UpdateValue/7p6a4g00/${ btoa( this.props.user.getBasicProfile().getEmail() + '_1') }/${partedKey1}`, {method: 'POST'})
+                .then( response => {
+                    if (response.status === 200)
+                    {
+                        fetch(`https://keyvalue.immanuel.co/api/KeyVal/UpdateValue/7p6a4g00/${ btoa( this.props.user.getBasicProfile().getEmail() + '_2') }/${partedKey2}`, {method: 'POST'})
+                            .then( response2 => {
+                                if (response2.status === 200)
+                                {
+                                    console.log('VALUES SENT SUCCESSFULLY!');
+                                }
+                            } )
+                    }
+                })
+        };
+
         if (storage.getItem('myMessages') && storage.getItem('myMessages').length > 3)
         {
             this.props.dispatch( setMyMessages(JSON.parse( storage.getItem('myMessages')) ) );
+        }
+
+        if (!storage.getItem('privateKey') || !storage.getItem('publicKey'))
+        {
+            CryptHelper.generateKeyB64()
+                .then( ({privateKeyB64, publicKeyB64}) => {
+                    storage.setItem('publicKey', publicKeyB64);
+                    storage.setItem('privateKey',  privateKeyB64);
+
+                    sendKeyToService(publicKeyB64);
+
+                    this.props.dispatch( setKeys({publicKeyB64, privateKeyB64}) );
+                } )
+        }
+        else
+        {
+            sendKeyToService( storage.getItem('publicKey') );
+            this.props.dispatch( setKeys({publicKeyB64: storage.getItem('publicKey'), privateKeyB64: storage.getItem('privateKey')}) );
         }
     }
 
@@ -80,12 +117,14 @@ class Body extends Component {
                         })
                             .then( out2 => out2.text())
                             .then( key2 => {
-                                this.props.dispatch( currentDialogPublicKey( JSON.parse(key1) + JSON.parse(key2) ) );
+                                let key = JSON.parse(key1).replace(/[@]/g, '/').replace(/[_]/g, '+').trim() + JSON.parse(key2).replace(/[@]/g, '/').replace(/[_]/g, '+').trim();
+
+                                this.props.dispatch( currentDialogPublicKey( key ) );
                             } )
                     }
                 });
 
-            if (!storage.getItem('publicKey') || storage.getItem('publicKey').length < 1)
+            /*if (!storage.getItem('publicKey') || storage.getItem('publicKey').length < 1)
             {
                 CryptHelper.generateKey().then( keys => {
                     const email      = nextProps.user.getBasicProfile().getEmail();
@@ -126,7 +165,7 @@ class Body extends Component {
                 {
                     startCheckingKey();
                 }
-            }
+            }*/
 
         }
     }
