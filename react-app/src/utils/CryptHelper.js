@@ -94,7 +94,14 @@ let CryptHelper = {
     },
     decryptMessage: (privateKey, {encryptedAesKey, encryptedPm}) =>
         crypto.subtle.importKey('pkcs8', privateKey, rsaAlgo, true, ["decrypt"])
-            .then(importedPrivate => crypto.subtle.decrypt(rsaAlgo, importedPrivate, encryptedAesKey))
+            .then(importedPrivate => {
+                return crypto.subtle.decrypt(rsaAlgo, importedPrivate, encryptedAesKey)
+                    .catch(domExc => {
+                        let msg = 'Failed to decrypt AES part of the message using private key - ' + domExc;
+                        console.error(msg, {privateKey, encryptedAesKey}, domExc);
+                        return Promise.reject(new Error(msg))
+                    });
+            })
             .then(decryptedAesKey => {
                 let jwkData = JSON.parse(new TextDecoder().decode(decryptedAesKey));
                 return crypto.subtle.importKey('jwk', jwkData, aesAlgo, true, ["encrypt", "decrypt"])
