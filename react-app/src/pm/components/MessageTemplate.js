@@ -8,10 +8,10 @@ class Message extends Component{
 
     render() {
         return(
-            <div className="pm-msg-right" >
+            <div className={this.props.userMessage ? "pm-msg-right": "pm-msg-left"} >
                 <div className="pm-msg">
                     <span>{this.props.data.author}</span>
-                    <p>{this.props.data.message}</p>
+                    <p>{this.props.data.msg}</p>
                 </div>
             </div>
         );

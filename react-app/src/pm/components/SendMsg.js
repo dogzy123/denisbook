@@ -33,8 +33,10 @@ class PmSendMessageInput extends Component {
                 message     : this.state.text,
                 author      : this.props.user.getBasicProfile().getEmail(),
                 recipient   : this.props.currentDialog.email,
-                date        : ''
+                date        : new Date()
             };
+
+            e.target.value = '';
 
             if (!storage.getItem('myMessages') || storage.getItem('myMessages').length < 3)
             {
