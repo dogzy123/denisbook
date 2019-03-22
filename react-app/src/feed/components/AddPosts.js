@@ -26,6 +26,13 @@ class AddPosts extends Component {
     addPost () {
         const data = { text : this.state.text };
 
+        if (this.state.pastedImages.length > 0)
+        {
+            this.state.pastedImages.forEach( img => {
+                data.text = data.text + `![](${img})\n`;
+            } );
+        }
+
         post({func: "addPost", ...data})
             .then( response => {
                 const newPost = {
@@ -39,7 +46,8 @@ class AddPosts extends Component {
 
         this.setState({
             ...this.state,
-            text : ''
+            text : '',
+            pastedImages : []
         })
     }
 
@@ -74,13 +82,23 @@ class AddPosts extends Component {
                 const reader    = new FileReader();
 
                 reader.onload = event => {
-                    //console.log(event.target.result); base64
-                };
+                    const imgBase64 = event.target.result;
 
-                this.setState({
-                    ...this.state,
-                    pastedImages : this.state.pastedImages.concat([blob])
-                });
+                    post({
+                        func: "uploadImage",
+                        fileName : blob.name,
+                        imageBase64: imgBase64.substring(imgBase64.indexOf("base64,") + 7, imgBase64.length)
+                    })
+                        .then( response => {
+                            if (response && response['message'] === "ok")
+                            {
+                                this.setState({
+                                    ...this.state,
+                                    pastedImages : this.state.pastedImages.concat([response.imageUrl])
+                                });
+                            }
+                        } );
+                };
 
                 reader.readAsDataURL(blob)
             }
@@ -133,9 +151,7 @@ class AddPosts extends Component {
 
         if (this.state.pastedImages.length > 0)
         {
-            const URLObj = window.URL || window.webkitURL;
-
-            this.state.pastedImages.forEach( (imageBlob, i) => {
+            this.state.pastedImages.forEach( (imageUrl, i) => {
                 previewImages.push(
                     <div className="preview-image-wrapper" key={i}>
                         <span className="preview-image-remove" onClick={ () => this.removePreviewImage(i) }>
@@ -143,7 +159,7 @@ class AddPosts extends Component {
                                 <path className="close-svg-path" d="M 10,10 L 30,30 M 30,10 L 10,30" />
                             </svg>
                         </span>
-                        <img src={URLObj.createObjectURL(imageBlob)} alt={"preview" + i} width={175} height={135}/>
+                        <img src={imageUrl} alt={"preview" + i} width={175} height={135}/>
                     </div>
                 );
             } );
