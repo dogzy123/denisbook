@@ -10,6 +10,7 @@
     "react-dom": "^16.6.3",
     "react-google-login": "^4.0.0",
     "react-loaders": "^3.0.1",
+    "react-markdown": "^4.0.6",
     "react-redux": "^5.1.1",
     "react-scripts": "2.1.1",
     "react-spinners": "^0.4.7",
@@ -17,10 +18,10 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "watch": "webpack --watch --mode-development"
+    "watch": "webpack --watch --mode-development",
+    "build": "webpack --mode-production"
   },
   "eslintConfig": {
     "extends": "react-app"

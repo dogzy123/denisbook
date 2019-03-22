@@ -4,7 +4,6 @@ const webpack           = require('webpack');
 
 
 module.exports = {
-    mode : 'development',
 
     entry: {
         feed : "./src/feed/index.js",

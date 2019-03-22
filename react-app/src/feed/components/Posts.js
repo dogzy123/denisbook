@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import moment from "moment";
 import {post} from "../../requests";
 import {FETCH_POSTS, setPostsLength, showPosts} from "../../actions/actions";
-import marked from "marked";
+import ReactMarkdown from "react-markdown";
 import RemovePost from "./RemovePost";
 
 class Posts extends Component {
@@ -96,14 +96,6 @@ class Posts extends Component {
     render() {
         const posts = [];
 
-        marked.setOptions({
-            pedantic : true,
-            smartypants : true,
-            sanitize : true
-        });
-
-        const getHtml = text => ({__html : marked(text)});
-
         if (this.props.showPosts.length)
         {
             this.props.showPosts.map( post => {
@@ -117,7 +109,9 @@ class Posts extends Component {
                                 </div>
                                 <div className="post-date">{moment(post.dt).format("DD MMMM, HH:mm")}</div>
                             </div>
-                            <div className="post-body" dangerouslySetInnerHTML={getHtml(post.text)}></div>
+                            <div className="post-body">
+                                <ReactMarkdown source={post.text}/>
+                            </div>
                         </div>
                     </div>
                 )
