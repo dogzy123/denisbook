@@ -1,5 +1,5 @@
 import {Component} from "react";
-import {post} from "../requests";
+import {post} from "../../requests";
 
 
 export default class RemovePost extends Component {

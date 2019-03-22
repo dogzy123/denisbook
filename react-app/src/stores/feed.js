@@ -4,5 +4,5 @@ import mainAppReducer from "../reducers/mainAppReducer";
 export const store = createStore(mainAppReducer);
 
 store.subscribe( () => {
-    console.log(store.getState());
+    //console.log(store.getState());
 } );

@@ -1,8 +1,8 @@
 import {Component} from "react";
 import {connect} from "react-redux";
-import Dialogs from "../pm/components/Dialogs";
-import Body from  "../pm/components/Body";
-import PmSendMessageInput from "../pm/components/SendMsg";
+import Dialogs from "./Dialogs";
+import Body from "./Body";
+import PmSendMessageInput from "./SendMsg";
 
 class Pm extends Component {
     render () {

@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import PmApp from "../components/PmApp";
+import PmApp from "./PmApp";
 
 ReactDOM.render(
     <PmApp/>,

@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import {Provider} from "react-redux";
 import {store} from "../stores/pm";
-import LoginChecker from "./LoginChecker";
-import Pm from "./Pm";
+import LoginChecker from "../components/LoginChecker";
+import Pm from "./components/Pm";
 
 class PmApp extends Component {
     render() {

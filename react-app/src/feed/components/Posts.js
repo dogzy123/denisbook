@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
 import moment from "moment";
-import {post} from "../requests";
-import {FETCH_POSTS, setPostsLength, showPosts} from "../actions/actions";
+import {post} from "../../requests";
+import {FETCH_POSTS, setPostsLength, showPosts} from "../../actions/actions";
 import marked from "marked";
 import RemovePost from "./RemovePost";
 
