@@ -133,7 +133,7 @@ class AddPosts extends Component {
             {
                 e.preventDefault();
 
-                if (e.target.value.length < 1)
+                if (e.target.value.length < 1 && this.state.pastedImages.length < 1)
                 {
                     return this.setState({
                         ...this.state,
