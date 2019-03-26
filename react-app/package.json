@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@material-ui/core": "^3.9.2",
+    "@material-ui/icons": "^3.0.2",
     "marked": "^0.5.2",
     "md5": "^2.2.1",
     "moment": "^2.22.2",
@@ -20,8 +22,8 @@
     "start": "react-scripts start",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "watch": "webpack --watch --mode-development",
-    "build": "webpack --mode-production"
+    "watch": "webpack --watch --mode=development",
+    "build": "webpack --mode=production"
   },
   "eslintConfig": {
     "extends": "react-app"

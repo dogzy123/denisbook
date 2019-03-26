@@ -5,6 +5,8 @@ import {post} from "../../requests";
 import {FETCH_POSTS, setPostsLength, showPosts} from "../../actions/actions";
 import ReactMarkdown from "react-markdown";
 import RemovePost from "./RemovePost";
+import ThumbUp from "@material-ui/icons/ThumbUpTwoTone";
+import Avatar from '@material-ui/core/Avatar';
 
 class Posts extends Component {
     constructor (props) {
@@ -78,7 +80,7 @@ class Posts extends Component {
                window.addEventListener('scroll', updatePostsToShow)
            } );
 
-        this.updateInterval = setInterval( fetchPosts, 1000 );
+        this.updateInterval = setInterval( fetchPosts, 2000 );
     }
 
     componentDidMount () {
@@ -104,14 +106,26 @@ class Posts extends Component {
                         <div className="post-wrapper">
                             <RemovePost post={post} />
                             <div className="post-sub-title">
-                                <div className="post-author">
-                                    <span>{post.author}</span>
+                                <div className="post-avatar">
+                                    <Avatar src='' />
                                 </div>
-                                <div className="post-date">{moment(post.dt).format("DD MMMM, HH:mm")}</div>
+                                <div className="post-user-info">
+                                    <div className="post-author">
+                                        <span>{post.author}</span>
+                                    </div>
+                                    <div className="post-date">{moment(post.dt).format("DD MMMM, HH:mm")}</div>
+                                </div>
                             </div>
                             <div className="post-body">
                                 <ReactMarkdown source={post.text}/>
                             </div>
+                            {<div className="post-footer">
+                                <div className="footer-icons">
+                                    <span className="icon-like">
+                                        <ThumbUp fontSize="small"/>
+                                    </span>
+                                </div>
+                            </div>}
                         </div>
                     </div>
                 )

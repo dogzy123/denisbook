@@ -77,13 +77,22 @@ h4, h5, h6,
       flex-wrap: wrap;
       display: flex;
       flex-direction: row;
-      justify-content: space-evenly;
+      justify-content: flex-start;
 
       .preview-image-wrapper {
         position: relative;
         border: 1px solid #a7dcd9;
         padding: 6px 8px;
         margin-top: 8px;
+        margin-right: 8px;
+        margin-left: 8px;
+        cursor: pointer;
+        transition: background-color 0.11s ease-out;
+
+        &:hover {
+          background-color: #e0f2f1;
+          border-radius: 4px;
+        }
 
         .preview-image-remove {
           position: absolute;
@@ -94,6 +103,11 @@ h4, h5, h6,
           padding: 1px 4px;
           top: -12px;
           right: -12px;
+        }
+
+        img {
+          max-height: 90px;
+          max-width: 210px;
         }
       }
     }
@@ -177,7 +191,7 @@ h4, h5, h6,
     .post {
       margin-top: 16px;
       margin-bottom: 16px;
-      border: 1px solid #68a09e;
+      border: 1px solid #1d756d;
       background-color: #00897B;
       border-radius: 3px;
       box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.16);
@@ -205,6 +219,7 @@ h4, h5, h6,
         .post-body {
           word-break: break-word;
           white-space: pre-wrap;
+          margin-bottom: 32px;
 
           img {
             max-height: 100%;
@@ -224,6 +239,28 @@ h4, h5, h6,
               border: 1px solid #2a5a55;
               color: white;
               background-color: #0d312d;
+              padding: 2px 4px;
+            }
+          }
+        }
+
+        .post-footer {
+          display: flex;
+          flex-direction: row-reverse;
+
+          .footer-icons {
+            width: 30%;
+            padding-top: 12px;
+            border-top : 1px solid #69ada5;
+
+            .icon-like {
+              cursor: pointer;
+              float: right;
+              margin-right: 8px;
+
+              &.liked {
+                fill : '';
+              }
             }
           }
         }
@@ -234,14 +271,21 @@ h4, h5, h6,
           margin-bottom: 16px;
           font-size: 12px;
 
-          .post-author {
-            margin-right: 16px;
-            color: #d8e7e8;
-          }
+          .post-user-info {
+            margin-top: 3px;
+            margin-left: 9px;
 
-          .post-date {
-            color : #d8e7e8;
-            padding-top: 1px;
+            .post-author {
+              margin-right: 16px;
+              color: #d8e7e8;
+              font-size: 14px;
+              font-weight: 500;
+            }
+
+            .post-date {
+              color : #d8e7e8;
+              padding-top: 1px;
+            }
           }
         }
 

@@ -2,6 +2,23 @@ import { connect } from "react-redux";
 import React, { Component } from 'react';
 import {post} from "../../requests";
 import {addPost} from "../../actions/actions";
+import Modal from '@material-ui/core/Modal';
+
+const getImageModalStyles = () => {
+    return {
+        position : 'absolute',
+        top: `50%`,
+        left: `50%`,
+        transform: `translate(-50%, -50%)`,
+    };
+};
+
+const getImageStyles = () => {
+    return {
+        maxHeight : '575px',
+        maxWidth  : '100%'
+    };
+};
 
 class AddPosts extends Component {
     constructor (props) {
@@ -11,6 +28,7 @@ class AddPosts extends Component {
             text : '',
             pastedImages : [],
             isError : false,
+            fullImage : '',
             newLine : {
                 16 : false, // shift
                 13 : false  // enter
@@ -21,6 +39,9 @@ class AddPosts extends Component {
         this.onInput    = this.onInput.bind(this);
         this.onKeyUp    = this.onKeyUp.bind(this);
         this.onPaste    = this.onPaste.bind(this);
+
+        this.fullImageClose   = this.fullImageClose.bind(this);
+        this.fullImageOpen    = this.fullImageOpen.bind(this);
     }
 
     addPost () {
@@ -146,6 +167,14 @@ class AddPosts extends Component {
         }
     }
 
+    fullImageOpen (url) {
+        this.setState({ ...this.state, fullImage : url });
+    }
+
+    fullImageClose () {
+        this.setState({ ...this.state, fullImage : '' });
+    }
+
     render() {
         const previewImages = [];
 
@@ -159,7 +188,7 @@ class AddPosts extends Component {
                                 <path className="close-svg-path" d="M 10,10 L 30,30 M 30,10 L 10,30" />
                             </svg>
                         </span>
-                        <img src={imageUrl} alt={"preview" + i} width={175} height={135}/>
+                        <img src={imageUrl} alt={"preview" + i} onClick={ e => this.fullImageOpen(imageUrl) }/>
                     </div>
                 );
             } );
@@ -171,7 +200,19 @@ class AddPosts extends Component {
                     <textarea value={this.state.text} onPaste={this.onPaste} className={"create-post-text" + (this.state.isError ? " error" : "") } onKeyDown={this.onKeyDown} onKeyUp={this.onKeyUp} onChange={this.onInput} placeholder="Write something here..." />
                 </div>
                 {this.state.pastedImages.length > 0 &&
-                    <div className="create-post-image-preview">{previewImages}</div>
+                    <div className="create-post-image-preview">
+                        {previewImages}
+                        <Modal
+                            open={this.state.fullImage.length > 0}
+                            onClose={this.fullImageClose}
+                        >
+                            <div style={getImageModalStyles()}>
+                                <div>
+                                    <img src={this.state.fullImage} style={getImageStyles()}/>
+                                </div>
+                            </div>
+                        </Modal>
+                    </div>
                 }
             </div>
         );
