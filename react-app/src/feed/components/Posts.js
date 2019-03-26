@@ -7,6 +7,15 @@ import ReactMarkdown from "react-markdown";
 import RemovePost from "./RemovePost";
 import ThumbUp from "@material-ui/icons/ThumbUpTwoTone";
 import Avatar from '@material-ui/core/Avatar';
+import { withStyles } from '@material-ui/core/styles';
+
+
+const UserAvatar = withStyles( theme => ({
+    root : {
+        backgroundColor : "#e0f2f1"
+    }
+}) )(Avatar);
+
 
 class Posts extends Component {
     constructor (props) {
@@ -107,7 +116,7 @@ class Posts extends Component {
                             <RemovePost post={post} />
                             <div className="post-sub-title">
                                 <div className="post-avatar">
-                                    <Avatar src='' />
+                                    <UserAvatar src='' />
                                 </div>
                                 <div className="post-user-info">
                                     <div className="post-author">
