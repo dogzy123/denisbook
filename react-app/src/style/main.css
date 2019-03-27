@@ -100,7 +100,7 @@ h6,
   margin-left: auto;
   margin-right: auto;
   margin-top: 60px;
-  padding-top: 24px;
+  /*padding-top: 24px;*/
   padding-bottom: 24px;
 }
 .main-container .create-post {
@@ -253,7 +253,7 @@ h6,
   flex-direction: row-reverse;
 }
 .main-container .user-posts .post .post-wrapper .post-footer .footer-icons {
-  width: 30%;
+  width: 100%;
   padding-top: 12px;
   border-top: 1px solid #69ada5;
 }
@@ -268,7 +268,7 @@ h6,
 .main-container .user-posts .post .post-wrapper .post-sub-title {
   display: flex;
   margin-top: 4px;
-  margin-bottom: 16px;
+  margin-bottom: 32px;
   font-size: 12px;
 }
 .main-container .user-posts .post .post-wrapper .post-sub-title .post-user-info {
@@ -276,6 +276,7 @@ h6,
   margin-left: 9px;
 }
 .main-container .user-posts .post .post-wrapper .post-sub-title .post-user-info .post-author {
+  padding-top: 2px;
   margin-right: 16px;
   color: #d8e7e8;
   font-size: 14px;
@@ -283,7 +284,7 @@ h6,
 }
 .main-container .user-posts .post .post-wrapper .post-sub-title .post-user-info .post-date {
   color: #d8e7e8;
-  padding-top: 1px;
+  padding-top: 4px;
 }
 .main-container .user-posts .post .post-wrapper h1,
 .main-container .user-posts .post .post-wrapper h2,

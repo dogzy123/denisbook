@@ -12,7 +12,8 @@ import { withStyles } from '@material-ui/core/styles';
 
 const UserAvatar = withStyles( theme => ({
     root : {
-        backgroundColor : "#e0f2f1"
+        backgroundColor : "#e0f2f1",
+        border : "2px solid #a4bfbe"
     }
 }) )(Avatar);
 
@@ -23,6 +24,12 @@ class Posts extends Component {
 
         this.newPostSound = new Audio('../react-app/src/audio/newpost.mp3');
         this.updateInterval = null;
+
+        this.state = {
+            users : []
+        };
+
+        this.getUserAvatar = this.getUserAvatar.bind(this);
     }
 
     componentWillMount () {
@@ -96,6 +103,36 @@ class Posts extends Component {
 
     }
 
+    getUserAvatar (author) {
+        let fount = false;
+
+        this.state.users.forEach( user => {
+            if (user.email === author)
+            {
+                fount = true;
+            }
+        } );
+
+        if (!fount)
+        {
+            post( {func: 'getUserData', email: author} )
+                .then( response => {
+                    if (response && response['message'] === "ok")
+                    {
+                        const [fountUser] = this.state.users.filter( user => response.email === user.email);
+
+                        if (!fountUser)
+                        {
+                            this.setState({
+                                ...this.state,
+                                users : this.state.users.concat({...response})
+                            })
+                        }
+                    }
+                } );
+        }
+    }
+
     /*componentWillReceiveProps (nextProps) {
         if (nextProps.newPost && nextProps.newPost.rowId !== this.props.posts[0].rowId)
         {
@@ -107,36 +144,62 @@ class Posts extends Component {
     render() {
         const posts = [];
 
+        const profile = this.props.user.getBasicProfile();
+
+        console.log(this.state);
+
         if (this.props.showPosts.length)
         {
             this.props.showPosts.map( post => {
+                let avatarUrl, userName;
+
+                if (profile.getEmail() === post.author)
+                {
+                    avatarUrl = profile.getImageUrl();
+                    userName = profile.getName();
+                }
+                else
+                {
+                    const [fountUser] = this.state.users.filter( user => post.author === user.email);
+
+                    if (fountUser)
+                    {
+                        avatarUrl = fountUser.imageUrl;
+                        userName = fountUser.displayName;
+                    }
+                    else
+                    {
+                        this.getUserAvatar(post.author);
+                    }
+                }
+
                 posts.push(
                     <div key={post.rowId} className="post">
-                        <div className="post-wrapper">
-                            <RemovePost post={post} />
-                            <div className="post-sub-title">
-                                <div className="post-avatar">
-                                    <UserAvatar src='' />
-                                </div>
-                                <div className="post-user-info">
-                                    <div className="post-author">
-                                        <span>{post.author}</span>
-                                    </div>
-                                    <div className="post-date">{moment(post.dt).format("DD MMMM, HH:mm")}</div>
-                                </div>
+                    <div className="post-wrapper">
+                        <RemovePost post={post} />
+                        <div className="post-sub-title">
+                            <div className="post-avatar">
+                                <UserAvatar src={avatarUrl} />
                             </div>
-                            <div className="post-body">
-                                <ReactMarkdown source={post.text}/>
-                            </div>
-                            {<div className="post-footer">
-                                <div className="footer-icons">
-                                    <span className="icon-like">
-                                        <ThumbUp fontSize="small"/>
-                                    </span>
+                            <div className="post-user-info">
+                                <div className="post-author">
+                                    <span>{userName ? userName : post.author}</span>
                                 </div>
-                            </div>}
+                                <div className="post-date">{moment(post.dt).format("DD MMMM, HH:mm")}</div>
+                            </div>
                         </div>
+                        <div className="post-body">
+                            <ReactMarkdown source={post.text}/>
+                        </div>
+                        {<div className="post-footer">
+                            <div className="footer-icons">
+                                <span className="icon-like">
+                                    <ThumbUp fontSize="small"/>
+                                </span>
+                            </div>
+                        </div>}
                     </div>
+                </div>
                 )
             } )
         }
