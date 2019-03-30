@@ -1,5 +1,5 @@
 import {
-    ADD_POST, FETCH_POSTS, INITIAL_POSTS_STATUS, LOG_OUT, LOGGED_IN, POSTS_TO_SHOW, SET_SESSION
+    ADD_POST, FETCH_POSTS, INITIAL_POSTS_STATUS, LOG_OUT, LOGGED_IN, POSTS_TO_SHOW, SET_ERROR, SET_SESSION
 } from "../actions/actions";
 
 const initialState = {
@@ -8,7 +8,11 @@ const initialState = {
     posts           : [],
     showPosts       : [],
     postsLength     : 0,
-    showPostStep    : 0
+    showPostStep    : 0,
+    error           : {
+        isError    : false,
+        errorMsg   : ''
+    }
 };
 
 export default function ( state = initialState, action ) {
@@ -60,6 +64,15 @@ export default function ( state = initialState, action ) {
                 ...state,
                 loggedIn    : action.loggedIn,
                 user        : action.user,
+            };
+
+        case SET_ERROR:
+            return {
+                ...state,
+                error : {
+                    isError     : action.error.isError,
+                    errorMsg    : action.error.errorMsg
+                }
             };
 
         default:

@@ -14,6 +14,7 @@ export const INIT_MY_MESSAGES = "INIT MY MESSAGES";
 export const SET_MY_MESSAGES = "SET MY MESSAGES";
 export const CHECK_KEYS = "CHECK KEYS";
 export const SET_KEYS = "SET KEYS";
+export const SET_ERROR = "SET ERROR";
 
 export const logIn = user => {
     return ({
@@ -124,5 +125,12 @@ export const setMyMessages = myMessages => {
     return ({
         type: SET_MY_MESSAGES,
         myMessages
+    });
+};
+
+export const setError = error => {
+    return ({
+        type : SET_ERROR,
+        error
     });
 };

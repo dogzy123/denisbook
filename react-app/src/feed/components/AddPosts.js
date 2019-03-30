@@ -54,7 +54,7 @@ class AddPosts extends Component {
             } );
         }
 
-        post({func: "addPost", ...data})
+        post({func: "addPost", componentDispatch: this.props.dispatch, ...data})
             .then( response => {
                 const newPost = {
                     rowId   : response.rowId,

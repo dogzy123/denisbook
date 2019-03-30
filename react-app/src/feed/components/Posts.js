@@ -59,7 +59,7 @@ class Posts extends Component {
         };
 
         const fetchPosts = () => {
-            return post({func : 'getRelevantPosts'})
+            return post({func : 'getRelevantPosts', componentDispatch: this.props.dispatch})
                 .then( response =>
                     this.props.dispatch({
                         type    : FETCH_POSTS,
@@ -115,7 +115,7 @@ class Posts extends Component {
 
         if (!fount)
         {
-            post( {func: 'getUserData', email: author} )
+            post( {func: 'getUserData', email: author, componentDispatch: this.props.dispatch} )
                 .then( response => {
                     if (response && response['message'] === "ok")
                     {
@@ -146,8 +146,6 @@ class Posts extends Component {
 
         const profile = this.props.user.getBasicProfile();
 
-        console.log(this.state);
-
         if (this.props.showPosts.length)
         {
             this.props.showPosts.map( post => {
@@ -176,7 +174,7 @@ class Posts extends Component {
                 posts.push(
                     <div key={post.rowId} className="post">
                     <div className="post-wrapper">
-                        <RemovePost post={post} />
+                        {this.props.user.getBasicProfile().getEmail() === post.author && <RemovePost post={post}/> }
                         <div className="post-sub-title">
                             <div className="post-avatar">
                                 <UserAvatar src={avatarUrl} />

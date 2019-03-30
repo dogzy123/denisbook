@@ -1,3 +1,5 @@
+import {setError} from "./actions/actions";
+
 const getGoogleUser = () => window.auth2['currentUser'].get();
 
 export const get = () => {};
@@ -21,10 +23,33 @@ export const post = ( props ) => {
         body    : JSON.stringify( data ),
     })
         .then( resp => {
-            if (resp && resp.status === 200 && resp.statusText === "OK")
+            if (resp)
             {
                 return resp.json();
             }
-        } );
+
+            throw Error("Something bad is happening with server.");
+        } )
+        .then( resp => {
+            if (resp.error || !resp.hasOwnProperty('message'))
+            {
+                if (props.hasOwnProperty('componentDispatch'))
+                {
+                    const error = {
+                        isError: true,
+                        errorMsg: resp.error || "Something went wrong :/"
+                    };
+
+                    props.componentDispatch(setError(error));
+
+                    return Promise.reject(resp.error);
+                }
+            }
+
+            return resp;
+        } )
+        .catch(e => {
+            console.error(e);
+        });
 
 };

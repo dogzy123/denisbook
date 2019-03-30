@@ -94,6 +94,22 @@ h6,
 #navigation > ul > li {
   padding: 4px 8px;
 }
+.error-notification {
+  background-color: #d32f2f !important;
+  max-width: 440px !important;
+}
+.error-notification > div {
+  display: flex;
+}
+.error-notification .error-msg-content {
+  display: flex;
+  align-items: center;
+  max-width: 365px;
+}
+.error-notification .error-msg-content .error-msg-icon {
+  opacity: 0.75;
+  margin-right: 16px;
+}
 .main-container {
   display: flex;
   flex-direction: column;
