@@ -23,7 +23,8 @@ class Posts extends Component {
         super(props);
 
         this.newPostSound = new Audio('../react-app/src/audio/newpost.mp3');
-        this.updateInterval = null;
+
+        this.processingUsers = [];
 
         this.state = {
             users : []
@@ -128,8 +129,10 @@ class Posts extends Component {
             }
         } );
 
-        if (!fount)
+        if (!fount && this.processingUsers.indexOf(author) < 0)
         {
+            this.processingUsers = this.processingUsers.concat([author]);
+
             post( {func: 'getUserData', email: author, componentDispatch: this.props.dispatch} )
                 .then( response => {
                     if (response && response['message'] === "ok")
@@ -138,6 +141,8 @@ class Posts extends Component {
 
                         if (!fountUser)
                         {
+                            this.processingUsers = this.processingUsers.filter( user => user !== author );
+
                             this.setState({
                                 ...this.state,
                                 users : this.state.users.concat({...response})
@@ -204,13 +209,13 @@ class Posts extends Component {
                         <div className="post-body">
                             <ReactMarkdown source={post.text}/>
                         </div>
-                        {<div className="post-footer">
+                        <div className="post-footer">
                             <div className="footer-icons">
                                 <span className="icon-like">
                                     <ThumbUp fontSize="small"/>
                                 </span>
                             </div>
-                        </div>}
+                        </div>
                     </div>
                 </div>
                 )
