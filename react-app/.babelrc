@@ -1,4 +1,22 @@
 {
-  "presets": ["@babel/preset-env", "@babel/preset-react"],
-  "plugins": ["emotion"]
+  "presets": [ [
+    "@babel/preset-env",
+    {
+      "useBuiltIns" : "usage",
+      "corejs": "3",
+      "targets" : {
+        "browsers" : [
+          ">1%",
+          "not ie 11",
+          "not op_mini all"
+        ]
+      }
+    }
+  ], "@babel/preset-react" ],
+  "plugins": [
+    "@babel/plugin-proposal-class-properties",
+    "@babel/plugin-proposal-object-rest-spread",
+    "@babel/plugin-transform-runtime",
+    "emotion"
+  ]
 }

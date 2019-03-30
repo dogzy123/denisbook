@@ -1,7 +1,7 @@
-const path              = require('path');
-const webpack           = require('webpack');
-//const HtmlWebPackPlugin = require("html-webpack-plugin");
-
+const path                  = require('path');
+const CleanWebpackPlugin    = require('clean-webpack-plugin');
+const webpack               = require('webpack');
+/*const HtmlWebPackPlugin = require("html-webpack-plugin");*/
 
 module.exports = {
 
@@ -16,10 +16,16 @@ module.exports = {
         filename: "[name]-bundle.js"
     },
 
+    resolve : {
+        alias : {
+            '@material-ui/core' : '@material-ui/core/es'
+        }
+    },
+
     module: {
         rules: [
             {
-                test: /\.js$/,
+                test: /\.(js|jsx)$/,
                 exclude: /node_modules/,
                 use: {
                     loader: "babel-loader"
@@ -40,13 +46,33 @@ module.exports = {
         ]
     },
 
+    optimization : {
+        splitChunks : {
+            cacheGroups: {
+                vendors : {
+                    test : /[\\/]node_modules[\\/]/,
+                    name : 'vendor',
+                    chunks : 'all'
+                }
+            }
+        }
+    },
+
     plugins: [
         new webpack.ProvidePlugin({
             "React": "react",
-        })
-       /* new HtmlWebPackPlugin({
-            template: "./src/index.html",
-            filename: "./index.html"
+        }),
+
+        new CleanWebpackPlugin(),
+
+        new webpack.DefinePlugin({
+            'process.env.NODE_ENV' : JSON.stringify('production')
+        }),
+
+        // TODO
+        /*new HtmlWebPackPlugin({
+            template: "../views/index.html",
+            filename: "../index.html",
         })*/
     ]
 };

@@ -99,8 +99,23 @@ class Posts extends Component {
         this.updateInterval = setInterval( fetchPosts, 2000 );
     }
 
-    componentDidMount () {
+    shouldComponentUpdate(nextProps, nextState) {
+        if (nextProps.showPosts.length !== this.props.showPosts.length)
+        {
+            return true;
+        }
 
+        if (nextProps.posts.length !== this.props.postsLength)
+        {
+            return true;
+        }
+
+        if (nextState.users.length > this.state.users.length)
+        {
+            return true;
+        }
+
+        return false;
     }
 
     getUserAvatar (author) {
