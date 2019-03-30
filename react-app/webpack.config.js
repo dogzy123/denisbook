@@ -1,6 +1,9 @@
 const path                  = require('path');
-const CleanWebpackPlugin    = require('clean-webpack-plugin');
 const webpack               = require('webpack');
+
+const CleanWebpackPlugin    = require('clean-webpack-plugin');
+const UglifyJsPlugin        = require('uglifyjs-webpack-plugin');
+const TerserPlugin          = require('terser-webpack-plugin');
 /*const HtmlWebPackPlugin = require("html-webpack-plugin");*/
 
 module.exports = {
@@ -47,6 +50,12 @@ module.exports = {
     },
 
     optimization : {
+        minimizer: [
+            new TerserPlugin({
+                test: /\.js(\?.*)?$/i,
+                extractComments: true
+            }),
+        ],
         splitChunks : {
             cacheGroups: {
                 vendors : {
@@ -59,11 +68,13 @@ module.exports = {
     },
 
     plugins: [
+        new CleanWebpackPlugin(),
+
         new webpack.ProvidePlugin({
             "React": "react",
         }),
 
-        new CleanWebpackPlugin(),
+       // new UglifyJsPlugin(),
 
         new webpack.DefinePlugin({
             'process.env.NODE_ENV' : JSON.stringify('production')
