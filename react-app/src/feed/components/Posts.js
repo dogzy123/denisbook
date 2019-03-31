@@ -22,15 +22,31 @@ class Posts extends Component {
     constructor (props) {
         super(props);
 
-        this.newPostSound = new Audio('../react-app/src/audio/newpost.mp3');
-
-        this.processingUsers = [];
+        this.postSound          = null;
+        this.processingUsers    = [];
+        this.isBlurred          = false;
+        this.updateInterval     = null;
 
         this.state = {
-            users : []
+            users : [],
+            play : false
         };
 
         this.getUserAvatar = this.getUserAvatar.bind(this);
+    }
+
+    getBlurred () {
+        return this.isBlurred;
+    }
+
+    changeFavIco ({type}) {
+        const link = document.querySelector("link[rel*='icon']") || document.createElement('link');
+
+        link.type   = 'image/x-icon';
+        link.rel    = 'shortcut icon';
+        link.href   = type && type === "NEW MESSAGE" ? '../react-app/src/style/img/favicon-msg.ico' : "../react-app/src/style/img/favicon.ico";
+
+        document.getElementsByTagName('head')[0].appendChild(link);
     }
 
     componentWillMount () {
@@ -75,10 +91,10 @@ class Posts extends Component {
                     {
                         if (this.props.posts.length > this.props.postsLength)
                         {
-                            console.log(this.props.posts[0]);
-                            if (this.props.posts[0].author !== this.props.user['w3']['U3'])
+                            if (this.getBlurred() && this.props.posts[0].author !== this.props.user.getBasicProfile().getEmail())
                             {
-                                this.newPostSound.play();
+                                this.changeFavIco({type: "NEW MESSAGE"});
+                                this.postSound.play();
                             }
 
                             this.props.dispatch( setPostsLength({ postsLength: this.props.posts.length }) );
@@ -153,13 +169,16 @@ class Posts extends Component {
         }
     }
 
-    /*componentWillReceiveProps (nextProps) {
-        if (nextProps.newPost && nextProps.newPost.rowId !== this.props.posts[0].rowId)
-        {
-            this.props.posts.unshift( nextProps.newPost );
-            this.props.showPosts.unshift( nextProps.newPost );
-        }
-    }*/
+    componentDidMount () {
+        const blurEvent     = e => this.isBlurred = true;
+        const focusEvent    = e => {
+            this.isBlurred = false;
+            this.changeFavIco({type: false});
+        };
+
+        window.onblur = blurEvent;
+        window.onfocus = focusEvent;
+    }
 
     render() {
         const posts = [];
@@ -223,7 +242,10 @@ class Posts extends Component {
         }
 
         return (
-            <div className="user-posts">{ posts }</div>
+            <div className="user-posts">
+                { posts }
+                <audio src='../react-app/src/audio/newpost.mp3' ref={ el => this.postSound = el }/>
+            </div>
         );
     }
 }
