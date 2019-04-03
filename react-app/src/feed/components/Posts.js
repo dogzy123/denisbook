@@ -9,14 +9,12 @@ import ThumbUp from "@material-ui/icons/ThumbUpTwoTone";
 import Avatar from '@material-ui/core/Avatar';
 import { withStyles } from '@material-ui/core/styles';
 
-
 const UserAvatar = withStyles( theme => ({
     root : {
         backgroundColor : "#e0f2f1",
         border : "2px solid #a4bfbe"
     }
 }) )(Avatar);
-
 
 class Posts extends Component {
     constructor (props) {
@@ -31,6 +29,9 @@ class Posts extends Component {
             users : [],
             play : false
         };
+
+        this.step = 1;
+        this.postsLength = 35;
 
         this.getUserAvatar = this.getUserAvatar.bind(this);
     }
@@ -51,88 +52,55 @@ class Posts extends Component {
 
     componentWillMount () {
         const updatePostsToShow = e => {
-            if (window.pageYOffset + 1000 > document.body.clientHeight)
+            if (window.pageYOffset + 1200 > document.body.clientHeight)
             {
-                if (this.props.posts.length)
-                {
-                    let step = this.props.showPostStep + 35;
+                this.step = this.step + 1;
 
-                    if (this.props.showPostStep >= this.props.posts.length)
-                    {
-                        this.props.dispatch( showPosts( {
-                            showPosts : this.props.showPosts,
-                            showPostStep : this.props.posts.length
-                        } ) );
+                window.removeEventListener('scroll', updatePostsToShow);
 
-                        return window.removeEventListener('scroll', updatePostsToShow);
-                    }
-
-                    this.props.dispatch( showPosts( {
-                        showPosts: this.props.showPosts.concat( this.props.posts.slice(this.props.showPosts.length, step) ),
-                        showPostStep : step
-                    }) );
-                }
+                fetchPosts();
             }
         };
 
         const fetchPosts = () => {
-            return post({func : 'getRelevantPosts', componentDispatch: this.props.dispatch})
-                .then( response =>
-                    this.props.dispatch({
-                        type    : FETCH_POSTS,
-                        posts   : response['records'] || []
-                    })
-                )
-                .then( () => {
-                    this.props.dispatch( showPosts( {showPosts: this.props.posts.slice(0, this.props.showPosts.length), showPostStep: this.props.showPostStep}) );
-                } )
-                .then( () => {
+            return post({
+                func : 'getRelevantPosts',
+                length : (this.postsLength * this.step),
+                beforeId : '',
+                componentDispatch: this.props.dispatch
+            })
+                .then( response => {
+                    // check for new posts
                     if (this.props.postsLength > 0)
                     {
-                        if (this.props.posts.length > this.props.postsLength)
+                        const postsLastDate = new Date(this.props.posts[0]['dt']).getTime();
+                        const responseLastDate = new Date(response['records'][0]['dt']).getTime();
+
+                        // check if currently recorded posts first element isn't equals with response first element
+                        if (this.props.posts[0]['rowId'] !== response['records'][0]['rowId'] && responseLastDate > postsLastDate)
                         {
                             if (this.getBlurred() && this.props.posts[0].author !== this.props.user.getBasicProfile().getEmail())
                             {
                                 this.changeFavIco({type: "NEW MESSAGE"});
                                 this.postSound.play();
                             }
-
-                            this.props.dispatch( setPostsLength({ postsLength: this.props.posts.length }) );
                         }
                     }
-                } );
+
+                    this.props.dispatch({
+                        type    : FETCH_POSTS,
+                        posts   : response['records'] || []
+                    });
+
+                    this.props.dispatch( setPostsLength({ postsLength: this.props.posts.length }) );
+
+                    window.addEventListener('scroll', updatePostsToShow);
+                });
         };
 
-        fetchPosts()
-           .then( () => {
-               this.props.dispatch( setPostsLength({ postsLength: this.props.posts.length }) );
-           } )
-           .then( () => {
-               this.props.dispatch( showPosts( {showPosts: this.props.posts.slice(0, 35), showPostStep: 35} ) );
-
-               window.addEventListener('scroll', updatePostsToShow)
-           } );
+        fetchPosts();
 
         this.updateInterval = setInterval( fetchPosts, 2000 );
-    }
-
-    shouldComponentUpdate(nextProps, nextState) {
-        if (nextProps.showPosts.length !== this.props.showPosts.length)
-        {
-            return true;
-        }
-
-        if (nextProps.posts.length !== this.props.postsLength)
-        {
-            return true;
-        }
-
-        if (nextState.users.length > this.state.users.length)
-        {
-            return true;
-        }
-
-        return false;
     }
 
     getUserAvatar (author) {
@@ -185,9 +153,9 @@ class Posts extends Component {
 
         const profile = this.props.user.getBasicProfile();
 
-        if (this.props.showPosts.length)
+        if (this.props.posts.length)
         {
-            this.props.showPosts.map( post => {
+            this.props.posts.map( post => {
                 let avatarUrl, userName;
 
                 if (profile.getEmail() === post.author)
@@ -252,8 +220,6 @@ class Posts extends Component {
 
 const mapStateToProps = state => ({
     posts   : state.posts,
-    showPosts   : state.showPosts,
-    showPostStep : state.showPostStep,
     newPost : state.newPost,
     postsLength : state.postsLength,
     user : state.user
