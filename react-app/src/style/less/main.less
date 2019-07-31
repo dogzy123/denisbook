@@ -148,7 +148,7 @@ h4, h5, h6,
         height: 110px;
         background-color: #E0F2F1;
         width: 100%;
-        border: 1px solid #a7dcd9;
+        border: 1px solid #badedc;
         -webkit-box-sizing: border-box;
         -moz-box-sizing: border-box;
         box-sizing: border-box;
@@ -190,6 +190,26 @@ h4, h5, h6,
           }
         }
       }
+
+      > textarea::-webkit-input-placeholder {
+        color: #098c7f;
+      }
+
+      > textarea:-moz-placeholder { /* Firefox 18- */
+        color: #098c7f;
+      }
+
+      > textarea::-moz-placeholder {  /* Firefox 19+ */
+        color: #098c7f;
+      }
+
+      textarea:-ms-input-placeholder {
+        color: #098c7f;
+      }
+
+      textarea::placeholder {
+        color: #098c7f;
+      }
     }
   }
 
@@ -208,14 +228,15 @@ h4, h5, h6,
 
   .user-posts {
     font-size: 14px;
+    color : #5f5f5f;
 
     .post {
       margin-top: 16px;
       margin-bottom: 16px;
-      border: 1px solid #1d756d;
-      background-color: #00897B;
+      border: 1px solid #e2e2e2;
+      background-color: #f6fffe;
       border-radius: 3px;
-      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.16);
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.06), 0 3px 14px rgba(0, 0, 0, 0.06);
 
       .post-wrapper {
         position: relative;
@@ -272,7 +293,7 @@ h4, h5, h6,
           .footer-icons {
             width: 100%;
             padding-top: 12px;
-            border-top : 1px solid #69ada5;
+            border-top : 1px solid #ccdedc;
 
             .icon-like {
               cursor: pointer;
@@ -299,13 +320,13 @@ h4, h5, h6,
             .post-author {
               padding-top: 2px;
               margin-right: 16px;
-              color: #d8e7e8;
+              color: #797979;
               font-size: 14px;
               font-weight: 500;
             }
 
             .post-date {
-              color : #d8e7e8;
+              color : #a2a2a2;
               padding-top: 4px;
             }
           }
@@ -359,10 +380,11 @@ h4, h5, h6,
 
 nav {
   width: 100%;
-  background-color: #045850;
+  background-color: #098c7f;
   position: fixed;
   top: 0;
   z-index: 1;
+  border-bottom: 1px solid #187970;
 }
 
 #pm-main {

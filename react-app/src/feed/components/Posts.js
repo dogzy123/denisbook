@@ -12,7 +12,7 @@ import { withStyles } from '@material-ui/core/styles';
 const UserAvatar = withStyles( theme => ({
     root : {
         backgroundColor : "#e0f2f1",
-        border : "2px solid #a4bfbe"
+        border : "1px solid #c1c5c5"
     }
 }) )(Avatar);
 
@@ -178,6 +178,17 @@ class Posts extends Component {
                     }
                 }
 
+                const dateDifferenceMin = moment(new Date()).diff(moment(post.dt), 'minutes');
+                const dateDifferenceHour = moment(new Date()).diff(moment(post.dt), 'minutes');
+
+                const postDate = dateDifferenceMin < 1
+                    ? "just now"
+                    : dateDifferenceMin < 60
+                        ? dateDifferenceMin + (dateDifferenceMin < 2 ? " minute ago" : " minutes ago")
+                        : dateDifferenceHour < 12
+                            ? dateDifferenceHour + (dateDifferenceHour < 2 ? "hour ago" : " hours ago")
+                            : moment(post.dt).format("DD MMMM, HH:mm");
+
                 posts.push(
                     <div key={post.rowId} className="post">
                     <div className="post-wrapper">
@@ -190,7 +201,7 @@ class Posts extends Component {
                                 <div className="post-author">
                                     <span>{userName ? userName : post.author}</span>
                                 </div>
-                                <div className="post-date">{moment(post.dt).format("DD MMMM, HH:mm")}</div>
+                                <div className="post-date">{postDate}</div>
                             </div>
                         </div>
                         <div className="post-body">
@@ -212,7 +223,7 @@ class Posts extends Component {
         return (
             <div className="user-posts">
                 { posts }
-                <audio src='../react-app/src/audio/newpost.mp3' ref={ el => this.postSound = el }/>
+                <audio src='../src/audio/newpost.mp3' ref={ el => this.postSound = el }/>
             </div>
         );
     }

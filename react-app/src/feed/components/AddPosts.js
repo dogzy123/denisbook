@@ -197,7 +197,7 @@ class AddPosts extends Component {
         return (
             <div className="create-post">
                 <div className="create-post-wrapper">
-                    <textarea value={this.state.text} onPaste={this.onPaste} className={"create-post-text" + (this.state.isError ? " error" : "") } onKeyDown={this.onKeyDown} onKeyUp={this.onKeyUp} onChange={this.onInput} placeholder="Write something here..." />
+                    <textarea value={this.state.text} onPaste={this.onPaste} className={"create-post-text" + (this.state.isError ? " error" : "") } onKeyDown={this.onKeyDown} onKeyUp={this.onKeyUp} onChange={this.onInput} placeholder="Type a message..." />
                 </div>
                 {this.state.pastedImages.length > 0 &&
                     <div className="create-post-image-preview">

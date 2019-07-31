@@ -1,10 +1,9 @@
 const path                  = require('path');
 const webpack               = require('webpack');
 
-const CleanWebpackPlugin    = require('clean-webpack-plugin');
-const UglifyJsPlugin        = require('uglifyjs-webpack-plugin');
+const { CleanWebpackPlugin }    = require('clean-webpack-plugin');
 const TerserPlugin          = require('terser-webpack-plugin');
-/*const HtmlWebPackPlugin = require("html-webpack-plugin");*/
+const HtmlWebPackPlugin     = require("html-webpack-plugin");
 
 module.exports = {
 
@@ -57,11 +56,26 @@ module.exports = {
             }),
         ],
         splitChunks : {
+            chunks: 'async',
+            minSize: 30000,
+            maxSize: 0,
+            minChunks: 1,
+            maxAsyncRequests: 5,
+            maxInitialRequests: 3,
+            automaticNameDelimiter: '~',
+            automaticNameMaxLength: 30,
+            name: true,
             cacheGroups: {
                 vendors : {
                     test : /[\\/]node_modules[\\/]/,
+                    priority : -10,
                     name : 'vendor',
-                    chunks : 'all'
+                    chunks : chunk => chunk.name !== "pre-main.min"
+                },
+                default : {
+                    minChunks: 2,
+                    priority: -20,
+                    reuseExistingChunk: true
                 }
             }
         }
@@ -74,16 +88,20 @@ module.exports = {
             "React": "react",
         }),
 
-       // new UglifyJsPlugin(),
-
         new webpack.DefinePlugin({
             'process.env.NODE_ENV' : JSON.stringify('production')
         }),
 
-        // TODO
-        /*new HtmlWebPackPlugin({
+        new HtmlWebPackPlugin({
             template: "../views/index.html",
-            filename: "../index.html",
-        })*/
+            filename: "./index.html",
+            chunks: ['feed']
+        }),
+
+        new HtmlWebPackPlugin({
+            template: "../views/pm/index.html",
+            filename: "./pm.html",
+            chunks: ['pm']
+        })
     ]
 };
