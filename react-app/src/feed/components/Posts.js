@@ -12,7 +12,9 @@ import { withStyles } from '@material-ui/core/styles';
 const UserAvatar = withStyles( theme => ({
     root : {
         backgroundColor : "#e0f2f1",
-        border : "1px solid #c1c5c5"
+        border : "1px solid #c1c5c5",
+        width : 48,
+        height : 48
     }
 }) )(Avatar);
 
