@@ -179,7 +179,7 @@ class Posts extends Component {
                 }
 
                 const dateDifferenceMin = moment(new Date()).diff(moment(post.dt), 'minutes');
-                const dateDifferenceHour = moment(new Date()).diff(moment(post.dt), 'minutes');
+                const dateDifferenceHour = moment(new Date()).diff(moment(post.dt), 'hours');
 
                 const postDate = dateDifferenceMin < 1
                     ? "just now"
