@@ -85,13 +85,6 @@ object-assign
  * LICENSE file in the root directory of this source tree.
  */
 
-/*!
- * isobject <https://github.com/jonschlinkert/isobject>
- *
- * Copyright (c) 2014-2017, Jon Schlinkert.
- * Released under the MIT License.
- */
-
 /**
     * CSS Vendor prefix detection and property feature testing.
     *
@@ -99,6 +92,13 @@ object-assign
     * @website https://github.com/jsstyles/css-vendor
     * @license MIT
     */
+
+/*!
+ * isobject <https://github.com/jonschlinkert/isobject>
+ *
+ * Copyright (c) 2014-2017, Jon Schlinkert.
+ * Released under the MIT License.
+ */
 
 /*!
  * Determine if an object is a Buffer

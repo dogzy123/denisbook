@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import {post} from "../../requests";
 import {addPost} from "../../actions/actions";
 import Modal from '@material-ui/core/Modal';
+import Icon from "@material-ui/core/Icon";
 
 const getImageModalStyles = () => {
     return {
@@ -39,6 +40,7 @@ class AddPosts extends Component {
         this.onInput    = this.onInput.bind(this);
         this.onKeyUp    = this.onKeyUp.bind(this);
         this.onPaste    = this.onPaste.bind(this);
+        this.sendMsg    = this.sendMsg.bind(this);
 
         this.fullImageClose   = this.fullImageClose.bind(this);
         this.fullImageOpen    = this.fullImageOpen.bind(this);
@@ -167,6 +169,13 @@ class AddPosts extends Component {
         }
     }
 
+    sendMsg () {
+        if (this.state.text && this.state.text.length > 0)
+        {
+            this.addPost()
+        }
+    }
+
     fullImageOpen (url) {
         this.setState({ ...this.state, fullImage : url });
     }
@@ -198,6 +207,7 @@ class AddPosts extends Component {
             <div className="create-post">
                 <div className="create-post-wrapper">
                     <textarea value={this.state.text} onPaste={this.onPaste} className={"create-post-text" + (this.state.isError ? " error" : "") } onKeyDown={this.onKeyDown} onKeyUp={this.onKeyUp} onChange={this.onInput} placeholder="Type a message..." />
+                    <Icon className="create-post-send" style={{color: "#098c7f"}} onClick={ () => this.sendMsg() }>send</Icon>
                 </div>
                 {this.state.pastedImages.length > 0 &&
                     <div className="create-post-image-preview">

@@ -122,6 +122,18 @@ h6,
 .main-container .create-post {
   min-height: 100px;
 }
+.main-container .create-post .create-post-send {
+  position: absolute;
+  color: #098c7f;
+  bottom: 18px;
+  right: 18px;
+  opacity: 0.6;
+  cursor: pointer;
+  transition: opacity 0.08s ease-in;
+}
+.main-container .create-post .create-post-send:hover {
+  opacity: 1;
+}
 .main-container .create-post .create-post-image-preview {
   flex-wrap: wrap;
   display: flex;
@@ -157,6 +169,7 @@ h6,
   max-width: 210px;
 }
 .main-container .create-post .create-post-wrapper {
+  position: relative;
   padding: 4px 8px;
   width: 100%;
   -webkit-box-sizing: border-box;
