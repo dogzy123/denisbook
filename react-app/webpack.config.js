@@ -2,8 +2,9 @@ const path                  = require('path');
 const webpack               = require('webpack');
 
 const { CleanWebpackPlugin }    = require('clean-webpack-plugin');
-const TerserPlugin          = require('terser-webpack-plugin');
-const HtmlWebPackPlugin     = require("html-webpack-plugin");
+const TerserPlugin              = require('terser-webpack-plugin');
+const HtmlWebPackPlugin         = require("html-webpack-plugin");
+const MiniCssExtractPlugin      = require('mini-css-extract-plugin');
 
 module.exports = {
 
@@ -34,17 +35,23 @@ module.exports = {
                 }
             },
             {
-                test: /\.css$/,
-                use: [ 'style-loader', 'css-loader' ]
-            }
-            /*{
-                test: /\.html$/,
-                use: [
-                    {
-                        loader: "html-loader"
-                    }
+                test : /\.css$/,
+                use : {
+                    loader: MiniCssExtractPlugin.loader,
+                    options: {
+                        publicPath: '../dist',
+                        hmr: process.env.NODE_ENV === 'development',
+                    },
+                },
+            },
+            {
+                test: /\.(less)$/,
+                use : [
+                    MiniCssExtractPlugin.loader,
+                    "css-loader",
+                    "less-loader"
                 ]
-            }*/
+            },
         ]
     },
 
@@ -90,6 +97,11 @@ module.exports = {
 
         new webpack.DefinePlugin({
             'process.env.NODE_ENV' : JSON.stringify('production')
+        }),
+
+        new MiniCssExtractPlugin({
+            filename: process.env.NODE_ENV === 'production' ? '../dist/style/main-[hash].css' : '../src/style/main.css',
+            ignoreOrder: false, // Enable to remove warnings about conflicting order
         }),
 
         new HtmlWebPackPlugin({

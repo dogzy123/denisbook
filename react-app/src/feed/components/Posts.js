@@ -8,6 +8,8 @@ import RemovePost from "./RemovePost";
 import ThumbUp from "@material-ui/icons/ThumbUpTwoTone";
 import Avatar from '@material-ui/core/Avatar';
 import { withStyles } from '@material-ui/core/styles';
+import { Tooltip } from "@material-ui/core";
+import Zoom from '@material-ui/core/Zoom';
 
 const UserAvatar = withStyles( theme => ({
     root : {
@@ -180,16 +182,19 @@ class Posts extends Component {
                     }
                 }
 
-                const dateDifferenceMin = moment(new Date()).diff(moment(post.dt), 'minutes');
-                const dateDifferenceHour = moment(new Date()).diff(moment(post.dt), 'hours');
+                const dateDifferenceMin     = moment(new Date()).diff(moment(post.dt), 'minutes');
+                const dateDifferenceHour    = moment(new Date()).diff(moment(post.dt), 'hours');
+                const dateDifferenceDay     = moment(new Date()).diff(moment(post.dt), 'days');
 
                 const postDate = dateDifferenceMin < 1
                     ? "just now"
                     : dateDifferenceMin < 60
                         ? dateDifferenceMin + (dateDifferenceMin < 2 ? " minute ago" : " minutes ago")
-                        : dateDifferenceHour < 12
-                            ? dateDifferenceHour + (dateDifferenceHour < 2 ? "hour ago" : " hours ago")
-                            : moment(post.dt).format("DD MMMM, HH:mm");
+                        : dateDifferenceHour < 24
+                            ? dateDifferenceHour + (dateDifferenceHour < 2 ? " hour ago" : " hours ago")
+                            : dateDifferenceDay < 7
+                                ? dateDifferenceDay + (dateDifferenceDay < 2 ? " day ago" : " days ago")
+                                : moment(post.dt).format("DD MMMM, HH:mm");
 
                 posts.push(
                     <div key={post.rowId} className="post">
@@ -203,7 +208,13 @@ class Posts extends Component {
                                 <div className="post-author">
                                     <span>{userName ? userName : post.author}</span>
                                 </div>
-                                <div className="post-date">{postDate}</div>
+                                {
+                                    dateDifferenceMin > 1
+                                        ? <Tooltip TransitionComponent={Zoom} title={moment(post.dt).format("MMMM D, HH:mm")}>
+                                            <div className="post-date">{postDate}</div>
+                                        </Tooltip>
+                                        : <div className="post-date">{postDate}</div>
+                                }
                             </div>
                         </div>
                         <div className="post-body">

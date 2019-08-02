@@ -43,7 +43,7 @@
 body {
   font-family: 'Roboto', sans-serif;
   color: #fff;
-  background-color: #fbfbfb;
+  background-color: #fdffff;
   margin: 0;
 }
 h1,
@@ -231,12 +231,12 @@ h6,
 }
 .main-container .user-posts {
   font-size: 14px;
-  color: #5f5f5f;
+  color: #464646;
 }
 .main-container .user-posts .post {
   margin: 24px 0;
   border: 1px solid #e2e2e2;
-  background-color: #f6fffe;
+  background-color: #fff;
   border-radius: 3px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.06), 0 3px 14px rgba(0, 0, 0, 0.06);
 }
@@ -256,7 +256,7 @@ h6,
   transition: color 0.11s ease-out;
 }
 .main-container .user-posts .post .post-wrapper .post-remove:hover {
-  color: #ffd3c5;
+  color: #ff7b50;
 }
 .main-container .user-posts .post .post-wrapper .post-body {
   word-break: break-word;
@@ -311,11 +311,12 @@ h6,
 .main-container .user-posts .post .post-wrapper .post-sub-title .post-user-info .post-author {
   padding-top: 2px;
   margin-right: 16px;
-  color: #797979;
+  color: #464646;
   font-size: 14px;
   font-weight: 500;
 }
 .main-container .user-posts .post .post-wrapper .post-sub-title .post-user-info .post-date {
+  cursor: default;
   color: #a2a2a2;
   padding-top: 4px;
 }
@@ -447,3 +448,4 @@ nav {
 #pm-main .pm-container .pm-body .pm-text-field .pm-send-msg:focus {
   outline: none;
 }
+

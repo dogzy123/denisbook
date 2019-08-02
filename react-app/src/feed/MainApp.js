@@ -1,3 +1,4 @@
+import "../style/less/main.less";
 import React, { Component } from 'react';
 import {Provider} from "react-redux";
 import LoginChecker from "../components/LoginChecker";
