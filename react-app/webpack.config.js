@@ -112,7 +112,7 @@ module.exports = {
 
         new HtmlWebPackPlugin({
             template: "../views/pm/index.html",
-            filename: "../../pm/pm.html",
+            filename: "../../pm/index.html",
             chunks: ['pm']
         })
     ]

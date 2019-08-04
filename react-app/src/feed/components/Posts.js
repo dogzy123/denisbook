@@ -20,6 +20,15 @@ const UserAvatar = withStyles( theme => ({
     }
 }) )(Avatar);
 
+const DateTooltip = withStyles( theme => ({
+    tooltip: {
+        backgroundColor: '#098c7f'
+    },
+    popper : {
+        top : '-8px !important'
+    }
+}) )(Tooltip);
+
 class Posts extends Component {
     constructor (props) {
         super(props);
@@ -210,9 +219,9 @@ class Posts extends Component {
                                 </div>
                                 {
                                     dateDifferenceMin > 1
-                                        ? <Tooltip TransitionComponent={Zoom} title={moment(post.dt).format("MMMM D, HH:mm")}>
+                                        ? <DateTooltip TransitionComponent={Zoom} title={moment(post.dt).format("MMMM D, HH:mm")}>
                                             <div className="post-date">{postDate}</div>
-                                        </Tooltip>
+                                        </DateTooltip>
                                         : <div className="post-date">{postDate}</div>
                                 }
                             </div>
@@ -236,7 +245,7 @@ class Posts extends Component {
         return (
             <div className="user-posts">
                 { posts }
-                <audio src='../src/audio/newpost.mp3' ref={ el => this.postSound = el }/>
+                <audio src='../react-app/src/audio/newpost.mp3' ref={ el => this.postSound = el }/>
             </div>
         );
     }

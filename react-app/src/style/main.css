@@ -142,7 +142,7 @@ h6,
 }
 .main-container .create-post .create-post-image-preview .preview-image-wrapper {
   position: relative;
-  border: 1px solid #a7dcd9;
+  border: 1px solid #badedc;
   padding: 6px 8px;
   margin-top: 8px;
   margin-right: 8px;
@@ -156,7 +156,7 @@ h6,
 }
 .main-container .create-post .create-post-image-preview .preview-image-wrapper .preview-image-remove {
   position: absolute;
-  background-color: #00897b;
+  background-color: #098c7f;
   border-radius: 21px;
   font-size: 14px;
   cursor: pointer;
@@ -275,6 +275,16 @@ h6,
   word-break: break-word;
   white-space: pre-wrap;
   margin-bottom: 32px;
+}
+.main-container .user-posts .post .post-wrapper .post-body a {
+  color: #098c7f;
+  text-decoration: none;
+}
+.main-container .user-posts .post .post-wrapper .post-body a:visited:hover {
+  text-decoration: underline;
+}
+.main-container .user-posts .post .post-wrapper .post-body a:hover {
+  text-decoration: underline;
 }
 .main-container .user-posts .post .post-wrapper .post-body img {
   max-height: 100%;
