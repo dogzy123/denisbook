@@ -106,13 +106,13 @@ module.exports = {
 
         new HtmlWebPackPlugin({
             template: "../views/index.html",
-            filename: "./index.html",
+            filename: "../../feed/index.html",
             chunks: ['feed']
         }),
 
         new HtmlWebPackPlugin({
             template: "../views/pm/index.html",
-            filename: "./pm.html",
+            filename: "../../pm/pm.html",
             chunks: ['pm']
         })
     ]
