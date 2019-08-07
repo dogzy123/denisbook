@@ -29,6 +29,14 @@ const DateTooltip = withStyles( theme => ({
     }
 }) )(Tooltip);
 
+function ParagraphRenderer ({ children }) {
+    const hasImage = !!children.find(
+        (child) => typeof child === 'object' && child.key && !!child.key.match(/image/g)
+    );
+
+    return hasImage ? <React.Fragment><p>{children[0]}</p><div style={{textAlign: 'center'}}>{children[1]}</div></React.Fragment> : <p>{children}</p>
+}
+
 class Posts extends Component {
     constructor (props) {
         super(props);
@@ -227,7 +235,12 @@ class Posts extends Component {
                             </div>
                         </div>
                         <div className="post-body">
-                            <ReactMarkdown source={post.text}/>
+                            <ReactMarkdown
+                                source={post.text}
+                                renderers={{
+                                    paragraph : ParagraphRenderer
+                                }}
+                            />
                         </div>
                         <div className="post-footer">
                             <div className="footer-icons">

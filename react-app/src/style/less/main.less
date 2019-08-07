@@ -182,7 +182,7 @@ h4, h5, h6,
 
         &:focus {
           cursor : text;
-          outline-color: #00695C;
+          outline-color: #098c7f;
           box-shadow: none;
           border: none;
           color: #000;
@@ -246,7 +246,7 @@ h4, h5, h6,
     color : #464646;
 
     .post {
-      margin : 24px 0;
+      margin : 28px 0;
       border: 1px solid #e2e2e2;
       background-color: #fff;
       border-radius: 3px;
@@ -254,7 +254,7 @@ h4, h5, h6,
 
       .post-wrapper {
         position: relative;
-        padding: 24px 16px;
+        padding: 20px 16px;
         border-left: 6px solid transparent;
 
         .post-remove {
@@ -262,10 +262,11 @@ h4, h5, h6,
           right: 3px;
           top: 0;
           border-radius: 26px;
-          font-size: 22px;
+          font-size: 20px;
+          line-height: 18px;
           padding: 4px 8px;
           cursor: pointer;
-          transition: color 0.11s ease-out;
+          transition: color 0.06s ease-in;
 
           &:hover {
             color : #ff7b50;
@@ -275,7 +276,11 @@ h4, h5, h6,
         .post-body {
           word-break: break-word;
           white-space: pre-wrap;
-          margin-bottom: 32px;
+          margin-bottom: 24px;
+
+          p {
+            line-height: 1.5em;
+          }
 
           a {
             color : #098c7f;
@@ -338,8 +343,7 @@ h4, h5, h6,
 
         .post-sub-title {
           display: flex;
-          margin-top: 4px;
-          margin-bottom: 32px;
+          margin-bottom: 24px;
           font-size: 12px;
 
           .post-user-info {

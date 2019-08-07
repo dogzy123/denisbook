@@ -26,7 +26,7 @@
 }
 @media (min-width: 1440px) {
   .main-container {
-    width: 50%;
+    width: 650px;
   }
   .create-post-text {
     width: 97%;
@@ -34,7 +34,7 @@
 }
 @media (min-width: 1920px) {
   .main-container {
-    width: 40%;
+    width: 705px;
   }
   .create-post-text {
     width: 98%;
@@ -198,7 +198,7 @@ h6,
 }
 .main-container .create-post .create-post-wrapper .create-post-text:focus {
   cursor: text;
-  outline-color: #00695C;
+  outline-color: #098c7f;
   box-shadow: none;
   border: none;
   color: #000;
@@ -247,7 +247,7 @@ h6,
   color: #464646;
 }
 .main-container .user-posts .post {
-  margin: 24px 0;
+  margin: 28px 0;
   border: 1px solid #e2e2e2;
   background-color: #fff;
   border-radius: 3px;
@@ -255,7 +255,7 @@ h6,
 }
 .main-container .user-posts .post .post-wrapper {
   position: relative;
-  padding: 24px 16px;
+  padding: 20px 16px;
   border-left: 6px solid transparent;
 }
 .main-container .user-posts .post .post-wrapper .post-remove {
@@ -263,10 +263,11 @@ h6,
   right: 3px;
   top: 0;
   border-radius: 26px;
-  font-size: 22px;
+  font-size: 20px;
+  line-height: 18px;
   padding: 4px 8px;
   cursor: pointer;
-  transition: color 0.11s ease-out;
+  transition: color 0.06s ease-in;
 }
 .main-container .user-posts .post .post-wrapper .post-remove:hover {
   color: #ff7b50;
@@ -274,7 +275,10 @@ h6,
 .main-container .user-posts .post .post-wrapper .post-body {
   word-break: break-word;
   white-space: pre-wrap;
-  margin-bottom: 32px;
+  margin-bottom: 24px;
+}
+.main-container .user-posts .post .post-wrapper .post-body p {
+  line-height: 1.5em;
 }
 .main-container .user-posts .post .post-wrapper .post-body a {
   color: #098c7f;
@@ -323,8 +327,7 @@ h6,
 }
 .main-container .user-posts .post .post-wrapper .post-sub-title {
   display: flex;
-  margin-top: 4px;
-  margin-bottom: 32px;
+  margin-bottom: 24px;
   font-size: 12px;
 }
 .main-container .user-posts .post .post-wrapper .post-sub-title .post-user-info {
