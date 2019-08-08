@@ -326,16 +326,41 @@ h4, h5, h6,
 
           .footer-icons {
             width: 100%;
-            padding-top: 12px;
+            padding-top: 8px;
             border-top : 1px solid #ccdedc;
 
             .icon-like {
               cursor: pointer;
               float: right;
               margin-right: 8px;
+              transition: color 0.09s ease-in;
+              display: flex;
+              flex-direction: row;
+
+              .icon-like-btn {
+                padding: 8px !important;
+              }
+
+              .icon-like-container {
+                padding: 8px;
+                padding-left: 4px;
+                padding-bottom: 0;
+                display: flex;
+                vertical-align: middle;
+
+                .icon-like-count {
+                  vertical-align: bottom;
+                  line-height: 22px;
+                  font-weight: 500;
+                }
+              }
 
               &.liked {
-                fill : '';
+                color: #098c7f;
+
+                .icon-like-btn {
+                  color: #098c7f;
+                }
               }
             }
           }
@@ -356,6 +381,16 @@ h4, h5, h6,
               color: #464646;
               font-size: 14px;
               font-weight: 500;
+
+              .post-from-mobile {
+                display: inline-block;
+                vertical-align: middle;
+                padding-left: 4px;
+
+                .post-from-mobile-icon {
+                  color: #a2a2a2;
+                }
+              }
             }
 
             .post-date {

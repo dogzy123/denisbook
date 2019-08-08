@@ -5,6 +5,9 @@
   .create-post-text {
     width: 94.888%;
   }
+  .post-from-mobile-icon {
+    font-size: 17px !important;
+  }
 }
 @media (min-width: 425px) {
   .create-post-text {
@@ -17,6 +20,9 @@
   }
   .create-post-text {
     width: 97%;
+  }
+  .post-from-mobile-icon {
+    font-size: 16px !important;
   }
 }
 @media (min-width: 1024px) {
@@ -314,16 +320,37 @@ h6,
 }
 .main-container .user-posts .post .post-wrapper .post-footer .footer-icons {
   width: 100%;
-  padding-top: 12px;
+  padding-top: 8px;
   border-top: 1px solid #ccdedc;
 }
 .main-container .user-posts .post .post-wrapper .post-footer .footer-icons .icon-like {
   cursor: pointer;
   float: right;
   margin-right: 8px;
+  transition: color 0.09s ease-in;
+  display: flex;
+  flex-direction: row;
+}
+.main-container .user-posts .post .post-wrapper .post-footer .footer-icons .icon-like .icon-like-btn {
+  padding: 8px !important;
+}
+.main-container .user-posts .post .post-wrapper .post-footer .footer-icons .icon-like .icon-like-container {
+  padding: 8px;
+  padding-left: 4px;
+  padding-bottom: 0;
+  display: flex;
+  vertical-align: middle;
+}
+.main-container .user-posts .post .post-wrapper .post-footer .footer-icons .icon-like .icon-like-container .icon-like-count {
+  vertical-align: bottom;
+  line-height: 22px;
+  font-weight: 500;
 }
 .main-container .user-posts .post .post-wrapper .post-footer .footer-icons .icon-like.liked {
-  fill: '';
+  color: #098c7f;
+}
+.main-container .user-posts .post .post-wrapper .post-footer .footer-icons .icon-like.liked .icon-like-btn {
+  color: #098c7f;
 }
 .main-container .user-posts .post .post-wrapper .post-sub-title {
   display: flex;
@@ -340,6 +367,14 @@ h6,
   color: #464646;
   font-size: 14px;
   font-weight: 500;
+}
+.main-container .user-posts .post .post-wrapper .post-sub-title .post-user-info .post-author .post-from-mobile {
+  display: inline-block;
+  vertical-align: middle;
+  padding-left: 4px;
+}
+.main-container .user-posts .post .post-wrapper .post-sub-title .post-user-info .post-author .post-from-mobile .post-from-mobile-icon {
+  color: #a2a2a2;
 }
 .main-container .user-posts .post .post-wrapper .post-sub-title .post-user-info .post-date {
   cursor: default;

@@ -9,6 +9,8 @@ import ThumbUp from "@material-ui/icons/ThumbUpTwoTone";
 import Avatar from '@material-ui/core/Avatar';
 import { withStyles } from '@material-ui/core/styles';
 import { Tooltip } from "@material-ui/core";
+import IconButton from '@material-ui/core/IconButton';
+import Icon from "@material-ui/core/Icon";
 import Zoom from '@material-ui/core/Zoom';
 
 const UserAvatar = withStyles( theme => ({
@@ -48,13 +50,15 @@ class Posts extends Component {
 
         this.state = {
             users : [],
-            play : false
+            play : false,
+            likedPosts : []
         };
 
         this.step = 1;
         this.postsLength = 35;
 
         this.getUserAvatar = this.getUserAvatar.bind(this);
+        this.like = this.like.bind(this);
     }
 
     getBlurred () {
@@ -169,6 +173,25 @@ class Posts extends Component {
         window.onfocus = focusEvent;
     }
 
+    like (postId) {
+        const [likedAlready] = this.state.likedPosts.filter( id => postId === id );
+
+        if (!likedAlready)
+        {
+            this.setState( state => ({
+                ...state,
+                likedPosts : [].concat(state.likedPosts, postId)
+            }) );
+        }
+        else
+        {
+            this.setState( state => ({
+                ...state,
+                likedPosts : [].concat(state.likedPosts).filter( id => id !== postId )
+            }) );
+        }
+    }
+
     render() {
         const posts = [];
 
@@ -178,6 +201,8 @@ class Posts extends Component {
         {
             this.props.posts.map( post => {
                 let avatarUrl, userName;
+
+                const [liked] = this.state.likedPosts.filter( id => post.rowId === id );
 
                 if (profile.getEmail() === post.author)
                 {
@@ -224,6 +249,13 @@ class Posts extends Component {
                             <div className="post-user-info">
                                 <div className="post-author">
                                     <span>{userName ? userName : post.author}</span>
+                                    {
+                                        post.fromMobile && (
+                                            <div className="post-from-mobile">
+                                                <Icon className='post-from-mobile-icon'>phone_iphone</Icon>
+                                            </div>
+                                        )
+                                    }
                                 </div>
                                 {
                                     dateDifferenceMin > 1
@@ -244,8 +276,13 @@ class Posts extends Component {
                         </div>
                         <div className="post-footer">
                             <div className="footer-icons">
-                                <span className="icon-like">
-                                    <ThumbUp fontSize="small"/>
+                                <span className={'icon-like' + (liked ? " liked" : '')}>
+                                    <IconButton className='icon-like-btn' onClick={ () => this.like(post.rowId) }>
+                                        <ThumbUp fontSize="small"/>
+                                    </IconButton>
+                                    <div className='icon-like-container'>
+                                        <span className="icon-like-count"></span>
+                                    </div>
                                 </span>
                             </div>
                         </div>
