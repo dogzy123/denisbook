@@ -56,18 +56,13 @@ class AddPosts extends Component {
     }
 
     addPost () {
-        const data = { text : this.state.text };
+        const data = { text: this.state.text, customData: { fromMobile: this.checkMobileDevice() } };
 
         if (this.state.pastedImages.length > 0)
         {
             this.state.pastedImages.forEach( img => {
                 data.text = data.text + `![](${img})\n`;
             } );
-        }
-
-        if (this.checkMobileDevice())
-        {
-            data.fromMobile = true;
         }
 
         post({func: "addPost", componentDispatch: this.props.dispatch, ...data})

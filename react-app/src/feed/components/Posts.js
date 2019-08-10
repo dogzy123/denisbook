@@ -221,7 +221,7 @@ class Posts extends Component {
         if (this.props.posts.length)
         {
             this.props.posts.map( post => {
-                let avatarUrl, userName, likesCount = 0;
+                let avatarUrl, userName, likesCount = 0, fromMobile = false;
 
                 const [liked] = this.state.likedPosts.filter( id => post.rowId === id );
                 const [unliked] = this.state.unlikedPosts.filter( id => post.rowId === id);
@@ -279,6 +279,11 @@ class Posts extends Component {
                     }
                 }
 
+                if (post.customData && post.customData.fromMobile)
+                {
+                    fromMobile = post.customData.fromMobile;
+                }
+
                 const postDate = dateDifferenceMin < 1
                     ? "just now"
                     : dateDifferenceMin < 60
@@ -301,7 +306,7 @@ class Posts extends Component {
                                 <div className="post-author">
                                     <span>{userName ? userName : post.author}</span>
                                     {
-                                        post.fromMobile && (
+                                        fromMobile && (
                                             <div className="post-from-mobile">
                                                 <Icon className='post-from-mobile-icon'>phone_iphone</Icon>
                                             </div>
