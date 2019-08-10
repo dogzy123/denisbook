@@ -15,6 +15,7 @@ export const SET_MY_MESSAGES = "SET MY MESSAGES";
 export const CHECK_KEYS = "CHECK KEYS";
 export const SET_KEYS = "SET KEYS";
 export const SET_ERROR = "SET ERROR";
+export const GET_LIKES = "GET_LIKES";
 
 export const logIn = user => {
     return ({
@@ -36,6 +37,13 @@ export const addPost = post => {
     return ({
         type : ADD_POST,
         post
+    });
+};
+
+export const getLikes = likes => {
+    return ({
+        type : GET_LIKES,
+        likes
     });
 };
 

@@ -1,11 +1,12 @@
 import {
-    ADD_POST, FETCH_POSTS, INITIAL_POSTS_STATUS, LOG_OUT, LOGGED_IN, POSTS_TO_SHOW, SET_ERROR, SET_SESSION
+    ADD_POST, FETCH_POSTS, GET_LIKES, INITIAL_POSTS_STATUS, LOG_OUT, LOGGED_IN, POSTS_TO_SHOW, SET_ERROR, SET_SESSION
 } from "../actions/actions";
 
 const initialState = {
     loggedIn        : false,
     user            : null,
     posts           : [],
+    likes           : [],
     showPosts       : [],
     postsLength     : 0,
     showPostStep    : 0,
@@ -73,6 +74,12 @@ export default function ( state = initialState, action ) {
                     isError     : action.error.isError,
                     errorMsg    : action.error.errorMsg
                 }
+            };
+
+        case GET_LIKES:
+            return {
+                ...state,
+                likes : [].concat( action.likes )
             };
 
         default:

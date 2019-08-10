@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from "react-redux";
 import moment from "moment";
 import {post} from "../../requests";
-import {FETCH_POSTS, setPostsLength, showPosts} from "../../actions/actions";
+import {FETCH_POSTS, getLikes, setPostsLength, showPosts} from "../../actions/actions";
 import ReactMarkdown from "react-markdown";
 import RemovePost from "./RemovePost";
 import ThumbUp from "@material-ui/icons/ThumbUpTwoTone";
@@ -51,7 +51,8 @@ class Posts extends Component {
         this.state = {
             users : [],
             play : false,
-            likedPosts : []
+            likedPosts : [],
+            unlikedPosts : []
         };
 
         this.step = 1;
@@ -163,6 +164,7 @@ class Posts extends Component {
     }
 
     componentDidMount () {
+        const profile       = this.props.user.getBasicProfile();
         const blurEvent     = e => this.isBlurred = true;
         const focusEvent    = e => {
             this.isBlurred = false;
@@ -171,6 +173,19 @@ class Posts extends Component {
 
         window.onblur = blurEvent;
         window.onfocus = focusEvent;
+
+        post( {func: 'getPostsLikes'} )
+            .then( resp => {
+                if (resp && resp.message === "ok")
+                {
+                    this.props.dispatch( getLikes(resp['postsLikes']) );
+
+                    this.setState( state => ({
+                        ...state,
+                        likedPosts : this.props.likes.filter( like => like.author === profile.getEmail() ).map( like => like.postId )
+                    }) );
+                }
+            } );
     }
 
     like (postId) {
@@ -180,15 +195,21 @@ class Posts extends Component {
         {
             this.setState( state => ({
                 ...state,
-                likedPosts : [].concat(state.likedPosts, postId)
+                likedPosts : [].concat(state.likedPosts, postId),
+                unlikedPosts : [].concat(state.unlikedPosts).filter( id => id !== postId )
             }) );
+
+            post( {func: 'likePost', postId} );
         }
         else
         {
             this.setState( state => ({
                 ...state,
-                likedPosts : [].concat(state.likedPosts).filter( id => id !== postId )
+                likedPosts : [].concat(state.likedPosts).filter( id => id !== postId ),
+                unlikedPosts : [].concat(state.unlikedPosts, postId)
             }) );
+
+            post( {func: 'unlikePost', postId} );
         }
     }
 
@@ -200,9 +221,10 @@ class Posts extends Component {
         if (this.props.posts.length)
         {
             this.props.posts.map( post => {
-                let avatarUrl, userName;
+                let avatarUrl, userName, likesCount = 0;
 
                 const [liked] = this.state.likedPosts.filter( id => post.rowId === id );
+                const [unliked] = this.state.unlikedPosts.filter( id => post.rowId === id);
 
                 if (profile.getEmail() === post.author)
                 {
@@ -227,6 +249,35 @@ class Posts extends Component {
                 const dateDifferenceMin     = moment(new Date()).diff(moment(post.dt), 'minutes');
                 const dateDifferenceHour    = moment(new Date()).diff(moment(post.dt), 'hours');
                 const dateDifferenceDay     = moment(new Date()).diff(moment(post.dt), 'days');
+
+                if (this.props.likes.length)
+                {
+                    const postLikes = this.props.likes.filter( like => like.postId === post.rowId );
+
+                    if (postLikes)
+                    {
+                        const [likedByMe] = postLikes.filter( like => like.author === profile.getEmail() );
+
+                        likesCount = postLikes.length;
+
+                        if (!likedByMe && liked && !unliked)
+                        {
+                            likesCount++;
+                        }
+
+                        if (likedByMe && unliked)
+                        {
+                            likesCount--;
+                        }
+                    }
+                    else
+                    {
+                        if (liked)
+                        {
+                            likesCount++;
+                        }
+                    }
+                }
 
                 const postDate = dateDifferenceMin < 1
                     ? "just now"
@@ -281,7 +332,7 @@ class Posts extends Component {
                                         <ThumbUp fontSize="small"/>
                                     </IconButton>
                                     <div className='icon-like-container'>
-                                        <span className="icon-like-count"></span>
+                                        <span className="icon-like-count">{likesCount > 0 ? likesCount : ''}</span>
                                     </div>
                                 </span>
                             </div>
@@ -305,7 +356,8 @@ const mapStateToProps = state => ({
     posts   : state.posts,
     newPost : state.newPost,
     postsLength : state.postsLength,
-    user : state.user
+    user : state.user,
+    likes : state.likes,
 });
 
 export default connect(mapStateToProps)(Posts);
