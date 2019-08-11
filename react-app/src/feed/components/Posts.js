@@ -24,10 +24,18 @@ const UserAvatar = withStyles( theme => ({
 
 const DateTooltip = withStyles( theme => ({
     tooltip: {
-        backgroundColor: '#098c7f'
+        backgroundColor: '#098c7f',
+        borderRadius : '2px'
     },
     popper : {
         top : '-8px !important'
+    }
+}) )(Tooltip);
+
+const LikedTooltip = withStyles( theme => ({
+    tooltip: {
+        backgroundColor: '#098c7f',
+        borderRadius : '2px'
     }
 }) )(Tooltip);
 
@@ -37,6 +45,20 @@ function ParagraphRenderer ({ children }) {
     );
 
     return hasImage ? <React.Fragment><p>{children[0]}</p><div style={{textAlign: 'center'}}>{children[1]}</div></React.Fragment> : <p>{children}</p>
+}
+
+class Liked extends Component {
+    constructor(props) {
+        super(props);
+    }
+
+    render () {
+        return (
+            <div>
+                { this.props.people.map( person => <div>{person}</div> ) }
+            </div>
+        );
+    }
 }
 
 class Posts extends Component {
@@ -59,6 +81,7 @@ class Posts extends Component {
         this.postsLength = 35;
 
         this.getUserAvatar = this.getUserAvatar.bind(this);
+        this.getUserName = this.getUserName.bind(this);
         this.like = this.like.bind(this);
     }
 
@@ -163,6 +186,17 @@ class Posts extends Component {
         }
     }
 
+    getUserName (email) {
+        const [fountUser] = this.state.users.filter( user => email === user.email);
+
+        if (fountUser)
+        {
+            return fountUser.displayName;
+        }
+
+        return email;
+    }
+
     componentDidMount () {
         const profile       = this.props.user.getBasicProfile();
         const blurEvent     = e => this.isBlurred = true;
@@ -221,7 +255,7 @@ class Posts extends Component {
         if (this.props.posts.length)
         {
             this.props.posts.map( post => {
-                let avatarUrl, userName, likesCount = 0, fromMobile = false;
+                let avatarUrl, userName, likesCount = 0, fromMobile = false, likedPeople = [];
 
                 const [liked] = this.state.likedPosts.filter( id => post.rowId === id );
                 const [unliked] = this.state.unlikedPosts.filter( id => post.rowId === id);
@@ -259,15 +293,21 @@ class Posts extends Component {
                         const [likedByMe] = postLikes.filter( like => like.author === profile.getEmail() );
 
                         likesCount = postLikes.length;
+                        likedPeople = postLikes.map( like => like.author === profile.getEmail()
+                            ? "You"
+                            : this.getUserName(like.author)
+                        );
 
                         if (!likedByMe && liked && !unliked)
                         {
                             likesCount++;
+                            likedPeople = [].concat( likedPeople.map( email => this.getUserName(email) ), "You" );
                         }
 
                         if (likedByMe && unliked)
                         {
                             likesCount--;
+                            likedPeople = likedPeople.filter( person => person !== "You" );
                         }
                     }
                     else
@@ -275,6 +315,7 @@ class Posts extends Component {
                         if (liked)
                         {
                             likesCount++;
+                            likedPeople = [].concat( likedPeople.map( email => this.getUserName(email) ), "You" );
                         }
                     }
                 }
@@ -336,9 +377,15 @@ class Posts extends Component {
                                     <IconButton className='icon-like-btn' onClick={ () => this.like(post.rowId) }>
                                         <ThumbUp fontSize="small"/>
                                     </IconButton>
-                                    <div className='icon-like-container'>
-                                        <span className="icon-like-count">{likesCount > 0 ? likesCount : ''}</span>
-                                    </div>
+                                    { likesCount > 0
+                                        ? <LikedTooltip title={ <Liked people={likedPeople}/> }>
+                                            <div className='icon-like-container'>
+                                                <span className="icon-like-count">{likesCount}</span>
+                                            </div>
+                                        </LikedTooltip>
+                                        : <div className='icon-like-container'>
+                                            <span className="icon-like-count" />
+                                        </div> }
                                 </span>
                             </div>
                         </div>
