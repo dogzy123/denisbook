@@ -62,11 +62,14 @@ module.exports = {
                 extractComments: true
             }),
         ],
+        runtimeChunk: {
+            name: entrypoint => `runtime~${entrypoint.name}`
+        },
+        namedModules: true,
         splitChunks : {
             chunks: 'async',
-            minSize: 30000,
-            maxSize: 0,
-            minChunks: 1,
+            minChunks: 2,
+            minSize: 0,
             maxAsyncRequests: 5,
             maxInitialRequests: 3,
             automaticNameDelimiter: '~',
@@ -76,8 +79,12 @@ module.exports = {
                 vendors : {
                     test : /[\\/]node_modules[\\/]/,
                     priority : -10,
-                    name : 'vendor',
-                    chunks : chunk => chunk.name !== "pre-main.min"
+                    name : module => {
+                        const packageName = module.context.match(/[\\/]node_modules[\\/](.*?)([\\/]|$)/)[1];
+
+                        return `vendor.${packageName.replace('@', '')}`;
+                    },
+                    chunks : 'all'
                 },
                 default : {
                     minChunks: 2,
@@ -89,7 +96,9 @@ module.exports = {
     },
 
     plugins: [
+        new webpack.HashedModuleIdsPlugin(),
         new CleanWebpackPlugin(),
+        new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
 
         new webpack.ProvidePlugin({
             "React": "react",
