@@ -149,7 +149,37 @@ class Posts extends Component {
 
         fetchPosts();
 
-        this.updateInterval = setInterval( fetchPosts, 2000 );
+        this.updateInterval = setInterval( fetchPosts, 1500 );
+    }
+
+    componentWillUpdate(nextProps, nextState, nextContext) {
+        if (nextProps.posts.length > this.props.posts.length)
+        {
+            if (window.localStorage)
+            {
+                const lastSeenPostId = localStorage.getItem('lastSeenPostId');
+
+                if (lastSeenPostId && lastSeenPostId.length)
+                {
+                    localStorage.setItem('lastSeenPostId', nextProps.posts[0].rowId);
+
+                    if (parseInt(lastSeenPostId) !== nextProps.posts[0].rowId)
+                    {
+                        const unseenPosts = nextProps.posts.filter( post => post.rowId > parseInt(lastSeenPostId) );
+
+                        localStorage.setItem('unreadPosts', unseenPosts.length);
+                    }
+                    else
+                    {
+                        localStorage.setItem('unreadPosts', 0);
+                    }
+                }
+                else
+                {
+                    localStorage.setItem('lastSeenPostId', nextProps.posts[0].rowId);
+                }
+            }
+        }
     }
 
     getUserAvatar (author) {

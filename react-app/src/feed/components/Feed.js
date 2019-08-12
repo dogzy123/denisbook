@@ -1,4 +1,4 @@
-import {Component} from "react";
+import React, {Component} from "react";
 import Snackbar from '@material-ui/core/Snackbar';
 import SnackbarContent from '@material-ui/core/SnackbarContent';
 import IconButton from '@material-ui/core/IconButton';
@@ -22,35 +22,37 @@ class Feed extends Component {
 
     render () {
         return (
-            <div className="main-app">
-                <AddPosts/>
-                <Posts />
-                <Snackbar
-                    open={this.props.error.isError}
-                    autoHideDuration={6000}
-                    anchorOrigin={{
-                        vertical: 'bottom',
-                        horizontal: 'left',
-                    }}
-                >
-                    <SnackbarContent
-                        className='error-notification'
-                        message={<span className='error-msg-content'>
+            <div className="main-container">
+                <div className="main-app">
+                    <AddPosts/>
+                    <Posts />
+                    <Snackbar
+                        open={this.props.error.isError}
+                        autoHideDuration={6000}
+                        anchorOrigin={{
+                            vertical: 'bottom',
+                            horizontal: 'left',
+                        }}
+                    >
+                        <SnackbarContent
+                            className='error-notification'
+                            message={<span className='error-msg-content'>
                             <ErrorIcon className='error-msg-icon' />
-                            {this.props.error.errorMsg}
+                                {this.props.error.errorMsg}
                         </span>}
-                        action={[
-                            <IconButton
-                                key="close"
-                                aria-label="Close"
-                                color="inherit"
-                                onClick={this.closeSnackbar}
-                            >
-                                <CloseIcon />
-                            </IconButton>
-                        ]}
-                    />
-                </Snackbar>
+                            action={[
+                                <IconButton
+                                    key="close"
+                                    aria-label="Close"
+                                    color="inherit"
+                                    onClick={this.closeSnackbar}
+                                >
+                                    <CloseIcon />
+                                </IconButton>
+                            ]}
+                        />
+                    </Snackbar>
+                </div>
             </div>
         );
     }

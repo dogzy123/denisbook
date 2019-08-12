@@ -1,8 +1,9 @@
-import { Component } from "react";
+import React, { Component } from "react";
 import LoginPanel from "./LoginPanel";
 import { BarLoader } from "react-spinners";
 import {connect} from "react-redux";
 import {logOut, setUserSession} from "../actions/actions";
+import Navigation from "./Navigation";
 
 class LoginChecker extends Component {
 
@@ -37,18 +38,31 @@ class LoginChecker extends Component {
             if (!this.props.user)
             {
                 return (
-                    <div className="loader">
-                        <BarLoader color={'#26A69A'} width={200} height={5} />
-                    </div>
+                    <React.Fragment>
+                        <Navigation />
+                        <div className="loader">
+                            <BarLoader color={'#26A69A'} width={200} height={5} />
+                        </div>
+                    </React.Fragment>
                 );
             }
 
             return (
-                <LoginPanel/>
+                <React.Fragment>
+                    <Navigation />
+                    <div className="main-container">
+                        <LoginPanel/>
+                    </div>
+                </React.Fragment>
             );
         }
 
-        return this.props.body;
+        return (
+            <React.Fragment>
+                <Navigation />
+                {this.props.body}
+            </React.Fragment>
+        );
     }
 
     render () {
