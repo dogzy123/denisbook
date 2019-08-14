@@ -16,6 +16,7 @@ export const CHECK_KEYS = "CHECK KEYS";
 export const SET_KEYS = "SET KEYS";
 export const SET_ERROR = "SET ERROR";
 export const GET_LIKES = "GET_LIKES";
+export const UNSEEN_POSTS_COUNT = "UNSEEN_POSTS_COUNT";
 
 export const logIn = user => {
     return ({
@@ -44,6 +45,13 @@ export const getLikes = likes => {
     return ({
         type : GET_LIKES,
         likes
+    });
+};
+
+export const unseenPostsCount = count => {
+    return ({
+        type: UNSEEN_POSTS_COUNT,
+        count
     });
 };
 

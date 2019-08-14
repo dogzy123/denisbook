@@ -13,7 +13,11 @@ import {connect} from "react-redux";
 
 const AppNavigation = withStyles( theme => ({
     root: {
-        backgroundColor: '#098c7f'
+        backgroundColor: '#098c7f',
+
+        [theme.breakpoints.up('sm')]: {
+            boxShadow: 'none'
+        }
     }
 }) )(AppBar);
 
@@ -69,6 +73,10 @@ const Navigation = props => {
         checkUnreadPosts()
     }, [] );
 
+    useEffect( () => {
+        handleUnreadBadge( props.unseenPostsCount );
+    }, [props.unseenPostsCount] );
+
     return (
         <React.Fragment>
             <AppNavigation position='sticky'>
@@ -112,7 +120,8 @@ const Navigation = props => {
 const mapStateToProps = state => ({
     loggedIn : state.loggedIn,
     user: state.user,
-    posts: state.posts
+    posts: state.posts,
+    unseenPostsCount: state.unseenPostsCount
 });
 
 export default connect(mapStateToProps)(Navigation);

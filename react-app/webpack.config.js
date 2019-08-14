@@ -16,7 +16,7 @@ module.exports = {
     output: {
         path: path.resolve(__dirname, "./dist"),
 
-        filename: "[name]-bundle.js"
+        filename: "[name]-bundle[hash:8].js"
     },
 
     resolve : {
@@ -36,13 +36,18 @@ module.exports = {
             },
             {
                 test : /\.css$/,
-                use : {
-                    loader: MiniCssExtractPlugin.loader,
-                    options: {
-                        publicPath: '../dist',
-                        hmr: process.env.NODE_ENV === 'development',
+                use : [
+                    {
+                        loader: MiniCssExtractPlugin.loader,
+                        options: {
+                            publicPath: (resourcePath, context) => {
+                                return path.relative(path.dirname(resourcePath), context) + '/';
+                            },
+                            hmr: process.env.NODE_ENV === 'development',
+                        },
                     },
-                },
+                    'css-loader',
+                ]
             },
             {
                 test: /\.(less)$/,
@@ -86,6 +91,12 @@ module.exports = {
                     },
                     chunks : 'all'
                 },
+                styles: {
+                    name: 'styles',
+                    test: /\.css$/,
+                    chunks: 'all',
+                    enforce: true,
+                },
                 default : {
                     minChunks: 2,
                     priority: -20,
@@ -97,7 +108,7 @@ module.exports = {
 
     plugins: [
         new webpack.HashedModuleIdsPlugin(),
-        new CleanWebpackPlugin(),
+
         new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
 
         new webpack.ProvidePlugin({
@@ -108,10 +119,9 @@ module.exports = {
             'process.env.NODE_ENV' : JSON.stringify('production')
         }),
 
-        new MiniCssExtractPlugin({
-            filename: process.env.NODE_ENV === 'production' ? '../dist/style/main-[hash].css' : '../src/style/main.css',
-            ignoreOrder: false, // Enable to remove warnings about conflicting order
-        }),
+        new MiniCssExtractPlugin({ filename: "[name].[contentHash].css" }),
+
+        new CleanWebpackPlugin(),
 
         new HtmlWebPackPlugin({
             template: "../views/index.html",

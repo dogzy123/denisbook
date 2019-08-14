@@ -105,6 +105,11 @@ h6,
   opacity: 0.75;
   margin-right: 16px;
 }
+.feed-body {
+  overflow-y: scroll;
+  width: 100%;
+  margin-top: 0;
+}
 .main-container {
   display: flex;
   flex-direction: column;
@@ -112,9 +117,7 @@ h6,
   margin-right: auto;
   margin-top: 35px;
   padding-bottom: 24px;
-}
-.main-container .create-post {
-  min-height: 100px;
+  height: calc(100vh - 132px);
 }
 .main-container .create-post .create-post-send {
   position: absolute;
@@ -227,10 +230,6 @@ h6,
 .main-container .create-post .create-post-wrapper textarea::placeholder {
   color: #098c7f;
 }
-.main-container .main-app {
-  padding-top: 16px;
-  padding-bottom: 16px;
-}
 .main-container .loader > div {
   margin-left: auto;
   margin-right: auto;
@@ -241,11 +240,9 @@ h6,
   color: #464646;
 }
 .main-container .user-posts .post {
-  margin: 28px 0;
-  border: 1px solid #e2e2e2;
+  margin: 32px 0;
+  border: 1px solid #e4e4e4;
   background-color: #fff;
-  border-radius: 3px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.06), 0 3px 14px rgba(0, 0, 0, 0.06);
 }
 .main-container .user-posts .post .post-wrapper {
   position: relative;
@@ -253,6 +250,7 @@ h6,
   border-left: 6px solid transparent;
 }
 .main-container .user-posts .post .post-wrapper .post-remove {
+  color: #bbbbbb;
   position: absolute;
   right: 3px;
   top: 0;
@@ -314,7 +312,6 @@ h6,
 .main-container .user-posts .post .post-wrapper .post-footer .footer-icons .icon-like {
   cursor: pointer;
   float: right;
-  margin-right: 8px;
   transition: color 0.09s ease-in;
   display: flex;
   flex-direction: row;
@@ -378,11 +375,8 @@ h6,
   margin: 8px 0;
   margin-bottom: 0;
 }
-.main-container .user-posts .post.new {
-  background-color: #48807e;
-}
 .main-container .user-posts .post.new > .post-wrapper {
-  border-left: 6px solid #05635f;
+  border-left: 6px solid #abe0db;
 }
 .main-container #login-panel #google-signin {
   width: 240px;

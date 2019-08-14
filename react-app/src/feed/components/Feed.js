@@ -22,8 +22,8 @@ class Feed extends Component {
 
     render () {
         return (
-            <div className="main-container">
-                <div className="main-app">
+            <div className="feed-body">
+                <div className="main-container">
                     <AddPosts/>
                     <Posts />
                     <Snackbar

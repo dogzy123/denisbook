@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from "react-redux";
 import moment from "moment";
 import {post} from "../../requests";
-import {FETCH_POSTS, getLikes, setPostsLength, showPosts} from "../../actions/actions";
+import {FETCH_POSTS, getLikes, setPostsLength, showPosts, unseenPostsCount} from "../../actions/actions";
 import ReactMarkdown from "react-markdown";
 import RemovePost from "./RemovePost";
 import ThumbUp from "@material-ui/icons/ThumbUpTwoTone";
@@ -73,6 +73,7 @@ class Posts extends Component {
         this.state = {
             users : [],
             play : false,
+            lastSeenPostId: null,
             likedPosts : [],
             unlikedPosts : []
         };
@@ -100,12 +101,15 @@ class Posts extends Component {
     }
 
     componentWillMount () {
+        const feedContainer = document.getElementsByClassName('feed-body');
+        const postsContainer = document.getElementsByClassName('user-posts');
+
         const updatePostsToShow = e => {
-            if (window.pageYOffset + 1200 > document.body.clientHeight)
+            if (feedContainer.item(0).scrollTop + 1200 > postsContainer.item(0).offsetHeight)
             {
                 this.step = this.step + 1;
 
-                window.removeEventListener('scroll', updatePostsToShow);
+                feedContainer.item(0).removeEventListener('scroll', updatePostsToShow);
 
                 fetchPosts();
             }
@@ -143,7 +147,7 @@ class Posts extends Component {
 
                     this.props.dispatch( setPostsLength({ postsLength: this.props.posts.length }) );
 
-                    window.addEventListener('scroll', updatePostsToShow);
+                    feedContainer.item(0).addEventListener('scroll', updatePostsToShow);
                 });
         };
 
@@ -155,19 +159,28 @@ class Posts extends Component {
     componentWillUpdate(nextProps, nextState, nextContext) {
         if (nextProps.posts.length > this.props.posts.length)
         {
+            const profile = this.props.user.getBasicProfile();
+
             if (window.localStorage)
             {
                 const lastSeenPostId = localStorage.getItem('lastSeenPostId');
 
                 if (lastSeenPostId && lastSeenPostId.length)
                 {
+                    this.setState( state => ({
+                        ...state,
+                        lastSeenPostId: parseInt(lastSeenPostId)
+                    }) );
+
                     localStorage.setItem('lastSeenPostId', nextProps.posts[0].rowId);
 
                     if (parseInt(lastSeenPostId) !== nextProps.posts[0].rowId)
                     {
-                        const unseenPosts = nextProps.posts.filter( post => post.rowId > parseInt(lastSeenPostId) );
+                        const unseenPosts = nextProps.posts.filter( post => post.rowId > parseInt(lastSeenPostId) && post.author !== profile.getEmail() );
 
                         localStorage.setItem('unreadPosts', unseenPosts.length);
+
+                        this.props.dispatch( unseenPostsCount(unseenPosts.length) );
                     }
                     else
                     {
@@ -284,11 +297,17 @@ class Posts extends Component {
 
         if (this.props.posts.length)
         {
+            const unseenPosts = this.state.lastSeenPostId
+                ? this.props.posts.filter( post => post.rowId > this.state.lastSeenPostId && post.author !== profile.getEmail() )
+                : false;
+
             this.props.posts.map( post => {
                 let avatarUrl, userName, likesCount = 0, fromMobile = false, likedPeople = [];
 
                 const [liked] = this.state.likedPosts.filter( id => post.rowId === id );
                 const [unliked] = this.state.unlikedPosts.filter( id => post.rowId === id);
+
+                const [unseenPost] = unseenPosts ? unseenPosts.filter( unseenPost => unseenPost.rowId === post.rowId ) : [false];
 
                 if (profile.getEmail() === post.author)
                 {
@@ -366,7 +385,7 @@ class Posts extends Component {
                                 : moment(post.dt).format("DD MMMM, HH:mm");
 
                 posts.push(
-                    <div key={post.rowId} className="post">
+                    <div key={post.rowId} className={"post" + (unseenPost ? " new" : "")}>
                     <div className="post-wrapper">
                         {this.props.user.getBasicProfile().getEmail() === post.author && <RemovePost post={post}/> }
                         <div className="post-sub-title">

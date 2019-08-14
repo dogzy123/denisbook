@@ -53,6 +53,12 @@ h4, h5, h6,
 
 }
 
+.feed-body {
+  overflow-y: scroll;
+  width: 100%;
+  margin-top: 0;
+}
+
 .main-container {
   display: flex;
   flex-direction: column;
@@ -60,10 +66,9 @@ h4, h5, h6,
   margin-right: auto;
   margin-top: 35px;
   padding-bottom: 24px;
+  height: calc(100vh - 132px);
 
   .create-post {
-    min-height: 100px;
-
     .create-post-send {
       position: absolute;
       color: #098c7f;
@@ -198,11 +203,6 @@ h4, h5, h6,
     }
   }
 
-  .main-app {
-    padding-top: 16px;
-    padding-bottom: 16px;
-  }
-
   .loader {
     > div {
       margin-left: auto;
@@ -216,11 +216,10 @@ h4, h5, h6,
     color : #464646;
 
     .post {
-      margin : 28px 0;
-      border: 1px solid #e2e2e2;
+      margin : 32px 0;
+      border: 1px solid #e4e4e4;
       background-color: #fff;
-      border-radius: 3px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.06), 0 3px 14px rgba(0, 0, 0, 0.06);
+      //box-shadow: 0 4px 6px rgba(0, 0, 0, 0.06), 0 3px 14px rgba(0, 0, 0, 0.06);
 
       .post-wrapper {
         position: relative;
@@ -228,6 +227,7 @@ h4, h5, h6,
         border-left: 6px solid transparent;
 
         .post-remove {
+          color: #bbbbbb;
           position: absolute;
           right: 3px;
           top: 0;
@@ -302,7 +302,6 @@ h4, h5, h6,
             .icon-like {
               cursor: pointer;
               float: right;
-              margin-right: 8px;
               transition: color 0.09s ease-in;
               display: flex;
               flex-direction: row;
@@ -379,10 +378,8 @@ h4, h5, h6,
       }
 
       &.new {
-        background-color: #48807e;
-
         > .post-wrapper {
-          border-left: 6px solid #05635f;
+          border-left: 6px solid #abe0db;
         }
       }
     }

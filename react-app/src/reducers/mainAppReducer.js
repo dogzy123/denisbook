@@ -1,5 +1,14 @@
 import {
-    ADD_POST, FETCH_POSTS, GET_LIKES, INITIAL_POSTS_STATUS, LOG_OUT, LOGGED_IN, POSTS_TO_SHOW, SET_ERROR, SET_SESSION
+    ADD_POST,
+    FETCH_POSTS,
+    GET_LIKES,
+    INITIAL_POSTS_STATUS,
+    LOG_OUT,
+    LOGGED_IN,
+    POSTS_TO_SHOW,
+    SET_ERROR,
+    SET_SESSION,
+    UNSEEN_POSTS_COUNT
 } from "../actions/actions";
 
 const initialState = {
@@ -10,6 +19,7 @@ const initialState = {
     showPosts       : [],
     postsLength     : 0,
     showPostStep    : 0,
+    unseenPostsCount : 0,
     error           : {
         isError    : false,
         errorMsg   : ''
@@ -80,6 +90,12 @@ export default function ( state = initialState, action ) {
             return {
                 ...state,
                 likes : [].concat( action.likes )
+            };
+
+        case UNSEEN_POSTS_COUNT:
+            return {
+                ...state,
+                unseenPostsCount: action.count
             };
 
         default:
