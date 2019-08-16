@@ -10,6 +10,7 @@
   }
   .post-from-mobile-icon {
     font-size: 17px !important;
+    padding-left: 4px;
   }
 }
 @media (min-width: 425px) {
@@ -117,7 +118,7 @@ h6,
   margin-right: auto;
   margin-top: 35px;
   padding-bottom: 24px;
-  height: calc(100vh - 132px);
+  height: calc(100vh - 108px);
 }
 .main-container .create-post .create-post-send {
   position: absolute;
@@ -229,6 +230,9 @@ h6,
 }
 .main-container .create-post .create-post-wrapper textarea::placeholder {
   color: #098c7f;
+}
+.main-container .loader {
+  width: 100%;
 }
 .main-container .loader > div {
   margin-left: auto;
@@ -365,6 +369,8 @@ h6,
   cursor: default;
   color: #a2a2a2;
   padding-top: 4px;
+  display: flex;
+  align-items: center;
 }
 .main-container .user-posts .post .post-wrapper h1,
 .main-container .user-posts .post .post-wrapper h2,

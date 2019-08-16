@@ -29,6 +29,11 @@ const useStyles = makeStyles( theme => ({
     },
     buttonsPanel: {
         display: 'flex'
+    },
+    toolbarRoot: {
+        [theme.breakpoints.up('lg')]: {
+            minHeight: '48px'
+        }
     }
 }) );
 
@@ -80,7 +85,9 @@ const Navigation = props => {
     return (
         <React.Fragment>
             <AppNavigation position='sticky'>
-                <Toolbar>
+                <Toolbar classes={{
+                    root: classes.toolbarRoot
+                }}>
                     <Typography className={classes.navigationTitle} variant="h6" noWrap>Denisbook</Typography>
                     { props.loggedIn && (
                         <div className={classes.buttonsPanel}>

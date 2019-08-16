@@ -41,7 +41,7 @@ class LoginChecker extends Component {
                     <React.Fragment>
                         <Navigation />
                         <div className="loader">
-                            <BarLoader color={'#26A69A'} width={200} height={5} />
+                            <BarLoader color={'#26A69A'} width='100%' height={5} />
                         </div>
                     </React.Fragment>
                 );

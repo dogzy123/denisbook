@@ -12,6 +12,7 @@ import { Tooltip } from "@material-ui/core";
 import IconButton from '@material-ui/core/IconButton';
 import Icon from "@material-ui/core/Icon";
 import Zoom from '@material-ui/core/Zoom';
+import Skeleton from '@material-ui/lab/Skeleton';
 
 const UserAvatar = withStyles( theme => ({
     root : {
@@ -39,12 +40,36 @@ const LikedTooltip = withStyles( theme => ({
     }
 }) )(Tooltip);
 
+const AuthorSkeleton = withStyles( theme => ({
+    root: {
+        width: '120px',
+        marginBottom: 0,
+        marginTop: 0,
+
+        [theme.breakpoints.down('xs')]: {
+            width: '140px'
+        }
+    }
+}) )(Skeleton);
+
 function ParagraphRenderer ({ children }) {
     const hasImage = !!children.find(
         (child) => typeof child === 'object' && child.key && !!child.key.match(/image/g)
     );
 
-    return hasImage ? <React.Fragment><p>{children[0]}</p><div style={{textAlign: 'center'}}>{children[1]}</div></React.Fragment> : <p>{children}</p>
+    const images = [], other = [];
+
+    if (hasImage)
+    {
+        children.map( child => child.type === "img" ? images.push(child) : other.push(child) );
+    }
+
+    return hasImage
+        ? <React.Fragment>
+            { other.map( obj => <p>{obj}</p> ) }
+            { images.map( img => <div style={{textAlign: 'center'}}>{img}</div> ) }
+         </React.Fragment>
+        : <p>{children}</p>
 }
 
 class Liked extends Component {
@@ -382,7 +407,7 @@ class Posts extends Component {
                             ? dateDifferenceHour + (dateDifferenceHour < 2 ? " hour ago" : " hours ago")
                             : dateDifferenceDay < 7
                                 ? dateDifferenceDay + (dateDifferenceDay < 2 ? " day ago" : " days ago")
-                                : moment(post.dt).format("DD MMMM, HH:mm");
+                                : moment(post.dt).format("D MMMM, HH:mm");
 
                 posts.push(
                     <div key={post.rowId} className={"post" + (unseenPost ? " new" : "")}>
@@ -390,25 +415,37 @@ class Posts extends Component {
                         {this.props.user.getBasicProfile().getEmail() === post.author && <RemovePost post={post}/> }
                         <div className="post-sub-title">
                             <div className="post-avatar">
-                                <UserAvatar src={avatarUrl} />
+                                { avatarUrl
+                                    ? <UserAvatar src={avatarUrl} />
+                                    : <Skeleton variant='circle' width={48} height={48} />
+                                }
                             </div>
                             <div className="post-user-info">
                                 <div className="post-author">
-                                    <span>{userName ? userName : post.author}</span>
-                                    {
-                                        fromMobile && (
-                                            <div className="post-from-mobile">
-                                                <Icon className='post-from-mobile-icon'>phone_iphone</Icon>
-                                            </div>
-                                        )
-                                    }
+                                    <span>
+                                        {userName ? userName : <AuthorSkeleton/>}
+                                    </span>
                                 </div>
                                 {
-                                    dateDifferenceMin > 1
+                                    dateDifferenceDay < 7
                                         ? <DateTooltip TransitionComponent={Zoom} title={moment(post.dt).format("MMMM D, HH:mm")}>
-                                            <div className="post-date">{postDate}</div>
+                                            <div className="post-date">
+                                                {postDate}
+                                                {
+                                                    fromMobile && (
+                                                        <Icon className='post-from-mobile-icon'>phone_iphone</Icon>
+                                                    )
+                                                }
+                                            </div>
                                         </DateTooltip>
-                                        : <div className="post-date">{postDate}</div>
+                                        : <div className="post-date">
+                                            {postDate}
+                                            {
+                                                fromMobile && (
+                                                    <Icon className='post-from-mobile-icon'>phone_iphone</Icon>
+                                                )
+                                            }
+                                        </div>
                                 }
                             </div>
                         </div>
