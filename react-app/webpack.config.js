@@ -14,9 +14,8 @@ module.exports = {
     },
 
     output: {
-        path: path.resolve(__dirname, "./dist"),
-
-        filename: "[name]-bundle[hash:8].js"
+        path: path.resolve(__dirname, "dist"),
+        filename: "[hash:8].js"
     },
 
     resolve : {
@@ -64,7 +63,8 @@ module.exports = {
         minimizer: [
             new TerserPlugin({
                 test: /\.js(\?.*)?$/i,
-                extractComments: true
+                parallel: true,
+                extractComments: true,
             }),
         ],
         runtimeChunk: {
@@ -119,7 +119,7 @@ module.exports = {
             'process.env.NODE_ENV' : JSON.stringify('production')
         }),
 
-        new MiniCssExtractPlugin({ filename: "[name].[contentHash].css" }),
+        new MiniCssExtractPlugin({ filename: "[hash:8].[contentHash].css" }),
 
         new CleanWebpackPlugin(),
 
