@@ -14,7 +14,7 @@ export const post = ( props ) => {
     };
 
     // f= just to see the name in Network panel during debug
-    return fetch('https://midiana.lv:8086/?f=' + data.func, {
+    return fetch('https://klesun-productions.com:8086/?f=' + data.func, {
         method  : "POST",
         headers : {
             'Accept': 'application/json',
