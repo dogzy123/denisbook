@@ -19,7 +19,7 @@
     </div>
     <p>This is a game like rock-paper-scissors, but with different values for each move. Rock = 1 point, Scissors = 2 points, Paper = 3 points. Wins the one who gains 3 point first.</p>
     <p>It could seem at a glance that choosing Paper is the best option since it gives you enough points to instantly win, but your opponent may expect you to do so and use the counter-move, Scissors, even though it gives less points, but you can read him as well, and counter that with Rock, and the pattern continues...</p>
-    <p>This game solves the issue of original rock-paper-scissors where winner is usually being decided by random. Here wins the one who understands his opponent better.</p>
+    <p>This game solves the issue of original rock-paper-scissors where winner is usually being decided by random. Here wins the one who reads his opponent better.</p>
     <div class="player-list-cont">
         <h3>Active players</h3>
         <div style="display: inline-block">
@@ -80,7 +80,7 @@ const enterMatchmaking = function(email, idToken) {
     let callApi = (func, restParams = {}) => {
         restParams.func = func;
         restParams.googleIdToken = idToken;
-        return fetch('https://midiana.lv:8086?f=' + func, {
+        return fetch('https://klesun-productions.com:8086?f=' + func, {
             method: 'POST',
             body: JSON.stringify(restParams)
         })  .then(resp => resp.json())
