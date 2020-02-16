@@ -5,11 +5,10 @@ const getGoogleUser = () => window.auth2['currentUser'].get();
 export const get = () => {};
 
 export const post = ( props ) => {
-
     const googleUser = getGoogleUser();
 
     const data = {
-        googleIdToken : googleUser['Zi']['id_token'],
+        googleIdToken : googleUser.getAuthResponse()['id_token'],
         ...props
     };
 
