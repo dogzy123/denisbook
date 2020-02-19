@@ -6,6 +6,8 @@ import IconButton from '@material-ui/core/IconButton';
 import Icon from "@material-ui/core/Icon";
 import Badge  from '@material-ui/core/Badge';
 import Menu from '@material-ui/core/Menu';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
 import MenuItem from '@material-ui/core/MenuItem';
 import Typography from '@material-ui/core/Typography';
 import {connect} from "react-redux";
@@ -37,16 +39,39 @@ const useStyles = makeStyles( theme => ({
     }
 }) );
 
+const getColoredIcon = color => {
+    switch (color) {
+        case 'red':
+            return (
+                <div>red</div>
+            );
+        case 'default':
+            return (
+                <div>default</div>
+            );
+    }
+};
+
 
 const Navigation = props => {
     const classes = useStyles();
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [unread, setUnread] = React.useState(0);
+    const [configMenuAnchor, setConfigMenuAnchor] = React.useState(null);
 
     const isMenuOpen = Boolean(anchorEl);
+    const isConfigMenuOpen = Boolean(configMenuAnchor);
 
     function handleProfileMenu (event) {
         setAnchorEl( event.currentTarget );
+    }
+
+    const handleConfigMenu = (e) => {
+        setConfigMenuAnchor( e.currentTarget );
+    };
+
+    const closeConfigMenu = () => {
+        setConfigMenuAnchor( null );
     }
 
     function closeProfileMenu () {
@@ -91,6 +116,13 @@ const Navigation = props => {
                     <Typography className={classes.navigationTitle} variant="h6" noWrap>Denisbook</Typography>
                     { props.loggedIn && (
                         <div className={classes.buttonsPanel}>
+                            {/*<IconButton
+                                aria-label="settings"
+                                aria-haspopup="true"
+                                onClick={handleConfigMenu}
+                            >
+                                <Icon>palette</Icon>
+                            </IconButton>*/}
                             <IconButton
                                 onClick={ () => checkUnreadPosts() }
                             >
@@ -119,6 +151,24 @@ const Navigation = props => {
                 onClose={closeProfileMenu}
             >
                 <MenuItem onClick={handleLogout}>Logout</MenuItem>
+            </Menu>
+            <Menu
+                anchorEl={configMenuAnchor}
+                anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                keepMounted
+                transformOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                open={isConfigMenuOpen}
+                onClose={closeConfigMenu}
+            >
+                <Tabs
+                    variant="fullWidth"
+                    indicatorColor="secondary"
+                    textColor="secondary"
+                    aria-label="theme select"
+                >
+                    <Tab icon={getColoredIcon('default')}/>
+                    <Tab icon={getColoredIcon('red')}/>
+                </Tabs>
             </Menu>
         </React.Fragment>
     );

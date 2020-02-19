@@ -8,10 +8,9 @@ import RemovePost from "./RemovePost";
 import ThumbUp from "@material-ui/icons/ThumbUpTwoTone";
 import Avatar from '@material-ui/core/Avatar';
 import { withStyles } from '@material-ui/core/styles';
-import { Tooltip } from "@material-ui/core";
+import Tooltip from "@material-ui/core/Tooltip";
 import IconButton from '@material-ui/core/IconButton';
 import Icon from "@material-ui/core/Icon";
-import Zoom from '@material-ui/core/Zoom';
 import Skeleton from '@material-ui/lab/Skeleton';
 
 const UserAvatar = withStyles( theme => ({
@@ -26,7 +25,8 @@ const UserAvatar = withStyles( theme => ({
 const DateTooltip = withStyles( theme => ({
     tooltip: {
         backgroundColor: '#098c7f',
-        borderRadius : '2px'
+        borderRadius : '2px',
+        fontSize: '12px',
     },
     popper : {
         top : '-8px !important'
@@ -36,7 +36,8 @@ const DateTooltip = withStyles( theme => ({
 const LikedTooltip = withStyles( theme => ({
     tooltip: {
         backgroundColor: '#098c7f',
-        borderRadius : '2px'
+        borderRadius : '2px',
+        fontSize: '12px',
     }
 }) )(Tooltip);
 
@@ -428,7 +429,7 @@ class Posts extends Component {
                                 </div>
                                 {
                                     dateDifferenceDay < 7
-                                        ? <DateTooltip TransitionComponent={Zoom} title={moment(post.dt).format("MMMM D, HH:mm")}>
+                                        ? <DateTooltip title={moment(post.dt).format("MMMM D, HH:mm")}>
                                             <div className="post-date">
                                                 {postDate}
                                                 {
