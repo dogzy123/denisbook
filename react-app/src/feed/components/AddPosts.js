@@ -4,6 +4,8 @@ import {post} from "../../requests";
 import {addPost} from "../../actions/actions";
 import Modal from '@material-ui/core/Modal';
 import Icon from "@material-ui/core/Icon";
+import {makeStyles} from "@material-ui/core";
+import classNames from "classnames";
 
 const getImageModalStyles = () => {
     return {
@@ -30,9 +32,30 @@ const checkMobileDevice = () => {
     return check;
 }
 
+const useStyles = makeStyles(theme => ({
+    createPost: {
+        backgroundColor: theme.denisbookLight,
+        border: '1px solid',
+        borderColor: theme.denisbookBorder,
+
+        '&::-webkit-input-placeholder': {
+            color: theme.denisbookPrimary,
+        },
+        '&:-ms-input-placeholder': {
+            color: theme.denisbookPrimary,
+        },
+        '&::placeholder': {
+            color: theme.denisbookPrimary,
+        },
+    },
+    createPostIcon: {
+        color: theme.denisbookPrimary,
+    }
+}) );
+
 const AddPosts = () => {
     const dispatch = useDispatch();
-
+    const styles = useStyles();
     const [text, setText] = useState('');
     const [pastedImages, setPastedImages] = useState([]);
     const [isError, setIsError] = useState(false);
@@ -171,14 +194,13 @@ const AddPosts = () => {
                 <textarea
                     value={text}
                     onPaste={onPaste}
-                    className={"create-post-text" + (isError ? " error" : "") }
+                    className={classNames("create-post-text", styles.createPost, (isError ? " error" : ""))}
                     onKeyDown={handleKeyDown}
                     onKeyUp={handleKeyUp}
                     onChange={ e => handleInput(e.target.value)} placeholder="Type a message..."
                 />
                 <Icon
-                    className="create-post-send"
-                    style={{color: "#098c7f"}}
+                    className={classNames("create-post-send", styles.createPostIcon)}
                     onClick={ () => sendMsg() }
                 >send</Icon>
             </div>

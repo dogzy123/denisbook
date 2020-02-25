@@ -7,7 +7,7 @@ import {
     LOGGED_IN,
     POSTS_TO_SHOW,
     SET_ERROR,
-    SET_SESSION,
+    SET_SESSION, SET_THEME,
     UNSEEN_POSTS_COUNT
 } from "../actions/actions";
 
@@ -20,6 +20,7 @@ const initialState = {
     postsLength     : 0,
     showPostStep    : 0,
     unseenPostsCount : 0,
+    themeState       : 'red',
     error           : {
         isError    : false,
         errorMsg   : ''
@@ -97,6 +98,12 @@ export default function ( state = initialState, action ) {
                 ...state,
                 unseenPostsCount: action.count
             };
+
+        case SET_THEME:
+            return {
+                ...state,
+                themeState: action.theme,
+            }
 
         default:
             return {...state};

@@ -15,8 +15,9 @@ export const SET_MY_MESSAGES = "SET MY MESSAGES";
 export const CHECK_KEYS = "CHECK KEYS";
 export const SET_KEYS = "SET KEYS";
 export const SET_ERROR = "SET ERROR";
-export const GET_LIKES = "GET_LIKES";
-export const UNSEEN_POSTS_COUNT = "UNSEEN_POSTS_COUNT";
+export const GET_LIKES = "GET LIKES";
+export const UNSEEN_POSTS_COUNT = "UNSEEN POSTS COUNT";
+export const SET_THEME = 'SET THEME';
 
 export const logIn = user => {
     return ({
@@ -148,5 +149,12 @@ export const setError = error => {
     return ({
         type : SET_ERROR,
         error
+    });
+};
+
+export const setTheme = theme => {
+    return ({
+        type: SET_THEME,
+        theme,
     });
 };

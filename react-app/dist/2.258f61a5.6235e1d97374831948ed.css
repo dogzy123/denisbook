@@ -1,12 +1,10 @@
 @media (min-width: 320px) {
-  body {
-    overflow-y: hidden;
+  #main {
+    padding-top: 56px;
   }
   .post {
     margin: 36px 0;
-    border: 1px solid #e4e4e4;
-    border-right: none;
-    border-left: none;
+    box-shadow: 0px 1px 12px 1px rgba(0, 0, 0, 0.07), 0px 1px 1px 0px rgba(0, 0, 0, 0.07), 0px 1px 24px 0px rgba(0, 0, 0, 0.12);
   }
   .footer-icons {
     border-top: none;
@@ -26,8 +24,8 @@
   }
 }
 @media (min-width: 425px) {
-  body {
-    overflow-y: hidden;
+  #main {
+    padding-top: 56px;
   }
   .create-post-text {
     width: 96%;
@@ -39,13 +37,16 @@
     width: 320px;
   }
 }
-@media (min-width: 760px) {
-  body {
-    overflow-y: hidden;
+@media (min-width: 600px) {
+  #main {
+    padding-top: 64px;
   }
+}
+@media (min-width: 760px) {
   .post {
     margin: 32px 0;
     border: 1px solid #e4e4e4;
+    box-shadow: none;
   }
   .main-container {
     width: 70%;
@@ -61,14 +62,16 @@
   }
 }
 @media (min-width: 1024px) {
-  body {
-    overflow-y: hidden;
-  }
   .main-container {
     width: 60%;
   }
   .login-wrapper {
     width: 450px;
+  }
+}
+@media (min-width: 1281px) {
+  #main {
+    padding-top: 48px;
   }
 }
 @media (min-width: 1440px) {
@@ -135,7 +138,6 @@ h6,
   margin-right: 16px;
 }
 .feed-body {
-  overflow-y: scroll;
   width: 100%;
   margin-top: 0;
 }
@@ -144,13 +146,10 @@ h6,
   flex-direction: column;
   margin-left: auto;
   margin-right: auto;
-  margin-top: 35px;
-  padding-bottom: 24px;
-  height: calc(100vh - 108px);
+  padding: 24px 0;
 }
 .main-container .create-post .create-post-send {
   position: absolute;
-  color: #098c7f;
   bottom: 18px;
   right: 18px;
   opacity: 0.6;
@@ -208,9 +207,7 @@ h6,
   padding: 8px;
   margin: 0;
   height: 110px;
-  background-color: #E0F2F1;
   width: 100%;
-  border: 1px solid #badedc;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
@@ -241,23 +238,6 @@ h6,
 }
 .main-container .create-post .create-post-wrapper .create-post-text:focus::-moz-placeholder {
   color: #fff;
-}
-.main-container .create-post .create-post-wrapper > textarea::-webkit-input-placeholder {
-  color: #098c7f;
-}
-.main-container .create-post .create-post-wrapper > textarea:-moz-placeholder {
-  /* Firefox 18- */
-  color: #098c7f;
-}
-.main-container .create-post .create-post-wrapper > textarea::-moz-placeholder {
-  /* Firefox 19+ */
-  color: #098c7f;
-}
-.main-container .create-post .create-post-wrapper textarea:-ms-input-placeholder {
-  color: #098c7f;
-}
-.main-container .create-post .create-post-wrapper textarea::placeholder {
-  color: #098c7f;
 }
 .main-container .loader {
   width: 100%;
@@ -304,7 +284,6 @@ h6,
   line-height: 1.5em;
 }
 .main-container .user-posts .post .post-wrapper .post-body a {
-  color: #098c7f;
   text-decoration: none;
 }
 .main-container .user-posts .post .post-wrapper .post-body a:visited:hover {
@@ -360,12 +339,6 @@ h6,
   vertical-align: bottom;
   line-height: 22px;
   font-weight: 500;
-}
-.main-container .user-posts .post .post-wrapper .post-footer .footer-icons .icon-like.liked {
-  color: #098c7f;
-}
-.main-container .user-posts .post .post-wrapper .post-footer .footer-icons .icon-like.liked .icon-like-btn {
-  color: #098c7f;
 }
 .main-container .user-posts .post .post-wrapper .post-sub-title {
   display: flex;

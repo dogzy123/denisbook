@@ -3,7 +3,7 @@
 body {
   font-family: 'Roboto', sans-serif;
   color : #fff;
-  background-color: #fdffff;
+  background-color: #fdffff; //#fffcfc
   margin: 0;
 }
 
@@ -54,7 +54,6 @@ h4, h5, h6,
 }
 
 .feed-body {
-  overflow-y: scroll;
   width: 100%;
   margin-top: 0;
 }
@@ -64,14 +63,11 @@ h4, h5, h6,
   flex-direction: column;
   margin-left: auto;
   margin-right: auto;
-  margin-top: 35px;
-  padding-bottom: 24px;
-  height: calc(100vh - 108px);
+  padding: 24px 0;
 
   .create-post {
     .create-post-send {
       position: absolute;
-      color: #098c7f;
       bottom: 18px;
       right: 18px;
       opacity: 0.6;
@@ -136,9 +132,7 @@ h4, h5, h6,
         padding: 8px;
         margin: 0;
         height: 110px;
-        background-color: #E0F2F1;
         width: 100%;
-        border: 1px solid #badedc;
         -webkit-box-sizing: border-box;
         -moz-box-sizing: border-box;
         box-sizing: border-box;
@@ -179,26 +173,6 @@ h4, h5, h6,
             color: #fff;
           }
         }
-      }
-
-      > textarea::-webkit-input-placeholder {
-        color: #098c7f;
-      }
-
-      > textarea:-moz-placeholder { /* Firefox 18- */
-        color: #098c7f;
-      }
-
-      > textarea::-moz-placeholder {  /* Firefox 19+ */
-        color: #098c7f;
-      }
-
-      textarea:-ms-input-placeholder {
-        color: #098c7f;
-      }
-
-      textarea::placeholder {
-        color: #098c7f;
       }
     }
   }
@@ -254,7 +228,6 @@ h4, h5, h6,
           }
 
           a {
-            color : #098c7f;
             text-decoration: none;
 
             &:visited {
@@ -324,13 +297,6 @@ h4, h5, h6,
                 }
               }
 
-              &.liked {
-                color: #098c7f;
-
-                .icon-like-btn {
-                  color: #098c7f;
-                }
-              }
             }
           }
         }
@@ -381,7 +347,7 @@ h4, h5, h6,
 
       &.new {
         > .post-wrapper {
-          border-left: 6px solid #abe0db;
+          border-left: 6px solid #abe0db; //#ff9191
         }
       }
     }

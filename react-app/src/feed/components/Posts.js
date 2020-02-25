@@ -2,16 +2,31 @@ import React, { Component } from 'react';
 import { connect } from "react-redux";
 import moment from "moment";
 import {post} from "../../requests";
-import {FETCH_POSTS, getLikes, setPostsLength, showPosts, unseenPostsCount} from "../../actions/actions";
+import {FETCH_POSTS, getLikes, setPostsLength, unseenPostsCount} from "../../actions/actions";
 import ReactMarkdown from "react-markdown";
 import RemovePost from "./RemovePost";
-import ThumbUp from "@material-ui/icons/ThumbUpTwoTone";
 import Avatar from '@material-ui/core/Avatar';
-import { withStyles } from '@material-ui/core/styles';
+import {makeStyles, withStyles} from '@material-ui/core/styles';
 import Tooltip from "@material-ui/core/Tooltip";
-import IconButton from '@material-ui/core/IconButton';
 import Icon from "@material-ui/core/Icon";
 import Skeleton from '@material-ui/lab/Skeleton';
+import Likes from "./Likes";
+
+const useMarkdownStyles = makeStyles( theme => ({
+    markdown: {
+        '& a': {
+            color: theme.denisbookPrimary,
+        },
+
+        '& ul': {
+            paddingLeft: '28px',
+        },
+
+        '& li': {
+            padding: '4px 0',
+        }
+    }
+}) );
 
 const UserAvatar = withStyles( theme => ({
     root : {
@@ -24,20 +39,12 @@ const UserAvatar = withStyles( theme => ({
 
 const DateTooltip = withStyles( theme => ({
     tooltip: {
-        backgroundColor: '#098c7f',
+        backgroundColor: theme.denisbookPrimary, //#ce4444
         borderRadius : '2px',
         fontSize: '12px',
     },
     popper : {
         top : '-8px !important'
-    }
-}) )(Tooltip);
-
-const LikedTooltip = withStyles( theme => ({
-    tooltip: {
-        backgroundColor: '#098c7f',
-        borderRadius : '2px',
-        fontSize: '12px',
     }
 }) )(Tooltip);
 
@@ -52,6 +59,20 @@ const AuthorSkeleton = withStyles( theme => ({
         }
     }
 }) )(Skeleton);
+
+const Markdown = props => {
+    const markdownStyles = useMarkdownStyles();
+
+    return (
+        <ReactMarkdown
+            className={markdownStyles.markdown}
+            source={props.text}
+            renderers={{
+                paragraph : ParagraphRenderer
+            }}
+        />
+    );
+};
 
 function ParagraphRenderer ({ children }) {
     const hasImage = !!children.find(
@@ -71,20 +92,6 @@ function ParagraphRenderer ({ children }) {
             { images.map( img => <div style={{textAlign: 'center'}}>{img}</div> ) }
          </React.Fragment>
         : <p>{children}</p>
-}
-
-class Liked extends Component {
-    constructor(props) {
-        super(props);
-    }
-
-    render () {
-        return (
-            <div>
-                { this.props.people.map( person => <div>{person}</div> ) }
-            </div>
-        );
-    }
 }
 
 class Posts extends Component {
@@ -451,29 +458,16 @@ class Posts extends Component {
                             </div>
                         </div>
                         <div className="post-body">
-                            <ReactMarkdown
-                                source={post.text}
-                                renderers={{
-                                    paragraph : ParagraphRenderer
-                                }}
-                            />
+                            <Markdown text={post.text}/>
                         </div>
                         <div className="post-footer">
                             <div className="footer-icons">
-                                <span className={'icon-like' + (liked ? " liked" : '')}>
-                                    <IconButton className='icon-like-btn' onClick={ () => this.like(post.rowId) }>
-                                        <ThumbUp fontSize="small"/>
-                                    </IconButton>
-                                    { likesCount > 0
-                                        ? <LikedTooltip title={ <Liked people={likedPeople}/> }>
-                                            <div className='icon-like-container'>
-                                                <span className="icon-like-count">{likesCount}</span>
-                                            </div>
-                                        </LikedTooltip>
-                                        : <div className='icon-like-container'>
-                                            <span className="icon-like-count" />
-                                        </div> }
-                                </span>
+                                <Likes
+                                    liked={liked}
+                                    handleLike={ () => this.like(post.rowId) }
+                                    likesCount={likesCount}
+                                    people={likedPeople}
+                                />
                             </div>
                         </div>
                     </div>

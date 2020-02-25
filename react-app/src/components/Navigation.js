@@ -10,18 +10,33 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import MenuItem from '@material-ui/core/MenuItem';
 import Typography from '@material-ui/core/Typography';
-import {connect} from "react-redux";
+import {connect, useDispatch, useSelector} from "react-redux";
+import {setTheme} from "../actions/actions";
+import classNames from "classnames";
 
 
 const AppNavigation = withStyles( theme => ({
     root: {
-        backgroundColor: '#098c7f',
+        backgroundColor: theme.denisbookPrimary, //#ce4444
 
         [theme.breakpoints.up('sm')]: {
             boxShadow: 'none'
         }
     }
 }) )(AppBar);
+
+const ThemedTabs = withStyles( theme => ({
+    root: {
+        minHeight: '24px',
+    }
+}) )(Tabs);
+
+const ThemeTab = withStyles( theme => ({
+   root: {
+       minHeight: '24px',
+       minWidth: '84px',
+   },
+}) )(Tab);
 
 const useStyles = makeStyles( theme => ({
     navigationTitle: {
@@ -36,24 +51,22 @@ const useStyles = makeStyles( theme => ({
         [theme.breakpoints.up('lg')]: {
             minHeight: '48px'
         }
+    },
+    colorSquire: {
+        height: '24px',
+        width: '24px',
+    },
+    redColor: {
+        backgroundColor: '#ce4444'
+    },
+    defaultColor: {
+        backgroundColor: '#098c7f'
     }
 }) );
 
-const getColoredIcon = color => {
-    switch (color) {
-        case 'red':
-            return (
-                <div>red</div>
-            );
-        case 'default':
-            return (
-                <div>default</div>
-            );
-    }
-};
-
-
 const Navigation = props => {
+    const themeState = useSelector( state => state.themeState );
+    const dispatch = useDispatch();
     const classes = useStyles();
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [unread, setUnread] = React.useState(0);
@@ -82,6 +95,13 @@ const Navigation = props => {
         setUnread(num);
     }
 
+    function changeTheme (theme) {
+        if (themeState !== theme)
+        {
+            dispatch( setTheme(theme) );
+        }
+    }
+
     function handleLogout() {
         window.auth2.signOut();
         window.location.reload();
@@ -99,6 +119,19 @@ const Navigation = props => {
         }
     }
 
+    const getColoredIcon = color => {
+        switch (color) {
+            case 'red':
+                return (
+                    <div className={classNames(classes.colorSquire, classes.redColor)}/>
+                );
+            case 'default':
+                return (
+                    <div className={classNames(classes.colorSquire, classes.defaultColor)}/>
+                );
+        }
+    };
+
     useEffect( () => {
         checkUnreadPosts()
     }, [] );
@@ -109,20 +142,20 @@ const Navigation = props => {
 
     return (
         <React.Fragment>
-            <AppNavigation position='sticky'>
+            <AppNavigation position='fixed'>
                 <Toolbar classes={{
                     root: classes.toolbarRoot
                 }}>
                     <Typography className={classes.navigationTitle} variant="h6" noWrap>Denisbook</Typography>
                     { props.loggedIn && (
                         <div className={classes.buttonsPanel}>
-                            {/*<IconButton
+                            <IconButton
                                 aria-label="settings"
                                 aria-haspopup="true"
                                 onClick={handleConfigMenu}
                             >
                                 <Icon>palette</Icon>
-                            </IconButton>*/}
+                            </IconButton>
                             <IconButton
                                 onClick={ () => checkUnreadPosts() }
                             >
@@ -160,15 +193,21 @@ const Navigation = props => {
                 open={isConfigMenuOpen}
                 onClose={closeConfigMenu}
             >
-                <Tabs
+                <ThemedTabs
                     variant="fullWidth"
                     indicatorColor="secondary"
                     textColor="secondary"
                     aria-label="theme select"
                 >
-                    <Tab icon={getColoredIcon('default')}/>
-                    <Tab icon={getColoredIcon('red')}/>
-                </Tabs>
+                    <ThemeTab
+                        icon={getColoredIcon('default')}
+                        onClick={ () => changeTheme('default') }
+                    />
+                    <ThemeTab
+                        icon={getColoredIcon('red')}
+                        onClick={ () => changeTheme('red') }
+                    />
+                </ThemedTabs>
             </Menu>
         </React.Fragment>
     );
