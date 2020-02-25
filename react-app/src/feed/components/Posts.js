@@ -134,15 +134,14 @@ class Posts extends Component {
     }
 
     componentWillMount () {
-        const feedContainer = document.getElementsByClassName('feed-body');
         const postsContainer = document.getElementsByClassName('user-posts');
 
         const updatePostsToShow = e => {
-            if (feedContainer.item(0).scrollTop + 1200 > postsContainer.item(0).offsetHeight)
+            if (window.pageYOffset + 1200 > postsContainer.item(0).offsetHeight)
             {
                 this.step = this.step + 1;
 
-                feedContainer.item(0).removeEventListener('scroll', updatePostsToShow);
+                window.removeEventListener('scroll', updatePostsToShow);
 
                 fetchPosts();
             }
@@ -180,7 +179,7 @@ class Posts extends Component {
 
                     this.props.dispatch( setPostsLength({ postsLength: this.props.posts.length }) );
 
-                    feedContainer.item(0).addEventListener('scroll', updatePostsToShow);
+                    window.addEventListener('scroll', updatePostsToShow);
                 });
         };
 
