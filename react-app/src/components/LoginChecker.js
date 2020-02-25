@@ -4,6 +4,23 @@ import { BarLoader } from "react-spinners";
 import {connect} from "react-redux";
 import {logOut, setUserSession} from "../actions/actions";
 import Navigation from "./Navigation";
+import {makeStyles} from "@material-ui/core";
+
+const useLoaderStyles = makeStyles( theme => ({
+    loader: {
+        color: theme.denisbookPrimary,
+    }
+}) );
+
+const Loader = () => {
+    const styles = useLoaderStyles();
+
+    return (
+        <div className="loader">
+            <BarLoader className={styles.loader} width='100%' height={5} />
+        </div>
+    );
+};
 
 class LoginChecker extends Component {
 
@@ -40,9 +57,7 @@ class LoginChecker extends Component {
                 return (
                     <React.Fragment>
                         <Navigation />
-                        <div className="loader">
-                            <BarLoader color={'#098c7f'} width='100%' height={5} />
-                        </div>
+                        <Loader />
                     </React.Fragment>
                 );
             }
