@@ -20,7 +20,7 @@ const initialState = {
     postsLength     : 0,
     showPostStep    : 0,
     unseenPostsCount : 0,
-    themeState       : 'red',
+    themeState       : window.localStorage.getItem('theme') ? window.localStorage.getItem('theme') : 'default',
     error           : {
         isError    : false,
         errorMsg   : ''

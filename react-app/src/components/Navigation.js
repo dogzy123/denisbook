@@ -100,6 +100,8 @@ const Navigation = props => {
         {
             dispatch( setTheme(theme) );
         }
+
+        window.localStorage.setItem('theme', theme);
     }
 
     function handleLogout() {
